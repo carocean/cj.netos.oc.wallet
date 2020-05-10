@@ -1,0 +1,76 @@
+{
+	entryPoint : {
+		plugins: [
+			{
+				name:"mybatis",
+				class:"cj.studio.orm.mybatis.MyBatisPlugin",
+				parameters:{
+					classes:"[
+					]",
+					packages:"[
+					]"
+				}
+			}
+		],
+		activators: [
+			{
+				name: '开放口服务活动器',
+				class: 'cj.studio.openport.OpenportEntryPointActivator',
+				parameters: {
+					"publicAPIPath": '/portsapi',
+					checkAppSignStrategy: 'cj.netos.oc.wallet.program.AppSignStrategy',
+					checkAccessTokenStrategy: ''
+				}
+			}
+		]
+	},
+	assemblyInfo : {
+		assemblyTitle : "oc.wallet",
+		assemblyResource:"site=/site;http.root=$(site)/web;http.jss=$(site)/jss/http;ws.jss=$(site)/jss/ws",
+		assemblyDescription : "钱包交易指令中心",
+		assemblyConfiguration : "",
+		assemblyCompany : "cj工作室出品，lns平台制造",
+		assemblyProduct : "cj.netos.oc.wallet",
+		assemblyCopyright : "Copyright   2011",
+		assemblyTrademark : "",
+		assemblyCulture : "",
+		guid : "AA9FB5A0-09F2-49AC-98C2-E326BC789C67",
+		assemblyVersion : "1.0.0.0",
+		assemblyFileVersion : "1.0.0.0"
+	},
+	global:{
+		default:"zh_CN",
+		desc:"如果系统环境要求各芯片采用的语言本芯片没有，则芯片可采用默认语言"
+		},
+	serviceContainer : {
+		name : "netContainer",
+		switchFilter:"off",
+		monitor: "",
+		jss:[{
+			module:"services1",
+			package:"cj.netos.oc.wallet.jss",
+			unzip:"true",
+			searchMode:"link",
+			extName:".jss.js"
+		}],
+		scans : [{
+			package : "cj.studio.orm.mybatis",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
+		},{
+			package : "cj.netos.oc.wallet.program",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
+		},{
+			package : "cj.netos.oc.wallet.service",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
+		},{
+				package : "cj.netos.oc.wallet.ports",
+				extName : ".class|.json|.xml",
+				exoterical:"true"
+		}
+		]
+
+	}
+}
