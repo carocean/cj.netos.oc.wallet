@@ -417,63 +417,133 @@ public class RechargeRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNull() {
-            addCriterion("amount is null");
+        public Criteria andDemandAmountIsNull() {
+            addCriterion("demand_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNotNull() {
-            addCriterion("amount is not null");
+        public Criteria andDemandAmountIsNotNull() {
+            addCriterion("demand_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountEqualTo(Long value) {
-            addCriterion("amount =", value, "amount");
+        public Criteria andDemandAmountEqualTo(Long value) {
+            addCriterion("demand_amount =", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotEqualTo(Long value) {
-            addCriterion("amount <>", value, "amount");
+        public Criteria andDemandAmountNotEqualTo(Long value) {
+            addCriterion("demand_amount <>", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThan(Long value) {
-            addCriterion("amount >", value, "amount");
+        public Criteria andDemandAmountGreaterThan(Long value) {
+            addCriterion("demand_amount >", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThanOrEqualTo(Long value) {
-            addCriterion("amount >=", value, "amount");
+        public Criteria andDemandAmountGreaterThanOrEqualTo(Long value) {
+            addCriterion("demand_amount >=", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThan(Long value) {
-            addCriterion("amount <", value, "amount");
+        public Criteria andDemandAmountLessThan(Long value) {
+            addCriterion("demand_amount <", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThanOrEqualTo(Long value) {
-            addCriterion("amount <=", value, "amount");
+        public Criteria andDemandAmountLessThanOrEqualTo(Long value) {
+            addCriterion("demand_amount <=", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIn(List<Long> values) {
-            addCriterion("amount in", values, "amount");
+        public Criteria andDemandAmountIn(List<Long> values) {
+            addCriterion("demand_amount in", values, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotIn(List<Long> values) {
-            addCriterion("amount not in", values, "amount");
+        public Criteria andDemandAmountNotIn(List<Long> values) {
+            addCriterion("demand_amount not in", values, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountBetween(Long value1, Long value2) {
-            addCriterion("amount between", value1, value2, "amount");
+        public Criteria andDemandAmountBetween(Long value1, Long value2) {
+            addCriterion("demand_amount between", value1, value2, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotBetween(Long value1, Long value2) {
-            addCriterion("amount not between", value1, value2, "amount");
+        public Criteria andDemandAmountNotBetween(Long value1, Long value2) {
+            addCriterion("demand_amount not between", value1, value2, "demandAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIsNull() {
+            addCriterion("real_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIsNotNull() {
+            addCriterion("real_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountEqualTo(String value) {
+            addCriterion("real_amount =", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotEqualTo(String value) {
+            addCriterion("real_amount <>", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountGreaterThan(String value) {
+            addCriterion("real_amount >", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountGreaterThanOrEqualTo(String value) {
+            addCriterion("real_amount >=", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountLessThan(String value) {
+            addCriterion("real_amount <", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountLessThanOrEqualTo(String value) {
+            addCriterion("real_amount <=", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountLike(String value) {
+            addCriterion("real_amount like", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotLike(String value) {
+            addCriterion("real_amount not like", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIn(List<String> values) {
+            addCriterion("real_amount in", values, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotIn(List<String> values) {
+            addCriterion("real_amount not in", values, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountBetween(String value1, String value2) {
+            addCriterion("real_amount between", value1, value2, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotBetween(String value1, String value2) {
+            addCriterion("real_amount not between", value1, value2, "realAmount");
             return (Criteria) this;
         }
 
@@ -744,6 +814,146 @@ public class RechargeRecordExample {
 
         public Criteria andLutimeNotBetween(String value1, String value2) {
             addCriterion("lutime not between", value1, value2, "lutime");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIsNull() {
+            addCriterion("note is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIsNotNull() {
+            addCriterion("note is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteEqualTo(String value) {
+            addCriterion("note =", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotEqualTo(String value) {
+            addCriterion("note <>", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteGreaterThan(String value) {
+            addCriterion("note >", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteGreaterThanOrEqualTo(String value) {
+            addCriterion("note >=", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLessThan(String value) {
+            addCriterion("note <", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLessThanOrEqualTo(String value) {
+            addCriterion("note <=", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLike(String value) {
+            addCriterion("note like", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotLike(String value) {
+            addCriterion("note not like", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIn(List<String> values) {
+            addCriterion("note in", values, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotIn(List<String> values) {
+            addCriterion("note not in", values, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteBetween(String value1, String value2) {
+            addCriterion("note between", value1, value2, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotBetween(String value1, String value2) {
+            addCriterion("note not between", value1, value2, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageIsNull() {
+            addCriterion("message is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageIsNotNull() {
+            addCriterion("message is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageEqualTo(String value) {
+            addCriterion("message =", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageNotEqualTo(String value) {
+            addCriterion("message <>", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageGreaterThan(String value) {
+            addCriterion("message >", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageGreaterThanOrEqualTo(String value) {
+            addCriterion("message >=", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageLessThan(String value) {
+            addCriterion("message <", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageLessThanOrEqualTo(String value) {
+            addCriterion("message <=", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageLike(String value) {
+            addCriterion("message like", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageNotLike(String value) {
+            addCriterion("message not like", value, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageIn(List<String> values) {
+            addCriterion("message in", values, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageNotIn(List<String> values) {
+            addCriterion("message not in", values, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageBetween(String value1, String value2) {
+            addCriterion("message between", value1, value2, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageNotBetween(String value1, String value2) {
+            addCriterion("message not between", value1, value2, "message");
             return (Criteria) this;
         }
     }

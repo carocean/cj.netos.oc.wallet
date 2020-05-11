@@ -29,10 +29,16 @@ public class RechargeRecord {
     private String currency;
 
     /**
-     * Column: amount
-     * Remark: 冲值金额
+     * Column: demand_amount
+     * Remark: 要求冲值金额
      */
-    private Long amount;
+    private Long demandAmount;
+
+    /**
+     * Column: real_amount
+     * Remark: 实际冲值发生额
+     */
+    private String realAmount;
 
     /**
      * Column: from_channel
@@ -57,6 +63,18 @@ public class RechargeRecord {
      * Remark: 最新修改时间
      */
     private String lutime;
+
+    /**
+     * Column: note
+     * Remark: 备注
+     */
+    private String note;
+
+    /**
+     * Column: message
+     * Remark: 订单完成时的返回信息
+     */
+    private String message;
 
     public String getSn() {
         return sn;
@@ -90,12 +108,20 @@ public class RechargeRecord {
         this.currency = currency == null ? null : currency.trim();
     }
 
-    public Long getAmount() {
-        return amount;
+    public Long getDemandAmount() {
+        return demandAmount;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setDemandAmount(Long demandAmount) {
+        this.demandAmount = demandAmount;
+    }
+
+    public String getRealAmount() {
+        return realAmount;
+    }
+
+    public void setRealAmount(String realAmount) {
+        this.realAmount = realAmount == null ? null : realAmount.trim();
     }
 
     public String getFromChannel() {
@@ -128,5 +154,21 @@ public class RechargeRecord {
 
     public void setLutime(String lutime) {
         this.lutime = lutime == null ? null : lutime.trim();
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message == null ? null : message.trim();
     }
 }

@@ -22,6 +22,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.3.1'
+    implementation project(':cj.netos.oc.wallet.openports')
 }
 task copyRefembeds(type: Copy) {
     from configurations.compileClasspath.files {

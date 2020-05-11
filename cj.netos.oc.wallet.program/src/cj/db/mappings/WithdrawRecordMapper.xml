@@ -12,6 +12,7 @@
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    sn, person, person_name, currency, amount, to_channel, `state`, ctime, lutime
+    sn, person, person_name, currency, amount, to_channel, `state`, ctime, lutime, note
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.WithdrawRecordExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -115,12 +116,12 @@
     <!-- @mbg.generated: generated automatically, do not modify! -->
     insert into withdraw_record (sn, person, person_name, 
       currency, amount, to_channel, 
-      `state`, ctime, lutime
-      )
+      `state`, ctime, lutime, 
+      note)
     values (#{sn,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
       #{currency,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{toChannel,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR}
-      )
+      #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.WithdrawRecord">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -153,6 +154,9 @@
       <if test="lutime != null">
         lutime,
       </if>
+      <if test="note != null">
+        note,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sn != null">
@@ -181,6 +185,9 @@
       </if>
       <if test="lutime != null">
         #{lutime,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -222,6 +229,9 @@
       <if test="record.lutime != null">
         lutime = #{record.lutime,jdbcType=VARCHAR},
       </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -238,7 +248,8 @@
       to_channel = #{record.toChannel,jdbcType=VARCHAR},
       `state` = #{record.state,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=VARCHAR},
-      lutime = #{record.lutime,jdbcType=VARCHAR}
+      lutime = #{record.lutime,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,6 +282,9 @@
       <if test="lutime != null">
         lutime = #{lutime,jdbcType=VARCHAR},
       </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
     </set>
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
@@ -284,7 +298,8 @@
       to_channel = #{toChannel,jdbcType=VARCHAR},
       `state` = #{state,jdbcType=INTEGER},
       ctime = #{ctime,jdbcType=VARCHAR},
-      lutime = #{lutime,jdbcType=VARCHAR}
+      lutime = #{lutime,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
 </mapper>

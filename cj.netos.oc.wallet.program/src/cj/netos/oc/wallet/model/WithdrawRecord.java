@@ -58,6 +58,11 @@ public class WithdrawRecord {
      */
     private String lutime;
 
+    /**
+     * Column: note
+     */
+    private String note;
+
     public String getSn() {
         return sn;
     }
@@ -128,5 +133,13 @@ public class WithdrawRecord {
 
     public void setLutime(String lutime) {
         this.lutime = lutime == null ? null : lutime.trim();
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
     }
 }
