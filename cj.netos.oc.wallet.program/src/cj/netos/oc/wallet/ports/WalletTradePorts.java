@@ -25,8 +25,8 @@ public class WalletTradePorts implements IWalletTradePorts {
     }
 
     @Override
-    public void rechargeDone(ISecuritySession securitySession, String sn, long amount,String message) throws CircuitException {
-        walletTradeService.rechargeDone(sn,amount,message);
+    public void rechargeDone(ISecuritySession securitySession, String sn, long amount,String code,String message) throws CircuitException {
+        walletTradeService.rechargeDone(sn,amount,code,message);
     }
 
     @Override

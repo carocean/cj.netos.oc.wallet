@@ -50,19 +50,19 @@ public class WalletTradeService implements IWalletTradeService {
 
     @CjTransaction
     @Override
-    public void rechargeDone(String sn, long amount,String message) throws CircuitException {
+    public void rechargeDone(String sn, long amount,String code,String message) throws CircuitException {
         RechargeRecord rechargeRecord = rechargeRecordMapper.selectByPrimaryKey(sn);
         if (rechargeRecord == null) {
             throw new CircuitException("404", "没有下单");
         }
-        updateRechargeRecord(sn, amount,message);
+        updateRechargeRecord(sn, amount,code,message);
         BalanceBill balanceBill = addBalanceBill(rechargeRecord);
         updateBalanceAccount(balanceBill);
     }
 
-    private void updateRechargeRecord(String sn, long amount, String message) {
+    private void updateRechargeRecord(String sn, long amount,String code, String message) {
         String ldtime = WalletUtils.dateTimeToSecond(System.currentTimeMillis());
-        rechargeRecordMapper.finish(sn, amount, ldtime, message);
+        rechargeRecordMapper.finish(sn, amount, ldtime,code, message);
     }
 
     private void updateBalanceAccount(BalanceBill rechargeRecord) {

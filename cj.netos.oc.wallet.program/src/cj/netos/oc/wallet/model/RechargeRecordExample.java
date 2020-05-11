@@ -887,73 +887,143 @@ public class RechargeRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andMessageIsNull() {
-            addCriterion("message is null");
+        public Criteria andDoneCodeIsNull() {
+            addCriterion("done_code is null");
             return (Criteria) this;
         }
 
-        public Criteria andMessageIsNotNull() {
-            addCriterion("message is not null");
+        public Criteria andDoneCodeIsNotNull() {
+            addCriterion("done_code is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMessageEqualTo(String value) {
-            addCriterion("message =", value, "message");
+        public Criteria andDoneCodeEqualTo(String value) {
+            addCriterion("done_code =", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageNotEqualTo(String value) {
-            addCriterion("message <>", value, "message");
+        public Criteria andDoneCodeNotEqualTo(String value) {
+            addCriterion("done_code <>", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageGreaterThan(String value) {
-            addCriterion("message >", value, "message");
+        public Criteria andDoneCodeGreaterThan(String value) {
+            addCriterion("done_code >", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageGreaterThanOrEqualTo(String value) {
-            addCriterion("message >=", value, "message");
+        public Criteria andDoneCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("done_code >=", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageLessThan(String value) {
-            addCriterion("message <", value, "message");
+        public Criteria andDoneCodeLessThan(String value) {
+            addCriterion("done_code <", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageLessThanOrEqualTo(String value) {
-            addCriterion("message <=", value, "message");
+        public Criteria andDoneCodeLessThanOrEqualTo(String value) {
+            addCriterion("done_code <=", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageLike(String value) {
-            addCriterion("message like", value, "message");
+        public Criteria andDoneCodeLike(String value) {
+            addCriterion("done_code like", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageNotLike(String value) {
-            addCriterion("message not like", value, "message");
+        public Criteria andDoneCodeNotLike(String value) {
+            addCriterion("done_code not like", value, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageIn(List<String> values) {
-            addCriterion("message in", values, "message");
+        public Criteria andDoneCodeIn(List<String> values) {
+            addCriterion("done_code in", values, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageNotIn(List<String> values) {
-            addCriterion("message not in", values, "message");
+        public Criteria andDoneCodeNotIn(List<String> values) {
+            addCriterion("done_code not in", values, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageBetween(String value1, String value2) {
-            addCriterion("message between", value1, value2, "message");
+        public Criteria andDoneCodeBetween(String value1, String value2) {
+            addCriterion("done_code between", value1, value2, "doneCode");
             return (Criteria) this;
         }
 
-        public Criteria andMessageNotBetween(String value1, String value2) {
-            addCriterion("message not between", value1, value2, "message");
+        public Criteria andDoneCodeNotBetween(String value1, String value2) {
+            addCriterion("done_code not between", value1, value2, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIsNull() {
+            addCriterion("done_msg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIsNotNull() {
+            addCriterion("done_msg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgEqualTo(String value) {
+            addCriterion("done_msg =", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotEqualTo(String value) {
+            addCriterion("done_msg <>", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgGreaterThan(String value) {
+            addCriterion("done_msg >", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgGreaterThanOrEqualTo(String value) {
+            addCriterion("done_msg >=", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLessThan(String value) {
+            addCriterion("done_msg <", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLessThanOrEqualTo(String value) {
+            addCriterion("done_msg <=", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLike(String value) {
+            addCriterion("done_msg like", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotLike(String value) {
+            addCriterion("done_msg not like", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIn(List<String> values) {
+            addCriterion("done_msg in", values, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotIn(List<String> values) {
+            addCriterion("done_msg not in", values, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgBetween(String value1, String value2) {
+            addCriterion("done_msg between", value1, value2, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotBetween(String value1, String value2) {
+            addCriterion("done_msg not between", value1, value2, "doneMsg");
             return (Criteria) this;
         }
     }

@@ -14,7 +14,8 @@
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
     <result column="note" jdbcType="VARCHAR" property="note" />
-    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="done_code" jdbcType="VARCHAR" property="doneCode" />
+    <result column="done_msg" jdbcType="VARCHAR" property="doneMsg" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -79,7 +80,7 @@
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
     sn, person, person_name, currency, demand_amount, real_amount, from_channel, `state`, 
-    ctime, lutime, note, message
+    ctime, lutime, note, done_code, done_msg
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.RechargeRecordExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -120,13 +121,13 @@
     insert into recharge_record (sn, person, person_name, 
       currency, demand_amount, real_amount, 
       from_channel, `state`, ctime, 
-      lutime, note, message
-      )
+      lutime, note, done_code, 
+      done_msg)
     values (#{sn,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
       #{currency,jdbcType=VARCHAR}, #{demandAmount,jdbcType=BIGINT}, #{realAmount,jdbcType=VARCHAR}, 
       #{fromChannel,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, 
-      #{lutime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}
-      )
+      #{lutime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{doneCode,jdbcType=VARCHAR}, 
+      #{doneMsg,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.RechargeRecord">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -165,8 +166,11 @@
       <if test="note != null">
         note,
       </if>
-      <if test="message != null">
-        message,
+      <if test="doneCode != null">
+        done_code,
+      </if>
+      <if test="doneMsg != null">
+        done_msg,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -203,8 +207,11 @@
       <if test="note != null">
         #{note,jdbcType=VARCHAR},
       </if>
-      <if test="message != null">
-        #{message,jdbcType=VARCHAR},
+      <if test="doneCode != null">
+        #{doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doneMsg != null">
+        #{doneMsg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -252,8 +259,11 @@
       <if test="record.note != null">
         note = #{record.note,jdbcType=VARCHAR},
       </if>
-      <if test="record.message != null">
-        message = #{record.message,jdbcType=VARCHAR},
+      <if test="record.doneCode != null">
+        done_code = #{record.doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doneMsg != null">
+        done_msg = #{record.doneMsg,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -274,7 +284,8 @@
       ctime = #{record.ctime,jdbcType=VARCHAR},
       lutime = #{record.lutime,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
-      message = #{record.message,jdbcType=VARCHAR}
+      done_code = #{record.doneCode,jdbcType=VARCHAR},
+      done_msg = #{record.doneMsg,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -313,8 +324,11 @@
       <if test="note != null">
         note = #{note,jdbcType=VARCHAR},
       </if>
-      <if test="message != null">
-        message = #{message,jdbcType=VARCHAR},
+      <if test="doneCode != null">
+        done_code = #{doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doneMsg != null">
+        done_msg = #{doneMsg,jdbcType=VARCHAR},
       </if>
     </set>
     where sn = #{sn,jdbcType=VARCHAR}
@@ -332,7 +346,8 @@
       ctime = #{ctime,jdbcType=VARCHAR},
       lutime = #{lutime,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},
-      message = #{message,jdbcType=VARCHAR}
+      done_code = #{doneCode,jdbcType=VARCHAR},
+      done_msg = #{doneMsg,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
   <update id="finish" parameterType="cj.netos.oc.wallet.model.RechargeRecord">
@@ -341,7 +356,8 @@
     real_amount = #{amount,jdbcType=VARCHAR},
     `state` = 1,
     lutime = #{lutime,jdbcType=VARCHAR},
-    message = #{message,jdbcType=VARCHAR}
+    done_code = #{doneCode,jdbcType=VARCHAR},
+      done_msg = #{doneMsg,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
 </mapper>

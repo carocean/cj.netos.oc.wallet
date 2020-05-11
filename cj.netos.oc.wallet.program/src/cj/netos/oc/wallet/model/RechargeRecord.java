@@ -71,10 +71,16 @@ public class RechargeRecord {
     private String note;
 
     /**
-     * Column: message
-     * Remark: 订单完成时的返回信息
+     * Column: done_code
+     * Remark: 订单完成时第三方渠道的返回码
      */
-    private String message;
+    private String doneCode;
+
+    /**
+     * Column: done_msg
+     * Remark: 订单完成时第三方渠道的返回信息
+     */
+    private String doneMsg;
 
     public String getSn() {
         return sn;
@@ -164,11 +170,19 @@ public class RechargeRecord {
         this.note = note == null ? null : note.trim();
     }
 
-    public String getMessage() {
-        return message;
+    public String getDoneCode() {
+        return doneCode;
     }
 
-    public void setMessage(String message) {
-        this.message = message == null ? null : message.trim();
+    public void setDoneCode(String doneCode) {
+        this.doneCode = doneCode == null ? null : doneCode.trim();
+    }
+
+    public String getDoneMsg() {
+        return doneMsg;
+    }
+
+    public void setDoneMsg(String doneMsg) {
+        this.doneMsg = doneMsg == null ? null : doneMsg.trim();
     }
 }

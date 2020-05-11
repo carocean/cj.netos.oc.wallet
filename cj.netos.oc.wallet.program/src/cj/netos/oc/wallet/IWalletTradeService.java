@@ -7,6 +7,6 @@ import cj.studio.ecm.net.CircuitException;
 public interface IWalletTradeService {
     RechargeRecord addRechargeOrder(RechargeBO recharge) throws CircuitException;
 
-    void rechargeDone(String sn, long amount,String message) throws CircuitException;
+    void rechargeDone(String sn, long amount,String code,String message) throws CircuitException;
 
 }
