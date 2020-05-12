@@ -7,12 +7,15 @@
     <result column="person" jdbcType="VARCHAR" property="person" />
     <result column="person_name" jdbcType="VARCHAR" property="personName" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
-    <result column="amount" jdbcType="BIGINT" property="amount" />
+    <result column="demand_amount" jdbcType="BIGINT" property="demandAmount" />
+    <result column="real_amount" jdbcType="BIGINT" property="realAmount" />
     <result column="to_channel" jdbcType="VARCHAR" property="toChannel" />
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
     <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="done_code" jdbcType="VARCHAR" property="doneCode" />
+    <result column="done_msg" jdbcType="VARCHAR" property="doneMsg" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -76,7 +79,8 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    sn, person, person_name, currency, amount, to_channel, `state`, ctime, lutime, note
+    sn, person, person_name, currency, demand_amount, real_amount, to_channel, `state`, 
+    ctime, lutime, note, done_code, done_msg
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.WithdrawRecordExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -115,13 +119,15 @@
   <insert id="insert" parameterType="cj.netos.oc.wallet.model.WithdrawRecord">
     <!-- @mbg.generated: generated automatically, do not modify! -->
     insert into withdraw_record (sn, person, person_name, 
-      currency, amount, to_channel, 
-      `state`, ctime, lutime, 
-      note)
+      currency, demand_amount, real_amount, 
+      to_channel, `state`, ctime, 
+      lutime, note, done_code, 
+      done_msg)
     values (#{sn,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
-      #{currency,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{toChannel,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR}, 
-      #{note,jdbcType=VARCHAR})
+      #{currency,jdbcType=VARCHAR}, #{demandAmount,jdbcType=BIGINT}, #{realAmount,jdbcType=BIGINT}, 
+      #{toChannel,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, 
+      #{lutime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{doneCode,jdbcType=VARCHAR}, 
+      #{doneMsg,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.WithdrawRecord">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -139,8 +145,11 @@
       <if test="currency != null">
         currency,
       </if>
-      <if test="amount != null">
-        amount,
+      <if test="demandAmount != null">
+        demand_amount,
+      </if>
+      <if test="realAmount != null">
+        real_amount,
       </if>
       <if test="toChannel != null">
         to_channel,
@@ -157,6 +166,12 @@
       <if test="note != null">
         note,
       </if>
+      <if test="doneCode != null">
+        done_code,
+      </if>
+      <if test="doneMsg != null">
+        done_msg,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sn != null">
@@ -171,8 +186,11 @@
       <if test="currency != null">
         #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="amount != null">
-        #{amount,jdbcType=BIGINT},
+      <if test="demandAmount != null">
+        #{demandAmount,jdbcType=BIGINT},
+      </if>
+      <if test="realAmount != null">
+        #{realAmount,jdbcType=BIGINT},
       </if>
       <if test="toChannel != null">
         #{toChannel,jdbcType=VARCHAR},
@@ -188,6 +206,12 @@
       </if>
       <if test="note != null">
         #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="doneCode != null">
+        #{doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doneMsg != null">
+        #{doneMsg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -214,8 +238,11 @@
       <if test="record.currency != null">
         currency = #{record.currency,jdbcType=VARCHAR},
       </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=BIGINT},
+      <if test="record.demandAmount != null">
+        demand_amount = #{record.demandAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.realAmount != null">
+        real_amount = #{record.realAmount,jdbcType=BIGINT},
       </if>
       <if test="record.toChannel != null">
         to_channel = #{record.toChannel,jdbcType=VARCHAR},
@@ -232,6 +259,12 @@
       <if test="record.note != null">
         note = #{record.note,jdbcType=VARCHAR},
       </if>
+      <if test="record.doneCode != null">
+        done_code = #{record.doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doneMsg != null">
+        done_msg = #{record.doneMsg,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -244,12 +277,15 @@
       person = #{record.person,jdbcType=VARCHAR},
       person_name = #{record.personName,jdbcType=VARCHAR},
       currency = #{record.currency,jdbcType=VARCHAR},
-      amount = #{record.amount,jdbcType=BIGINT},
+      demand_amount = #{record.demandAmount,jdbcType=BIGINT},
+      real_amount = #{record.realAmount,jdbcType=BIGINT},
       to_channel = #{record.toChannel,jdbcType=VARCHAR},
       `state` = #{record.state,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       lutime = #{record.lutime,jdbcType=VARCHAR},
-      note = #{record.note,jdbcType=VARCHAR}
+      note = #{record.note,jdbcType=VARCHAR},
+      done_code = #{record.doneCode,jdbcType=VARCHAR},
+      done_msg = #{record.doneMsg,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -267,8 +303,11 @@
       <if test="currency != null">
         currency = #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="amount != null">
-        amount = #{amount,jdbcType=BIGINT},
+      <if test="demandAmount != null">
+        demand_amount = #{demandAmount,jdbcType=BIGINT},
+      </if>
+      <if test="realAmount != null">
+        real_amount = #{realAmount,jdbcType=BIGINT},
       </if>
       <if test="toChannel != null">
         to_channel = #{toChannel,jdbcType=VARCHAR},
@@ -285,6 +324,12 @@
       <if test="note != null">
         note = #{note,jdbcType=VARCHAR},
       </if>
+      <if test="doneCode != null">
+        done_code = #{doneCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doneMsg != null">
+        done_msg = #{doneMsg,jdbcType=VARCHAR},
+      </if>
     </set>
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
@@ -294,12 +339,26 @@
     set person = #{person,jdbcType=VARCHAR},
       person_name = #{personName,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=BIGINT},
+      demand_amount = #{demandAmount,jdbcType=BIGINT},
+      real_amount = #{realAmount,jdbcType=BIGINT},
       to_channel = #{toChannel,jdbcType=VARCHAR},
       `state` = #{state,jdbcType=INTEGER},
       ctime = #{ctime,jdbcType=VARCHAR},
       lutime = #{lutime,jdbcType=VARCHAR},
-      note = #{note,jdbcType=VARCHAR}
+      note = #{note,jdbcType=VARCHAR},
+      done_code = #{doneCode,jdbcType=VARCHAR},
+      done_msg = #{doneMsg,jdbcType=VARCHAR}
+    where sn = #{sn,jdbcType=VARCHAR}
+  </update>
+
+  <update id="finish" parameterType="cj.netos.oc.wallet.model.WithdrawRecord">
+    update withdraw_record
+    set
+    real_amount = #{amount,jdbcType=VARCHAR},
+    `state` = 1,
+    lutime = #{lutime,jdbcType=VARCHAR},
+    done_code = #{doneCode,jdbcType=VARCHAR},
+      done_msg = #{doneMsg,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
 </mapper>

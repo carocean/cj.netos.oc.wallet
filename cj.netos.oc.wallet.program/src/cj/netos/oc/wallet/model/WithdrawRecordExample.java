@@ -417,63 +417,123 @@ public class WithdrawRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNull() {
-            addCriterion("amount is null");
+        public Criteria andDemandAmountIsNull() {
+            addCriterion("demand_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNotNull() {
-            addCriterion("amount is not null");
+        public Criteria andDemandAmountIsNotNull() {
+            addCriterion("demand_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountEqualTo(Long value) {
-            addCriterion("amount =", value, "amount");
+        public Criteria andDemandAmountEqualTo(Long value) {
+            addCriterion("demand_amount =", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotEqualTo(Long value) {
-            addCriterion("amount <>", value, "amount");
+        public Criteria andDemandAmountNotEqualTo(Long value) {
+            addCriterion("demand_amount <>", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThan(Long value) {
-            addCriterion("amount >", value, "amount");
+        public Criteria andDemandAmountGreaterThan(Long value) {
+            addCriterion("demand_amount >", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThanOrEqualTo(Long value) {
-            addCriterion("amount >=", value, "amount");
+        public Criteria andDemandAmountGreaterThanOrEqualTo(Long value) {
+            addCriterion("demand_amount >=", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThan(Long value) {
-            addCriterion("amount <", value, "amount");
+        public Criteria andDemandAmountLessThan(Long value) {
+            addCriterion("demand_amount <", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThanOrEqualTo(Long value) {
-            addCriterion("amount <=", value, "amount");
+        public Criteria andDemandAmountLessThanOrEqualTo(Long value) {
+            addCriterion("demand_amount <=", value, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIn(List<Long> values) {
-            addCriterion("amount in", values, "amount");
+        public Criteria andDemandAmountIn(List<Long> values) {
+            addCriterion("demand_amount in", values, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotIn(List<Long> values) {
-            addCriterion("amount not in", values, "amount");
+        public Criteria andDemandAmountNotIn(List<Long> values) {
+            addCriterion("demand_amount not in", values, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountBetween(Long value1, Long value2) {
-            addCriterion("amount between", value1, value2, "amount");
+        public Criteria andDemandAmountBetween(Long value1, Long value2) {
+            addCriterion("demand_amount between", value1, value2, "demandAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotBetween(Long value1, Long value2) {
-            addCriterion("amount not between", value1, value2, "amount");
+        public Criteria andDemandAmountNotBetween(Long value1, Long value2) {
+            addCriterion("demand_amount not between", value1, value2, "demandAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIsNull() {
+            addCriterion("real_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIsNotNull() {
+            addCriterion("real_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountEqualTo(Long value) {
+            addCriterion("real_amount =", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotEqualTo(Long value) {
+            addCriterion("real_amount <>", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountGreaterThan(Long value) {
+            addCriterion("real_amount >", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountGreaterThanOrEqualTo(Long value) {
+            addCriterion("real_amount >=", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountLessThan(Long value) {
+            addCriterion("real_amount <", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountLessThanOrEqualTo(Long value) {
+            addCriterion("real_amount <=", value, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountIn(List<Long> values) {
+            addCriterion("real_amount in", values, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotIn(List<Long> values) {
+            addCriterion("real_amount not in", values, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountBetween(Long value1, Long value2) {
+            addCriterion("real_amount between", value1, value2, "realAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealAmountNotBetween(Long value1, Long value2) {
+            addCriterion("real_amount not between", value1, value2, "realAmount");
             return (Criteria) this;
         }
 
@@ -814,6 +874,146 @@ public class WithdrawRecordExample {
 
         public Criteria andNoteNotBetween(String value1, String value2) {
             addCriterion("note not between", value1, value2, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeIsNull() {
+            addCriterion("done_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeIsNotNull() {
+            addCriterion("done_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeEqualTo(String value) {
+            addCriterion("done_code =", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeNotEqualTo(String value) {
+            addCriterion("done_code <>", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeGreaterThan(String value) {
+            addCriterion("done_code >", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("done_code >=", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeLessThan(String value) {
+            addCriterion("done_code <", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeLessThanOrEqualTo(String value) {
+            addCriterion("done_code <=", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeLike(String value) {
+            addCriterion("done_code like", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeNotLike(String value) {
+            addCriterion("done_code not like", value, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeIn(List<String> values) {
+            addCriterion("done_code in", values, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeNotIn(List<String> values) {
+            addCriterion("done_code not in", values, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeBetween(String value1, String value2) {
+            addCriterion("done_code between", value1, value2, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneCodeNotBetween(String value1, String value2) {
+            addCriterion("done_code not between", value1, value2, "doneCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIsNull() {
+            addCriterion("done_msg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIsNotNull() {
+            addCriterion("done_msg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgEqualTo(String value) {
+            addCriterion("done_msg =", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotEqualTo(String value) {
+            addCriterion("done_msg <>", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgGreaterThan(String value) {
+            addCriterion("done_msg >", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgGreaterThanOrEqualTo(String value) {
+            addCriterion("done_msg >=", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLessThan(String value) {
+            addCriterion("done_msg <", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLessThanOrEqualTo(String value) {
+            addCriterion("done_msg <=", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgLike(String value) {
+            addCriterion("done_msg like", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotLike(String value) {
+            addCriterion("done_msg not like", value, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgIn(List<String> values) {
+            addCriterion("done_msg in", values, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotIn(List<String> values) {
+            addCriterion("done_msg not in", values, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgBetween(String value1, String value2) {
+            addCriterion("done_msg between", value1, value2, "doneMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneMsgNotBetween(String value1, String value2) {
+            addCriterion("done_msg not between", value1, value2, "doneMsg");
             return (Criteria) this;
         }
     }

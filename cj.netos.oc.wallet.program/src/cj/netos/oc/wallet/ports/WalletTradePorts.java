@@ -2,6 +2,7 @@ package cj.netos.oc.wallet.ports;
 
 import cj.netos.oc.wallet.IWalletTradeService;
 import cj.netos.oc.wallet.bo.RechargeBO;
+import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
@@ -30,8 +31,15 @@ public class WalletTradePorts implements IWalletTradePorts {
     }
 
     @Override
-    public void withdraw(ISecuritySession securitySession) throws CircuitException {
-        System.out.println(securitySession.principal());
+    public Map<String, Object> withdrawOrder(ISecuritySession securitySession, WithdrawBO withdrawBO) throws CircuitException {
+        Object obj = walletTradeService.addWithdrawOrder(withdrawBO);
+        String json = new Gson().toJson(obj);
+        return new Gson().fromJson(json, HashMap.class);
+    }
+
+    @Override
+    public void withdrawDone(ISecuritySession securitySession, String sn, long amount, String code, String message) throws CircuitException {
+        walletTradeService.withdrawDone(sn,amount,code,message);
     }
 
     @Override

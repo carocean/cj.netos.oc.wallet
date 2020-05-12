@@ -4,9 +4,11 @@ import cj.netos.oc.wallet.IFinanceService;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.IWalletTradeService;
 import cj.netos.oc.wallet.bo.RechargeBO;
+import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.netos.oc.wallet.mapper.BalanceAccountMapper;
 import cj.netos.oc.wallet.mapper.BalanceBillMapper;
 import cj.netos.oc.wallet.mapper.RechargeRecordMapper;
+import cj.netos.oc.wallet.mapper.WithdrawRecordMapper;
 import cj.netos.oc.wallet.model.*;
 import cj.netos.oc.wallet.util.IdWorker;
 import cj.netos.oc.wallet.util.WalletUtils;
@@ -27,6 +29,9 @@ public class WalletTradeService implements IWalletTradeService {
 
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.BalanceAccountMapper")
     BalanceAccountMapper balanceAccountMapper;
+
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WithdrawRecordMapper")
+    WithdrawRecordMapper withdrawRecordMapper;
     @CjServiceRef
     IWalletService walletService;
 
@@ -75,7 +80,7 @@ public class WalletTradeService implements IWalletTradeService {
             throw new CircuitException("500", "没有开通账户:" + rechargeRecord.getPerson());
         }
         updateRechargeRecord(sn, amount, code, message);
-        addBalanceBill(rechargeRecord, amount);
+        addBalanceBillByRecharge(rechargeRecord, amount);
     }
 
     private void updateRechargeRecord(String sn, long amount, String code, String message) {
@@ -83,13 +88,13 @@ public class WalletTradeService implements IWalletTradeService {
         rechargeRecordMapper.finish(sn, amount, ldtime, code, message);
     }
 
-    private void addBalanceBill(RechargeRecord rechargeRecord, long amount) {
+    private void addBalanceBillByRecharge(RechargeRecord rechargeRecord, long amount) {
         BalanceBill balanceBill = new BalanceBill();
 
         BalanceAccount balanceAccount = walletService.getBalanceAccount(rechargeRecord.getPerson());
         IdWorker iw1 = new IdWorker(1);
         try {
-            balanceBill.setSn(iw1.nextId()+"");
+            balanceBill.setSn(iw1.nextId() + "");
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -115,5 +120,78 @@ public class WalletTradeService implements IWalletTradeService {
         balanceAccountMapper.updateAmount(balanceAccount.getId(), balance, WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
     }
 
+    @CjTransaction
+    @Override
+    public WithdrawRecord addWithdrawOrder(WithdrawBO withdrawBO) {
+        WithdrawRecord withdrawRecord = new WithdrawRecord();
+        withdrawRecord.setDemandAmount(withdrawBO.getAmount());
+        withdrawRecord.setCurrency(withdrawBO.getCurrency());
+        withdrawRecord.setToChannel(withdrawBO.getPaymentChannelID());
+        withdrawRecord.setPerson(withdrawBO.getWitchrawer());
+        withdrawRecord.setState(0);
+        withdrawRecord.setCtime(WalletUtils.dateTimeToSecond(withdrawBO.getCtime()));
+        withdrawRecord.setLutime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        withdrawRecord.setPersonName(withdrawBO.getWitchrawerName());
+        withdrawRecord.setNote(withdrawBO.getNote());
+        IdWorker iw1 = new IdWorker(1);
+        try {
+            withdrawRecord.setSn(iw1.nextId() + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        withdrawRecordMapper.insert(withdrawRecord);
+        return withdrawRecord;
+    }
+
+    @CjTransaction
+    @Override
+    public void withdrawDone(String sn, long amount, String code, String message) throws CircuitException {
+        WithdrawRecord withdrawRecord = withdrawRecordMapper.selectByPrimaryKey(sn);
+        if (withdrawRecord == null) {
+            throw new CircuitException("404", "没有下单");
+        }
+        if (withdrawRecord.getState() == 1) {
+            throw new CircuitException("404", "订单已完成");
+        }
+        if (!walletService.isinitWallet(withdrawRecord.getPerson())) {
+            throw new CircuitException("500", "没有开通账户:" + withdrawRecord.getPerson());
+        }
+        updateWithdrawRecord(sn, amount, code, message);
+        addBalanceBillByWithdraw(withdrawRecord, amount);
+    }
+
+
+    private void updateWithdrawRecord(String sn, long amount, String code, String message) {
+        String ldtime = WalletUtils.dateTimeToSecond(System.currentTimeMillis());
+        withdrawRecordMapper.finish(sn, amount, ldtime, code, message);
+    }
+
+    private void addBalanceBillByWithdraw(WithdrawRecord withdrawRecord, long amount) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(withdrawRecord.getPerson());
+        IdWorker iw1 = new IdWorker(1);
+        try {
+            balanceBill.setSn(iw1.nextId() + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(amount*-1);
+        balanceBill.setBalance(balanceAccount.getAmount() - amount);
+        balanceBill.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceBill.setNote(withdrawRecord.getNote());
+        balanceBill.setOrder(1);
+        balanceBill.setRefsn(withdrawRecord.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("提现");
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
 
 }

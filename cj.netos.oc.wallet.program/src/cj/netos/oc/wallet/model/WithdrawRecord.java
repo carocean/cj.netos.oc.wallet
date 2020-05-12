@@ -29,10 +29,16 @@ public class WithdrawRecord {
     private String currency;
 
     /**
-     * Column: amount
-     * Remark: 申购金
+     * Column: demand_amount
+     * Remark: 欲申购金
      */
-    private Long amount;
+    private Long demandAmount;
+
+    /**
+     * Column: real_amount
+     * Remark: 实际渠道接收的金额
+     */
+    private Long realAmount;
 
     /**
      * Column: to_channel
@@ -62,6 +68,18 @@ public class WithdrawRecord {
      * Column: note
      */
     private String note;
+
+    /**
+     * Column: done_code
+     * Remark: 订单完成时第三方渠道的返回码
+     */
+    private String doneCode;
+
+    /**
+     * Column: done_msg
+     * Remark: 订单完成时第三方渠道的返回信息
+     */
+    private String doneMsg;
 
     public String getSn() {
         return sn;
@@ -95,12 +113,20 @@ public class WithdrawRecord {
         this.currency = currency == null ? null : currency.trim();
     }
 
-    public Long getAmount() {
-        return amount;
+    public Long getDemandAmount() {
+        return demandAmount;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setDemandAmount(Long demandAmount) {
+        this.demandAmount = demandAmount;
+    }
+
+    public Long getRealAmount() {
+        return realAmount;
+    }
+
+    public void setRealAmount(Long realAmount) {
+        this.realAmount = realAmount;
     }
 
     public String getToChannel() {
@@ -141,5 +167,21 @@ public class WithdrawRecord {
 
     public void setNote(String note) {
         this.note = note == null ? null : note.trim();
+    }
+
+    public String getDoneCode() {
+        return doneCode;
+    }
+
+    public void setDoneCode(String doneCode) {
+        this.doneCode = doneCode == null ? null : doneCode.trim();
+    }
+
+    public String getDoneMsg() {
+        return doneMsg;
+    }
+
+    public void setDoneMsg(String doneMsg) {
+        this.doneMsg = doneMsg == null ? null : doneMsg.trim();
     }
 }

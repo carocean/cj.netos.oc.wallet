@@ -61,4 +61,8 @@ public interface WithdrawRecordMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(WithdrawRecord record);
+
+
+    void finish(@Param(value = "sn") String sn, @Param(value = "amount") long amount, @Param(value = "lutime") String lutime, @Param(value = "doneCode") String doneCode, @Param(value = "doneMsg") String doneMsg);
+
 }

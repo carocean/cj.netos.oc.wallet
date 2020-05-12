@@ -1,6 +1,7 @@
 package cj.netos.oc.wallet.ports;
 
 import cj.netos.oc.wallet.bo.RechargeBO;
+import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.openport.AccessTokenIn;
 import cj.studio.openport.IOpenportService;
@@ -32,8 +33,19 @@ public interface IWalletTradePorts extends IOpenportService {
     ) throws CircuitException;
 
     @CjOpenportAppSecurity
-    @CjOpenport(usage = "提现交易指令", tokenIn = AccessTokenIn.nope)
-    void withdraw(ISecuritySession securitySession) throws CircuitException;
+    @CjOpenport(usage = "提现下单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
+    Map<String, Object> withdrawOrder(ISecuritySession securitySession,
+                                      @CjOpenportParameter(usage = "充值单", name = "withdrawBO", in = PKeyInRequest.content)
+                                              WithdrawBO withdrawBO) throws CircuitException;
+
+    @CjOpenportAppSecurity
+    @CjOpenport(usage = "完成提现的交易指令", tokenIn = AccessTokenIn.nope)
+    void withdrawDone(ISecuritySession securitySession,
+                      @CjOpenportParameter(usage = "订单号", name = "sn") String sn,
+                      @CjOpenportParameter(usage = "实际完成提现的金额,单位为分", name = "amount") long amount,
+                      @CjOpenportParameter(usage = "订单完成时第三方渠道的返回码", name = "code") String code,
+                      @CjOpenportParameter(usage = "订单完成时第三方渠道的返回信息", name = "message") String message
+    ) throws CircuitException;
 
     @CjOpenportAppSecurity
     @CjOpenport(usage = "承兑交易指令", tokenIn = AccessTokenIn.nope)
