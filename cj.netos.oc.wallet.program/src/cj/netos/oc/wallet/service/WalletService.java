@@ -83,6 +83,7 @@ public class WalletService implements IWalletService {
         rootAccount.setPersonName(person.getNickName());
         rootAccount.setState(0);
         rootAccount.setProperty(0);
+        rootAccount.setOnorderAmount(0L);
         rootAccountMapper.insert(rootAccount);
         map.put("rootAccount", rootAccount.getId());
 

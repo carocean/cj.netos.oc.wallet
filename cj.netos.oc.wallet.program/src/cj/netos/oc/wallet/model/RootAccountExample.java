@@ -806,6 +806,66 @@ public class RootAccountExample {
             addCriterion("sign_value not between", value1, value2, "signValue");
             return (Criteria) this;
         }
+
+        public Criteria andOnorderAmountIsNull() {
+            addCriterion("onorder_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountIsNotNull() {
+            addCriterion("onorder_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountEqualTo(Long value) {
+            addCriterion("onorder_amount =", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountNotEqualTo(Long value) {
+            addCriterion("onorder_amount <>", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountGreaterThan(Long value) {
+            addCriterion("onorder_amount >", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountGreaterThanOrEqualTo(Long value) {
+            addCriterion("onorder_amount >=", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountLessThan(Long value) {
+            addCriterion("onorder_amount <", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountLessThanOrEqualTo(Long value) {
+            addCriterion("onorder_amount <=", value, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountIn(List<Long> values) {
+            addCriterion("onorder_amount in", values, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountNotIn(List<Long> values) {
+            addCriterion("onorder_amount not in", values, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountBetween(Long value1, Long value2) {
+            addCriterion("onorder_amount between", value1, value2, "onorderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnorderAmountNotBetween(Long value1, Long value2) {
+            addCriterion("onorder_amount not between", value1, value2, "onorderAmount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -13,6 +13,7 @@
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
     <result column="sign_value" jdbcType="VARCHAR" property="signValue" />
+    <result column="onorder_amount" jdbcType="BIGINT" property="onorderAmount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -76,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    id, person, phone, person_name, is_real_name, property, `state`, ctime, lutime, sign_value
+    id, person, phone, person_name, is_real_name, property, `state`, ctime, lutime, sign_value, 
+    onorder_amount
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.RootAccountExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -117,11 +119,11 @@
     insert into root_account (id, person, phone, 
       person_name, is_real_name, property, 
       `state`, ctime, lutime, 
-      sign_value)
+      sign_value, onorder_amount)
     values (#{id,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{personName,jdbcType=VARCHAR}, #{isRealName,jdbcType=INTEGER}, #{property,jdbcType=INTEGER}, 
       #{state,jdbcType=INTEGER}, #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR}, 
-      #{signValue,jdbcType=VARCHAR})
+      #{signValue,jdbcType=VARCHAR}, #{onorderAmount,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.RootAccount">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -157,6 +159,9 @@
       <if test="signValue != null">
         sign_value,
       </if>
+      <if test="onorderAmount != null">
+        onorder_amount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -188,6 +193,9 @@
       </if>
       <if test="signValue != null">
         #{signValue,jdbcType=VARCHAR},
+      </if>
+      <if test="onorderAmount != null">
+        #{onorderAmount,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -232,6 +240,9 @@
       <if test="record.signValue != null">
         sign_value = #{record.signValue,jdbcType=VARCHAR},
       </if>
+      <if test="record.onorderAmount != null">
+        onorder_amount = #{record.onorderAmount,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -249,7 +260,8 @@
       `state` = #{record.state,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       lutime = #{record.lutime,jdbcType=VARCHAR},
-      sign_value = #{record.signValue,jdbcType=VARCHAR}
+      sign_value = #{record.signValue,jdbcType=VARCHAR},
+      onorder_amount = #{record.onorderAmount,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -285,6 +297,9 @@
       <if test="signValue != null">
         sign_value = #{signValue,jdbcType=VARCHAR},
       </if>
+      <if test="onorderAmount != null">
+        onorder_amount = #{onorderAmount,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -299,7 +314,8 @@
       `state` = #{state,jdbcType=INTEGER},
       ctime = #{ctime,jdbcType=VARCHAR},
       lutime = #{lutime,jdbcType=VARCHAR},
-      sign_value = #{signValue,jdbcType=VARCHAR}
+      sign_value = #{signValue,jdbcType=VARCHAR},
+      onorder_amount = #{onorderAmount,jdbcType=BIGINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

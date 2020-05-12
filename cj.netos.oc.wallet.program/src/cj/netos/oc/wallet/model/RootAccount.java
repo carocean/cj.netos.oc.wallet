@@ -63,6 +63,12 @@ public class RootAccount {
      */
     private String signValue;
 
+    /**
+     * Column: onorder_amount
+     * Remark: 在预订单资金，比如正在支付、正在转账、正在申购时，由于还未完成确认扣款，又怕该资金被作它用，因此需要从别的账户划扣到主账户的在订单中暂存，在完成确认是扣减掉
+     */
+    private Long onorderAmount;
+
     public String getId() {
         return id;
     }
@@ -141,5 +147,13 @@ public class RootAccount {
 
     public void setSignValue(String signValue) {
         this.signValue = signValue == null ? null : signValue.trim();
+    }
+
+    public Long getOnorderAmount() {
+        return onorderAmount;
+    }
+
+    public void setOnorderAmount(Long onorderAmount) {
+        this.onorderAmount = onorderAmount;
     }
 }

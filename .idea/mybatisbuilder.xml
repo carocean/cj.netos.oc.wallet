@@ -163,6 +163,16 @@
             </TableInfo>
           </value>
         </entry>
+        <entry key="netos.fin#onorder_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.fin" />
+              <option name="domainName" value="OnorderBill" />
+              <option name="tableComment" value="主账户在订单资金余额变动流水表" />
+              <option name="tableName" value="onorder_bill" />
+            </TableInfo>
+          </value>
+        </entry>
         <entry key="netos.fin#pay_channel">
           <value>
             <TableInfo>
