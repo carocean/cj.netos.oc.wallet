@@ -41,7 +41,7 @@ public class RootAccount {
 
     /**
      * Column: state
-     * Remark: 00 待充值 01 充值中 02 成功 03 失败 
+     * Remark: 0-生效 1- 冻结 2- 注销
      */
     private Integer state;
 

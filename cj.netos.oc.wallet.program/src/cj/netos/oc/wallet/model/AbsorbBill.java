@@ -23,11 +23,6 @@ public class AbsorbBill {
     private String title;
 
     /**
-     * Column: leading
-     */
-    private String leading;
-
-    /**
      * Column: order
      * Remark: 01 充值  02 提现 03 转账 04 支付 05 收款 06原交易退款 07原交易撤销 08承兑
      */
@@ -91,14 +86,6 @@ public class AbsorbBill {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
-    }
-
-    public String getLeading() {
-        return leading;
-    }
-
-    public void setLeading(String leading) {
-        this.leading = leading == null ? null : leading.trim();
     }
 
     public Integer getOrder() {

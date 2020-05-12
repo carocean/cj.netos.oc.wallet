@@ -263,6 +263,16 @@
             </TableInfo>
           </value>
         </entry>
+        <entry key="netos.fin#work_day">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.fin" />
+              <option name="domainName" value="WorkDay" />
+              <option name="tableComment" value="会计日期切换表，&#10;各账户前日余额及当前日终快照，并置日切状态为正在切换&#10;原理：当插入一条记录时，初始状态为正在日切，则继续接受交易，添加的账金变动单记录的会计日期使用下一个会计日期，而不是当前会计日期，这样只需核到开始日切前的日账&#10;可以充许一一个会计日期账有错，在一下个日切时会被纠正，纠正生成记录给用户查看" />
+              <option name="tableName" value="work_day" />
+            </TableInfo>
+          </value>
+        </entry>
         <entry key="netos.fin#work_switch_day">
           <value>
             <TableInfo>

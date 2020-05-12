@@ -62,5 +62,5 @@ public interface RechargeRecordMapper {
      */
     int updateByPrimaryKey(RechargeRecord record);
 
-    void finish(@Param(value = "sn") String sn, @Param(value = "amount") long amount, @Param(value = "lutime") String lutime, @Param(value = "doneCode") String doneCode,@Param(value = "doneMsg") String doneMsg);
+    void finish(@Param(value = "sn") String sn, @Param(value = "amount") long amount, @Param(value = "lutime") String lutime, @Param(value = "doneCode") String doneCode, @Param(value = "doneMsg") String doneMsg);
 }

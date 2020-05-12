@@ -1,11 +1,9 @@
 package cj.netos.oc.wallet.model;
 
-import java.math.BigDecimal;
-
 /**
- * Table: work_switch_day
+ * Table: work_day
  */
-public class WorkSwitchDay {
+public class WorkDay {
     /**
      * Column: id
      */
@@ -63,46 +61,21 @@ public class WorkSwitchDay {
     private Long checkedProfitAmount;
 
     /**
-     * Column: pre_yinj_amount
+     * Column: day_state
+     * Remark: 日切状态: 0 工作状态 1 正在日切 2 日切完成，则余额才可用，即第二天的第一笔从这个余额开始
      */
-    private Long preYinjAmount;
-
-    /**
-     * Column: uncheck_yinj_amount
-     */
-    private Long uncheckYinjAmount;
-
-    /**
-     * Column: checked_yinj_amount
-     */
-    private Long checkedYinjAmount;
-
-    /**
-     * Column: pre_weny_quantities
-     */
-    private BigDecimal preWenyQuantities;
-
-    /**
-     * Column: unckeck_weny_quatities
-     */
-    private BigDecimal unckeckWenyQuatities;
-
-    /**
-     * Column: checked_weny_quantities
-     */
-    private BigDecimal checkedWenyQuantities;
-
-    /**
-     * Column: day_switch_state
-     * Remark: 日切状态: 0 正在日切 1 日切完成
-     */
-    private Integer daySwitchState;
+    private Integer dayState;
 
     /**
      * Column: note
      * Remark: 审计备注
      */
     private String note;
+
+    /**
+     * Column: person
+     */
+    private String person;
 
     public String getId() {
         return id;
@@ -192,60 +165,12 @@ public class WorkSwitchDay {
         this.checkedProfitAmount = checkedProfitAmount;
     }
 
-    public Long getPreYinjAmount() {
-        return preYinjAmount;
+    public Integer getDayState() {
+        return dayState;
     }
 
-    public void setPreYinjAmount(Long preYinjAmount) {
-        this.preYinjAmount = preYinjAmount;
-    }
-
-    public Long getUncheckYinjAmount() {
-        return uncheckYinjAmount;
-    }
-
-    public void setUncheckYinjAmount(Long uncheckYinjAmount) {
-        this.uncheckYinjAmount = uncheckYinjAmount;
-    }
-
-    public Long getCheckedYinjAmount() {
-        return checkedYinjAmount;
-    }
-
-    public void setCheckedYinjAmount(Long checkedYinjAmount) {
-        this.checkedYinjAmount = checkedYinjAmount;
-    }
-
-    public BigDecimal getPreWenyQuantities() {
-        return preWenyQuantities;
-    }
-
-    public void setPreWenyQuantities(BigDecimal preWenyQuantities) {
-        this.preWenyQuantities = preWenyQuantities;
-    }
-
-    public BigDecimal getUnckeckWenyQuatities() {
-        return unckeckWenyQuatities;
-    }
-
-    public void setUnckeckWenyQuatities(BigDecimal unckeckWenyQuatities) {
-        this.unckeckWenyQuatities = unckeckWenyQuatities;
-    }
-
-    public BigDecimal getCheckedWenyQuantities() {
-        return checkedWenyQuantities;
-    }
-
-    public void setCheckedWenyQuantities(BigDecimal checkedWenyQuantities) {
-        this.checkedWenyQuantities = checkedWenyQuantities;
-    }
-
-    public Integer getDaySwitchState() {
-        return daySwitchState;
-    }
-
-    public void setDaySwitchState(Integer daySwitchState) {
-        this.daySwitchState = daySwitchState;
+    public void setDayState(Integer dayState) {
+        this.dayState = dayState;
     }
 
     public String getNote() {
@@ -254,5 +179,13 @@ public class WorkSwitchDay {
 
     public void setNote(String note) {
         this.note = note == null ? null : note.trim();
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person == null ? null : person.trim();
     }
 }

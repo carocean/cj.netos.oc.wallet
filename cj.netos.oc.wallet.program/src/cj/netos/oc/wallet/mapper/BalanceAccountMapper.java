@@ -61,4 +61,6 @@ public interface BalanceAccountMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(BalanceAccount record);
+
+    void updateAmount(@Param(value = "id") String id, @Param(value = "balance") Long balance, @Param(value = "lutime") String lutime);
 }

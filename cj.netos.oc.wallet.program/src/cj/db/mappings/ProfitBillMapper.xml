@@ -6,7 +6,6 @@
     <id column="sn" jdbcType="VARCHAR" property="sn" />
     <result column="accountid" jdbcType="VARCHAR" property="accountid" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="leading" jdbcType="VARCHAR" property="leading" />
     <result column="order" jdbcType="INTEGER" property="order" />
     <result column="amount" jdbcType="BIGINT" property="amount" />
     <result column="balance" jdbcType="BIGINT" property="balance" />
@@ -77,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    sn, accountid, title, `leading`, `order`, amount, balance, refsn, ctime, note, workday
+    sn, accountid, title, `order`, amount, balance, refsn, ctime, note, workday
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.ProfitBillExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -116,13 +115,13 @@
   <insert id="insert" parameterType="cj.netos.oc.wallet.model.ProfitBill">
     <!-- @mbg.generated: generated automatically, do not modify! -->
     insert into profit_bill (sn, accountid, title, 
-      `leading`, `order`, amount, 
-      balance, refsn, ctime, 
-      note, workday)
+      `order`, amount, balance, 
+      refsn, ctime, note, 
+      workday)
     values (#{sn,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{leading,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, 
-      #{balance,jdbcType=BIGINT}, #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, 
-      #{note,jdbcType=VARCHAR}, #{workday,jdbcType=VARCHAR})
+      #{order,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
+      #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
+      #{workday,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.ProfitBill">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -136,9 +135,6 @@
       </if>
       <if test="title != null">
         title,
-      </if>
-      <if test="leading != null">
-        `leading`,
       </if>
       <if test="order != null">
         `order`,
@@ -171,9 +167,6 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="leading != null">
-        #{leading,jdbcType=VARCHAR},
       </if>
       <if test="order != null">
         #{order,jdbcType=INTEGER},
@@ -218,9 +211,6 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.leading != null">
-        `leading` = #{record.leading,jdbcType=VARCHAR},
-      </if>
       <if test="record.order != null">
         `order` = #{record.order,jdbcType=INTEGER},
       </if>
@@ -253,7 +243,6 @@
     set sn = #{record.sn,jdbcType=VARCHAR},
       accountid = #{record.accountid,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
-      `leading` = #{record.leading,jdbcType=VARCHAR},
       `order` = #{record.order,jdbcType=INTEGER},
       amount = #{record.amount,jdbcType=BIGINT},
       balance = #{record.balance,jdbcType=BIGINT},
@@ -274,9 +263,6 @@
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="leading != null">
-        `leading` = #{leading,jdbcType=VARCHAR},
       </if>
       <if test="order != null">
         `order` = #{order,jdbcType=INTEGER},
@@ -307,7 +293,6 @@
     update profit_bill
     set accountid = #{accountid,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
-      `leading` = #{leading,jdbcType=VARCHAR},
       `order` = #{order,jdbcType=INTEGER},
       amount = #{amount,jdbcType=BIGINT},
       balance = #{balance,jdbcType=BIGINT},

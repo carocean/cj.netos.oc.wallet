@@ -1,10 +1,9 @@
 package cj.netos.oc.wallet.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkSwitchDayExample {
+public class WorkDayExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -14,7 +13,7 @@ public class WorkSwitchDayExample {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    public WorkSwitchDayExample() {
+    public WorkDayExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -818,423 +817,63 @@ public class WorkSwitchDayExample {
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountIsNull() {
-            addCriterion("pre_yinj_amount is null");
+        public Criteria andDayStateIsNull() {
+            addCriterion("day_state is null");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountIsNotNull() {
-            addCriterion("pre_yinj_amount is not null");
+        public Criteria andDayStateIsNotNull() {
+            addCriterion("day_state is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountEqualTo(Long value) {
-            addCriterion("pre_yinj_amount =", value, "preYinjAmount");
+        public Criteria andDayStateEqualTo(Integer value) {
+            addCriterion("day_state =", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountNotEqualTo(Long value) {
-            addCriterion("pre_yinj_amount <>", value, "preYinjAmount");
+        public Criteria andDayStateNotEqualTo(Integer value) {
+            addCriterion("day_state <>", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountGreaterThan(Long value) {
-            addCriterion("pre_yinj_amount >", value, "preYinjAmount");
+        public Criteria andDayStateGreaterThan(Integer value) {
+            addCriterion("day_state >", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountGreaterThanOrEqualTo(Long value) {
-            addCriterion("pre_yinj_amount >=", value, "preYinjAmount");
+        public Criteria andDayStateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("day_state >=", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountLessThan(Long value) {
-            addCriterion("pre_yinj_amount <", value, "preYinjAmount");
+        public Criteria andDayStateLessThan(Integer value) {
+            addCriterion("day_state <", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountLessThanOrEqualTo(Long value) {
-            addCriterion("pre_yinj_amount <=", value, "preYinjAmount");
+        public Criteria andDayStateLessThanOrEqualTo(Integer value) {
+            addCriterion("day_state <=", value, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountIn(List<Long> values) {
-            addCriterion("pre_yinj_amount in", values, "preYinjAmount");
+        public Criteria andDayStateIn(List<Integer> values) {
+            addCriterion("day_state in", values, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountNotIn(List<Long> values) {
-            addCriterion("pre_yinj_amount not in", values, "preYinjAmount");
+        public Criteria andDayStateNotIn(List<Integer> values) {
+            addCriterion("day_state not in", values, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountBetween(Long value1, Long value2) {
-            addCriterion("pre_yinj_amount between", value1, value2, "preYinjAmount");
+        public Criteria andDayStateBetween(Integer value1, Integer value2) {
+            addCriterion("day_state between", value1, value2, "dayState");
             return (Criteria) this;
         }
 
-        public Criteria andPreYinjAmountNotBetween(Long value1, Long value2) {
-            addCriterion("pre_yinj_amount not between", value1, value2, "preYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountIsNull() {
-            addCriterion("uncheck_yinj_amount is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountIsNotNull() {
-            addCriterion("uncheck_yinj_amount is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountEqualTo(Long value) {
-            addCriterion("uncheck_yinj_amount =", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountNotEqualTo(Long value) {
-            addCriterion("uncheck_yinj_amount <>", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountGreaterThan(Long value) {
-            addCriterion("uncheck_yinj_amount >", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountGreaterThanOrEqualTo(Long value) {
-            addCriterion("uncheck_yinj_amount >=", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountLessThan(Long value) {
-            addCriterion("uncheck_yinj_amount <", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountLessThanOrEqualTo(Long value) {
-            addCriterion("uncheck_yinj_amount <=", value, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountIn(List<Long> values) {
-            addCriterion("uncheck_yinj_amount in", values, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountNotIn(List<Long> values) {
-            addCriterion("uncheck_yinj_amount not in", values, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountBetween(Long value1, Long value2) {
-            addCriterion("uncheck_yinj_amount between", value1, value2, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andUncheckYinjAmountNotBetween(Long value1, Long value2) {
-            addCriterion("uncheck_yinj_amount not between", value1, value2, "uncheckYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountIsNull() {
-            addCriterion("checked_yinj_amount is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountIsNotNull() {
-            addCriterion("checked_yinj_amount is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountEqualTo(Long value) {
-            addCriterion("checked_yinj_amount =", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountNotEqualTo(Long value) {
-            addCriterion("checked_yinj_amount <>", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountGreaterThan(Long value) {
-            addCriterion("checked_yinj_amount >", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountGreaterThanOrEqualTo(Long value) {
-            addCriterion("checked_yinj_amount >=", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountLessThan(Long value) {
-            addCriterion("checked_yinj_amount <", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountLessThanOrEqualTo(Long value) {
-            addCriterion("checked_yinj_amount <=", value, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountIn(List<Long> values) {
-            addCriterion("checked_yinj_amount in", values, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountNotIn(List<Long> values) {
-            addCriterion("checked_yinj_amount not in", values, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountBetween(Long value1, Long value2) {
-            addCriterion("checked_yinj_amount between", value1, value2, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedYinjAmountNotBetween(Long value1, Long value2) {
-            addCriterion("checked_yinj_amount not between", value1, value2, "checkedYinjAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesIsNull() {
-            addCriterion("pre_weny_quantities is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesIsNotNull() {
-            addCriterion("pre_weny_quantities is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesEqualTo(BigDecimal value) {
-            addCriterion("pre_weny_quantities =", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesNotEqualTo(BigDecimal value) {
-            addCriterion("pre_weny_quantities <>", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesGreaterThan(BigDecimal value) {
-            addCriterion("pre_weny_quantities >", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("pre_weny_quantities >=", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesLessThan(BigDecimal value) {
-            addCriterion("pre_weny_quantities <", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("pre_weny_quantities <=", value, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesIn(List<BigDecimal> values) {
-            addCriterion("pre_weny_quantities in", values, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesNotIn(List<BigDecimal> values) {
-            addCriterion("pre_weny_quantities not in", values, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("pre_weny_quantities between", value1, value2, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andPreWenyQuantitiesNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("pre_weny_quantities not between", value1, value2, "preWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesIsNull() {
-            addCriterion("unckeck_weny_quatities is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesIsNotNull() {
-            addCriterion("unckeck_weny_quatities is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesEqualTo(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities =", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesNotEqualTo(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities <>", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesGreaterThan(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities >", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities >=", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesLessThan(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities <", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("unckeck_weny_quatities <=", value, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesIn(List<BigDecimal> values) {
-            addCriterion("unckeck_weny_quatities in", values, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesNotIn(List<BigDecimal> values) {
-            addCriterion("unckeck_weny_quatities not in", values, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("unckeck_weny_quatities between", value1, value2, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnckeckWenyQuatitiesNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("unckeck_weny_quatities not between", value1, value2, "unckeckWenyQuatities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesIsNull() {
-            addCriterion("checked_weny_quantities is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesIsNotNull() {
-            addCriterion("checked_weny_quantities is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesEqualTo(BigDecimal value) {
-            addCriterion("checked_weny_quantities =", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesNotEqualTo(BigDecimal value) {
-            addCriterion("checked_weny_quantities <>", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesGreaterThan(BigDecimal value) {
-            addCriterion("checked_weny_quantities >", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("checked_weny_quantities >=", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesLessThan(BigDecimal value) {
-            addCriterion("checked_weny_quantities <", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("checked_weny_quantities <=", value, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesIn(List<BigDecimal> values) {
-            addCriterion("checked_weny_quantities in", values, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesNotIn(List<BigDecimal> values) {
-            addCriterion("checked_weny_quantities not in", values, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("checked_weny_quantities between", value1, value2, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckedWenyQuantitiesNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("checked_weny_quantities not between", value1, value2, "checkedWenyQuantities");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateIsNull() {
-            addCriterion("day_switch_state is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateIsNotNull() {
-            addCriterion("day_switch_state is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateEqualTo(Integer value) {
-            addCriterion("day_switch_state =", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateNotEqualTo(Integer value) {
-            addCriterion("day_switch_state <>", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateGreaterThan(Integer value) {
-            addCriterion("day_switch_state >", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateGreaterThanOrEqualTo(Integer value) {
-            addCriterion("day_switch_state >=", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateLessThan(Integer value) {
-            addCriterion("day_switch_state <", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateLessThanOrEqualTo(Integer value) {
-            addCriterion("day_switch_state <=", value, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateIn(List<Integer> values) {
-            addCriterion("day_switch_state in", values, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateNotIn(List<Integer> values) {
-            addCriterion("day_switch_state not in", values, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateBetween(Integer value1, Integer value2) {
-            addCriterion("day_switch_state between", value1, value2, "daySwitchState");
-            return (Criteria) this;
-        }
-
-        public Criteria andDaySwitchStateNotBetween(Integer value1, Integer value2) {
-            addCriterion("day_switch_state not between", value1, value2, "daySwitchState");
+        public Criteria andDayStateNotBetween(Integer value1, Integer value2) {
+            addCriterion("day_state not between", value1, value2, "dayState");
             return (Criteria) this;
         }
 
@@ -1305,6 +944,76 @@ public class WorkSwitchDayExample {
 
         public Criteria andNoteNotBetween(String value1, String value2) {
             addCriterion("note not between", value1, value2, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonIsNull() {
+            addCriterion("person is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonIsNotNull() {
+            addCriterion("person is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonEqualTo(String value) {
+            addCriterion("person =", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNotEqualTo(String value) {
+            addCriterion("person <>", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonGreaterThan(String value) {
+            addCriterion("person >", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonGreaterThanOrEqualTo(String value) {
+            addCriterion("person >=", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonLessThan(String value) {
+            addCriterion("person <", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonLessThanOrEqualTo(String value) {
+            addCriterion("person <=", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonLike(String value) {
+            addCriterion("person like", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNotLike(String value) {
+            addCriterion("person not like", value, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonIn(List<String> values) {
+            addCriterion("person in", values, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNotIn(List<String> values) {
+            addCriterion("person not in", values, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonBetween(String value1, String value2) {
+            addCriterion("person between", value1, value2, "person");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNotBetween(String value1, String value2) {
+            addCriterion("person not between", value1, value2, "person");
             return (Criteria) this;
         }
     }

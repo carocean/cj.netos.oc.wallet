@@ -46,6 +46,6 @@
         <mapper resource="cj/db/mappings/WenyExchangeRecordMapper.xml"/>
         <mapper resource="cj/db/mappings/WenyPurchRecordMapper.xml"/>
         <mapper resource="cj/db/mappings/WithdrawRecordMapper.xml"/>
-        <mapper resource="cj/db/mappings/WorkSwitchDayMapper.xml"/>
+        <mapper resource="cj/db/mappings/WorkDayMapper.xml"/>
     </mappers>
 </configuration>
