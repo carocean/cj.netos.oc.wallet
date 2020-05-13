@@ -31,7 +31,13 @@ public interface IWalletPorts extends IOpenportService {
 
     @CjOpenportAppSecurity
     @CjOpenport(usage = "获取各账户信息", tokenIn = AccessTokenIn.nope)
-    Map<String, Object> getAllAccounts(ISecuritySession securitySession,
-                                       @CjOpenportParameter(usage = "公众号", name = "person") String person
+    Map<String, Object> getAllAccount(ISecuritySession securitySession,
+                                      @CjOpenportParameter(usage = "公众号", name = "person") String person
+    ) throws CircuitException;
+
+    @CjOpenportAppSecurity
+    @CjOpenport(usage = "获取余额账户", tokenIn = AccessTokenIn.nope)
+    Map<String, Object> getBalanceAccount(ISecuritySession securitySession,
+                                          @CjOpenportParameter(usage = "公众号", name = "person") String person
     ) throws CircuitException;
 }

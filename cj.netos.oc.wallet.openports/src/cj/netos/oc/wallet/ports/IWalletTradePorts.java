@@ -35,8 +35,8 @@ public interface IWalletTradePorts extends IOpenportService {
     @CjOpenportAppSecurity
     @CjOpenport(usage = "提现下单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
     Map<String, Object> withdrawOrder(ISecuritySession securitySession,
-                                      @CjOpenportParameter(usage = "充值单", name = "withdrawBO", in = PKeyInRequest.content)
-                                              WithdrawBO withdrawBO) throws CircuitException;
+                                      @CjOpenportParameter(usage = "提现单", name = "withdrawBill", in = PKeyInRequest.content)
+                                              WithdrawBO withdrawBill) throws CircuitException;
 
     @CjOpenportAppSecurity
     @CjOpenport(usage = "完成提现的交易指令", tokenIn = AccessTokenIn.nope)
