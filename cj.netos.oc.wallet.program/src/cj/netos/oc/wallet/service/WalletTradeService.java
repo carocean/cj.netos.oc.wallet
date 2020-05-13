@@ -3,12 +3,10 @@ package cj.netos.oc.wallet.service;
 import cj.netos.oc.wallet.IFinanceService;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.IWalletTradeService;
+import cj.netos.oc.wallet.bo.PurchaseBO;
 import cj.netos.oc.wallet.bo.RechargeBO;
 import cj.netos.oc.wallet.bo.WithdrawBO;
-import cj.netos.oc.wallet.mapper.BalanceAccountMapper;
-import cj.netos.oc.wallet.mapper.BalanceBillMapper;
-import cj.netos.oc.wallet.mapper.RechargeRecordMapper;
-import cj.netos.oc.wallet.mapper.WithdrawRecordMapper;
+import cj.netos.oc.wallet.mapper.*;
 import cj.netos.oc.wallet.model.*;
 import cj.netos.oc.wallet.util.IdWorker;
 import cj.netos.oc.wallet.util.WalletUtils;
@@ -32,6 +30,10 @@ public class WalletTradeService implements IWalletTradeService {
 
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WithdrawRecordMapper")
     WithdrawRecordMapper withdrawRecordMapper;
+
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WenyPurchRecordMapper")
+    WenyPurchRecordMapper wenyPurchRecordMapper;
+
     @CjServiceRef
     IWalletService walletService;
 
@@ -178,7 +180,7 @@ public class WalletTradeService implements IWalletTradeService {
 
         }
         balanceBill.setAccountid(balanceAccount.getId());
-        balanceBill.setAmount(amount*-1);
+        balanceBill.setAmount(amount * -1);
         balanceBill.setBalance(balanceAccount.getAmount() - amount);
         balanceBill.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
         balanceBill.setNote(withdrawRecord.getNote());
@@ -194,4 +196,29 @@ public class WalletTradeService implements IWalletTradeService {
         updateBalanceAccount(balanceAccount, balanceBill.getBalance());
     }
 
+    @Override
+    public WenyPurchRecord addPurchaseeOrder(PurchaseBO purchaseBO) throws CircuitException {
+        return addPurchaseRecorder(purchaseBO);
+    }
+
+    private WenyPurchRecord addPurchaseRecorder(PurchaseBO purchaseBO) throws CircuitException {
+        WenyPurchRecord wenyPurchRecord = new WenyPurchRecord();
+//        wenyPurchRecord.setDemandAmount(recharge.getAmount());
+//        wenyPurchRecord.setCurrency(recharge.getCurrency());
+//        wenyPurchRecord.setFromChannel(recharge.getPaymentChannelID());
+//        wenyPurchRecord.setPerson(recharge.getRecharger());
+//        wenyPurchRecord.setState(0);
+//        wenyPurchRecord.setCtime(WalletUtils.dateTimeToSecond(recharge.getCtime()));
+//        wenyPurchRecord.setLutime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+//        wenyPurchRecord.setPersonName(recharge.getRechargerName());
+//        wenyPurchRecord.setNote(recharge.getNote());
+//        IdWorker iw1 = new IdWorker(1);
+//        try {
+//            wenyPurchRecord.setSn(iw1.nextId() + "");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        wenyPurchRecordMapper.insert(wenyPurchRecord);
+        return wenyPurchRecord;
+    }
 }

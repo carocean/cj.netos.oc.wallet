@@ -1,6 +1,7 @@
 package cj.netos.oc.wallet.ports;
 
 import cj.netos.oc.wallet.IWalletTradeService;
+import cj.netos.oc.wallet.bo.PurchaseBO;
 import cj.netos.oc.wallet.bo.RechargeBO;
 import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.studio.ecm.annotation.CjService;
@@ -43,12 +44,15 @@ public class WalletTradePorts implements IWalletTradePorts {
     }
 
     @Override
-    public void exchange(ISecuritySession securitySession) throws CircuitException {
-
+    public Map<String,Object> purchaseWenyOrder(ISecuritySession securitySession, PurchaseBO purchaseBO) throws CircuitException {
+        Object obj = walletTradeService.addPurchaseeOrder(purchaseBO);
+        String json = new Gson().toJson(obj);
+        return new Gson().fromJson(json, HashMap.class);
     }
 
     @Override
-    public void purchase(ISecuritySession securitySession) throws CircuitException {
+    public void exchangeWenyOrder(ISecuritySession securitySession) throws CircuitException {
 
     }
+
 }

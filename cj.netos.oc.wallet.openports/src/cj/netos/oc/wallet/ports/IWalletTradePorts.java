@@ -1,5 +1,6 @@
 package cj.netos.oc.wallet.ports;
 
+import cj.netos.oc.wallet.bo.PurchaseBO;
 import cj.netos.oc.wallet.bo.RechargeBO;
 import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.studio.ecm.net.CircuitException;
@@ -18,7 +19,7 @@ import java.util.Map;
 public interface IWalletTradePorts extends IOpenportService {
 
     @CjOpenportAppSecurity
-    @CjOpenport(usage = "充值下单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
+    @CjOpenport(usage = "充值收单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
     Map<String, Object> rechargeOrder(ISecuritySession securitySession,
                                       @CjOpenportParameter(usage = "充值单", name = "rechargeBill", in = PKeyInRequest.content)
                                               RechargeBO rechargeBill) throws CircuitException;
@@ -33,7 +34,7 @@ public interface IWalletTradePorts extends IOpenportService {
     ) throws CircuitException;
 
     @CjOpenportAppSecurity
-    @CjOpenport(usage = "提现下单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
+    @CjOpenport(usage = "提现收单交易指令", tokenIn = AccessTokenIn.nope, command = "post")
     Map<String, Object> withdrawOrder(ISecuritySession securitySession,
                                       @CjOpenportParameter(usage = "提现单", name = "withdrawBill", in = PKeyInRequest.content)
                                               WithdrawBO withdrawBill) throws CircuitException;
@@ -48,12 +49,15 @@ public interface IWalletTradePorts extends IOpenportService {
     ) throws CircuitException;
 
     @CjOpenportAppSecurity
-    @CjOpenport(usage = "承兑交易指令", tokenIn = AccessTokenIn.nope)
-    void exchange(ISecuritySession securitySession) throws CircuitException;
+    @CjOpenport(usage = "申购收单", tokenIn = AccessTokenIn.nope)
+    Map<String,Object>  purchaseWenyOrder(ISecuritySession securitySession,
+                           @CjOpenportParameter(usage = "申购单", name = "purchaseBill", in = PKeyInRequest.content)
+                                   PurchaseBO purchaseBO) throws CircuitException;
+
 
     @CjOpenportAppSecurity
-    @CjOpenport(usage = "申购交易指令", tokenIn = AccessTokenIn.nope)
-    void purchase(ISecuritySession securitySession) throws CircuitException;
+    @CjOpenport(usage = "承兑收单", tokenIn = AccessTokenIn.nope)
+    void exchangeWenyOrder(ISecuritySession securitySession) throws CircuitException;
 
 
 }
