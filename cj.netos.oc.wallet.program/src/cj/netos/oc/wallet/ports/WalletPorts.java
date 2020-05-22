@@ -17,13 +17,13 @@ public class WalletPorts implements IWalletPorts {
     IWalletService walletService;
 
     @Override
-    public Map<String, Object> initWallet(ISecuritySession securitySession, Person person) throws CircuitException {
-        return walletService.initWallet(person);
+    public Map<String, Object> createWallet(ISecuritySession securitySession, Person person) throws CircuitException {
+        return walletService.createWallet(person.getPerson(), person.getNickName());
     }
 
     @Override
-    public boolean isinitWallet(ISecuritySession securitySession, String person) throws CircuitException {
-        return walletService.isinitWallet(person);
+    public boolean hasWallet(ISecuritySession securitySession, String person) throws CircuitException {
+        return walletService.hasWallet(person);
     }
 
     @Override

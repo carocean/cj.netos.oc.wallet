@@ -10,6 +10,15 @@
 					packages:"[
 					]"
 				}
+			},{
+				name:"curator",
+				class:"cj.studio.orm.curator.CuratorPlugin",
+				parameters:{
+					connectString: "47.104.128.137:2181,47.104.128.137:2182,47.104.128.137:2183",
+					sessionTimeoutMs: "500000",
+					connectionTimeoutMs: "500000",
+					retryIntervalMs: "5000"
+				}
 			}
 		],
 		activators: [
@@ -45,7 +54,7 @@
 	serviceContainer : {
 		name : "netContainer",
 		switchFilter:"off",
-		monitor: "",
+		monitor: "cj.netos.rabbitmq.DefaultRabbitMQMonitor",
 		jss:[{
 			module:"services1",
 			package:"cj.netos.oc.wallet.jss",
@@ -66,9 +75,13 @@
 			extName : ".class|.json|.xml",
 			exoterical:"true"
 		},{
-				package : "cj.netos.oc.wallet.ports",
-				extName : ".class|.json|.xml",
-				exoterical:"true"
+			package : "cj.netos.oc.wallet.ports",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
+		},{
+			package : "cj.netos.oc.wallet.cmd",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
 		}
 		]
 

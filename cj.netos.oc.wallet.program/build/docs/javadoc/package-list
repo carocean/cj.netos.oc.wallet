@@ -1,6 +1,6 @@
 cj.netos.oc.wallet
+cj.netos.oc.wallet.cmd
 cj.netos.oc.wallet.mapper
-cj.netos.oc.wallet.model
 cj.netos.oc.wallet.ports
 cj.netos.oc.wallet.program
 cj.netos.oc.wallet.service

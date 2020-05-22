@@ -61,4 +61,7 @@ public interface RootAccountMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(RootAccount record);
+
+    void setAmountOnorder(@Param(value = "id") String id,@Param(value = "onorderAmount") Long onorderAmount,@Param(value = "lutime") String lutime);
+
 }

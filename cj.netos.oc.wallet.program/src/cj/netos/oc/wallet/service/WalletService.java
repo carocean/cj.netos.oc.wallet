@@ -41,17 +41,15 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
-    public Map<String, Object> initWallet(Person person) {
+    public Map<String, Object> createWallet(String person, String personName) {
         Map<String, Object> map = new HashMap<>();
-        map.put("person", person.getPerson());
-        map.put("nickName", person.getNickName());
-        map.put("appid", person.getAppid());
-        if (isinitWallet(person.getPerson())) {
+        map.put("person", person);
+        map.put("nickName", personName);
+        if (hasWallet(person)) {
             map.put("code", "1201");
             map.put("message", "已初始化过");
 
-            String p = (String) person.getPerson();
-
+            String p = person;
             RootAccount rootAccount = getRootAccount(p);
             map.put("rootAccount", rootAccount.getId());
 
@@ -79,8 +77,8 @@ public class WalletService implements IWalletService {
         rootAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         rootAccount.setIsRealName(1);
         rootAccount.setLutime(rootAccount.getCtime());
-        rootAccount.setPerson(person.getPerson());
-        rootAccount.setPersonName(person.getNickName());
+        rootAccount.setPerson(person);
+        rootAccount.setPersonName(personName);
         rootAccount.setState(0);
         rootAccount.setProperty(0);
         rootAccount.setOnorderAmount(0L);
@@ -93,8 +91,8 @@ public class WalletService implements IWalletService {
         balanceAccount.setCurrency("CNY");
         balanceAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         balanceAccount.setLutime(balanceAccount.getCtime());
-        balanceAccount.setPerson((String) person.getPerson());
-        balanceAccount.setPersonName((String) person.getNickName());
+        balanceAccount.setPerson(person);
+        balanceAccount.setPersonName(personName);
         balanceAccount.setState(0);
         balanceAccountMapper.insert(balanceAccount);
         map.put("balanceAccount", balanceAccount.getId());
@@ -105,8 +103,8 @@ public class WalletService implements IWalletService {
         freezenAccount.setCurrency("CNY");
         freezenAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         freezenAccount.setLutime(rootAccount.getLutime());
-        freezenAccount.setPerson((String) person.getPerson());
-        freezenAccount.setPersonName((String) person.getNickName());
+        freezenAccount.setPerson(person);
+        freezenAccount.setPersonName(personName);
         freezenAccount.setState(0);
         freezenAccountMapper.insert(freezenAccount);
         map.put("freezenAccount", freezenAccount.getId());
@@ -117,8 +115,8 @@ public class WalletService implements IWalletService {
         profitAccount.setCurrency("CNY");
         profitAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         profitAccount.setLutime(rootAccount.getLutime());
-        profitAccount.setPerson((String) person.getPerson());
-        profitAccount.setPersonName((String) person.getNickName());
+        profitAccount.setPerson(person);
+        profitAccount.setPersonName(personName);
         profitAccount.setState(0);
         profitAccountMapper.insert(profitAccount);
         map.put("profitAccount", profitAccount.getId());
@@ -129,8 +127,8 @@ public class WalletService implements IWalletService {
         absorbAccount.setCurrency("CNY");
         absorbAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         absorbAccount.setLutime(rootAccount.getLutime());
-        absorbAccount.setPerson((String) person.getPerson());
-        absorbAccount.setPersonName((String) person.getNickName());
+        absorbAccount.setPerson(person);
+        absorbAccount.setPersonName(personName);
         absorbAccount.setState(0);
         absorbAccountMapper.insert(absorbAccount);
         map.put("absorbAccount", absorbAccount.getId());
@@ -141,8 +139,8 @@ public class WalletService implements IWalletService {
         wenyAccount.setCurrency("WENY");
         wenyAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         wenyAccount.setLutime(rootAccount.getLutime());
-        wenyAccount.setPerson((String) person.getPerson());
-        wenyAccount.setPersonName((String) person.getNickName());
+        wenyAccount.setPerson(person);
+        wenyAccount.setPersonName(personName);
         wenyAccount.setState(0);
         wenyAccountMapper.insert(wenyAccount);
         map.put("wenyAccount", wenyAccount.getId());
@@ -257,7 +255,7 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
-    public boolean isinitWallet(String person) {
+    public boolean hasWallet(String person) {
         RootAccountExample example = new RootAccountExample();
         example.createCriteria().andPersonEqualTo(person);
         return rootAccountMapper.countByExample(example) > 0;

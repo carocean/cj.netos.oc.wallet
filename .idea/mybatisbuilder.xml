@@ -4,14 +4,14 @@
     <option name="connectionInfoList">
       <list>
         <ConnectionInfo>
-          <option name="database" value="netos.fin" />
+          <option name="database" value="netos.wallet.trade" />
           <option name="description" value="" />
           <option name="driverClass" value="" />
           <option name="driverLibrary" value="" />
           <option name="driverType" value="MySQL" />
           <option name="host" value="47.104.128.137" />
           <option name="id" value="b1da4273e7be46298db8a56f98b351d2" />
-          <option name="name" value="netos.fin" />
+          <option name="name" value="netos.wallet.trade" />
           <option name="port" value="3306" />
           <option name="url" value="" />
           <option name="userName" value="cj" />
@@ -90,7 +90,7 @@
         <option name="javaModelConfig">
           <JavaModelGeneratorConfiguration>
             <option name="targetPackage" value="cj.netos.oc.wallet.model" />
-            <option name="targetProject" value="$PROJECT_DIR$/cj.netos.oc.wallet.program/src" />
+            <option name="targetProject" value="$PROJECT_DIR$/cj.netos.oc.wallet.openports/src" />
           </JavaModelGeneratorConfiguration>
         </option>
         <option name="sqlMapConfig">
@@ -290,6 +290,126 @@
               <option name="domainName" value="WorkSwitchDay" />
               <option name="tableComment" value="会计日期切换表，&#10;各账户前日余额及当前日终快照，并置日切状态为正在切换&#10;原理：当插入一条记录时，初始状态为正在日切，则继续接受交易，添加的账金变动单记录的会计日期使用下一个会计日期，而不是当前会计日期，这样只需核到开始日切前的日账&#10;可以充许一一个会计日期账有错，在一下个日切时会被纠正，纠正生成记录给用户查看" />
               <option name="tableName" value="work_switch_day" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#absorb_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="AbsorbAccount" />
+              <option name="tableComment" value="洇金账户" />
+              <option name="tableName" value="absorb_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#absorb_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="AbsorbBill" />
+              <option name="tableComment" value="账户洇金变动流水表" />
+              <option name="tableName" value="absorb_bill" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#balance_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="BalanceAccount" />
+              <option name="tableComment" value="余额账户" />
+              <option name="tableName" value="balance_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#balance_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="BalanceBill" />
+              <option name="tableComment" value="账户资金变动流水表" />
+              <option name="tableName" value="balance_bill" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#freezen_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="FreezenAccount" />
+              <option name="tableComment" value="冻结金账户" />
+              <option name="tableName" value="freezen_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#freezen_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="FreezenBill" />
+              <option name="tableComment" value="账户资金变动流水表" />
+              <option name="tableName" value="freezen_bill" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#onorder_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="OnorderBill" />
+              <option name="tableComment" value="主账户在订单资金余额变动流水表" />
+              <option name="tableName" value="onorder_bill" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#profit_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="ProfitAccount" />
+              <option name="tableComment" value="收益账户" />
+              <option name="tableName" value="profit_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#profit_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="ProfitBill" />
+              <option name="tableComment" value="账户资金变动流水表" />
+              <option name="tableName" value="profit_bill" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#root_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="RootAccount" />
+              <option name="tableComment" value="主账户" />
+              <option name="tableName" value="root_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#weny_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="WenyAccount" />
+              <option name="tableComment" value="纹银账户" />
+              <option name="tableName" value="weny_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#weny_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="WenyBill" />
+              <option name="tableComment" value="账户纹银变动流水表" />
+              <option name="tableName" value="weny_bill" />
             </TableInfo>
           </value>
         </entry>

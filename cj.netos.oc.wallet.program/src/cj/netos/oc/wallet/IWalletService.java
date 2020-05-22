@@ -6,7 +6,7 @@ import cj.studio.orm.mybatis.annotation.CjTransaction;
 import java.util.Map;
 
 public interface IWalletService {
-    Map<String, Object> initWallet(Person person);
+    Map<String, Object> createWallet(String person, String personName);
 
     @CjTransaction
     WenyAccount getWenyAccount(String person);
@@ -26,7 +26,7 @@ public interface IWalletService {
     @CjTransaction
     RootAccount getRootAccount(String person);
 
-    boolean isinitWallet(String person);
+    boolean hasWallet(String person);
 
     Map<String, Object> getAllAccount(String person);
 
