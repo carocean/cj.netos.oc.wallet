@@ -12,6 +12,7 @@ import cj.netos.rabbitmq.IRabbitMQProducer;
 import cj.netos.rabbitmq.RabbitMQException;
 import cj.netos.rabbitmq.RetryCommandException;
 import cj.netos.rabbitmq.consumer.IConsumerCommand;
+import cj.studio.ecm.CJSystem;
 import cj.studio.ecm.IServiceSite;
 import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
@@ -83,7 +84,7 @@ public class PutOnorderCommand implements IConsumerCommand {
             result.setStatus(status);
             result.setRecord(onorderBO);
             try {
-                ack(result);
+                ack(result, onorderBO.getOrder());
             } catch (CircuitException e) {
                 throw new RabbitMQException(e.getStatus(), e.getMessage());
             }
@@ -91,11 +92,33 @@ public class PutOnorderCommand implements IConsumerCommand {
 
     }
 
-    private void ack(OnorderResult result) throws CircuitException {
+    private void ack(OnorderResult result, int order) throws CircuitException {
+        String cmd = "";
+        switch (order) {
+            case 1:
+                cmd = "recharge";
+                break;
+            case 2:
+                cmd = "withdraw";
+                break;
+            case 3:
+                cmd = "trans";
+                break;
+            case 4:
+                cmd = "payment";
+                break;
+            case 8:
+                cmd = "purchase";
+                break;
+            default:
+                CJSystem.logging().error(getClass(), String.format("不支持的指令代码：%s", cmd));
+                break;
+        }
+        final String command = cmd;
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/trade/receipt/ack.mq")
                 .headers(new HashMap<String, Object>() {{
-                    put("command", "withdraw");
+                    put("command", command);
                     put("person", result.getPerson());
                     put("record_sn", result.getSn());
                 }})
