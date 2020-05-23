@@ -123,7 +123,7 @@ public class PutOnorderCommand implements IConsumerCommand {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish(properties, new Gson().toJson(result).getBytes());
+        rabbitMQProducer.publish("gateway",properties, new Gson().toJson(result).getBytes());
     }
 
 }

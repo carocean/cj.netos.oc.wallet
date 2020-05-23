@@ -102,7 +102,7 @@ public class WithdrawCommand implements IConsumerCommand {
                     put("channelCode", result.getPayChannel());
                 }})
                 .build();
-        rabbitMQProducer.publish(properties, new Gson().toJson(result).getBytes());
+        rabbitMQProducer.publish("gateway",properties, new Gson().toJson(result).getBytes());
     }
 
 }

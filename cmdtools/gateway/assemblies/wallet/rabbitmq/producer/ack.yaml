@@ -42,7 +42,14 @@ routing:
   #默认为false
   #immediate: false
 
-  # 当 exchange.type=topic 时支持通配符
-  # 路由到相应的消费者队列，在netos.rabbitmq下，每个消费者自动创建一个队列，并绑定一个routingKey以接收
-  routingKeys:
-    - wallet.gateway1.ack
+  # 发送消息时到其它节点的路由规则,一般对应到目的节点的队列，如果是topic其路由键则需要注意对应消费者的可能会采用的模糊匹配该生产者的routingKey
+  # 路由到相应的消费者队列，在netos.rabbitmq下，每个消费者自动创建一个队列，并绑定一个routingKey代表接收节点
+  # castmode传播模式，该配置项仅在仅在exchange的type=direct有效。
+  # unicast 单播。为默认
+  # multicast 多播。该功能等效于type=fanout，建议多播使用type=fanout
+  routingNodes:
+    gateway:
+      title: 网关交易中心
+      castmode: unicast
+      routingKeys:
+        - wallet.gateway1.ack
