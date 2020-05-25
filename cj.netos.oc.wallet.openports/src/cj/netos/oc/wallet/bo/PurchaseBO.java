@@ -1,14 +1,33 @@
 package cj.netos.oc.wallet.bo;
 
+
 public class PurchaseBO {
     String sn;
-    String Purchaser;
-    String PurchaserName;
+    String purchaser;
+    String purchaserName;
     String currency;
     long amount;
     String wenyBankID;
     String ctime;
     String note;
+    String status;
+    String message;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getSn() {
         return sn;
@@ -19,19 +38,19 @@ public class PurchaseBO {
     }
 
     public String getPurchaser() {
-        return Purchaser;
+        return purchaser;
     }
 
     public void setPurchaser(String purchaser) {
-        Purchaser = purchaser;
+        this.purchaser = purchaser;
     }
 
     public String getPurchaserName() {
-        return PurchaserName;
+        return purchaserName;
     }
 
     public void setPurchaserName(String purchaserName) {
-        PurchaserName = purchaserName;
+        this.purchaserName = purchaserName;
     }
 
 

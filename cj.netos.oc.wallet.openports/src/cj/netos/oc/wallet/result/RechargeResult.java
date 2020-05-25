@@ -1,5 +1,7 @@
 package cj.netos.oc.wallet.result;
 
+import cj.netos.oc.wallet.bo.RechargeBO;
+
 public class RechargeResult {
     String sn;
     String person;
@@ -7,6 +9,25 @@ public class RechargeResult {
     String message;
     String payChannel;
     Object record;
+
+    public RechargeResult() {
+    }
+
+    public RechargeResult(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public static RechargeResult create(RechargeBO bo) {
+        RechargeResult rechargeResult = new RechargeResult();
+        rechargeResult.setSn(bo.getSn());
+        rechargeResult.setPayChannel(bo.getFromChannel());
+        rechargeResult.setPerson(bo.getPerson());
+        rechargeResult.setStatus(bo.getStatus()+"");
+        rechargeResult.setMessage(bo.getMessage());
+        rechargeResult.setRecord(bo);
+        return rechargeResult;
+    }
 
     public String getPayChannel() {
         return payChannel;

@@ -1,16 +1,14 @@
 package cj.netos.oc.wallet.cmd;
 
-import cj.netos.oc.wallet.ISettleTradeService;
-import cj.netos.oc.wallet.bo.RechargeBO;
+import cj.netos.oc.wallet.IWithdrawActivityController;
 import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.netos.oc.wallet.program.ICuratorPathChecker;
-import cj.netos.oc.wallet.result.RechargeResult;
 import cj.netos.oc.wallet.result.WithdrawResult;
 import cj.netos.rabbitmq.CjConsumer;
-import cj.netos.rabbitmq.IRabbitMQProducer;
 import cj.netos.rabbitmq.RabbitMQException;
 import cj.netos.rabbitmq.RetryCommandException;
 import cj.netos.rabbitmq.consumer.IConsumerCommand;
+import cj.studio.ecm.CJSystem;
 import cj.studio.ecm.IServiceSite;
 import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
@@ -24,11 +22,9 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
-import java.util.HashMap;
-
 @CjConsumer(name = "trade")
-@CjService(name = "/trade/settle.mq#withdraw")
-public class WithdrawCommand implements IConsumerCommand {
+@CjService(name = "/trade/receipt.mhub#withdraw")
+public class WithdrawReceiptCommand implements IConsumerCommand {
     @CjServiceSite
     IServiceSite site;
 
@@ -38,11 +34,8 @@ public class WithdrawCommand implements IConsumerCommand {
     @CjServiceRef
     ICuratorPathChecker curatorPathChecker;
 
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
-
     @CjServiceRef
-    ISettleTradeService settleTradeService;
+    IWithdrawActivityController withdrawActivityController;
 
     @Override
     public void command(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws RabbitMQException, RetryCommandException {
@@ -54,21 +47,39 @@ public class WithdrawCommand implements IConsumerCommand {
             throw new RabbitMQException("500", e);
         }
         WithdrawBO withdrawBO = new Gson().fromJson(new String(body), WithdrawBO.class);
-        LongString record_snLS = (LongString) properties.getHeaders().get("record_sn");
-        String status = "200";
-        String message = "OK";
+        WithdrawResult result = new WithdrawResult("200", "ok");
+        result.setPerson(withdrawBO.getPerson());
+        result.setSn(withdrawBO.getSn());
+        result.setPayChannel(withdrawBO.getToChannel());
+
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
         InterProcessMutex mutex = lock.writeLock();
         try {
             mutex.acquire();
-            settleTradeService.withdraw(withdrawBO);
+            withdrawActivityController.doReceipt(withdrawBO);
+            result.setRecord(withdrawBO);
+            withdrawActivityController.sendReceiptAck(result);
         } catch (RabbitMQException e) {
-            status = e.getStatus();
-            message = e.getMessage();
             throw e;
         } catch (Exception e) {
-            status = "500";
-            message = e.getMessage();
+            CircuitException ce = CircuitException.search(e);
+            if (ce != null) {
+                result.setStatus(ce.getStatus());
+                result.setMessage(ce.getMessage());
+                try {
+                    withdrawActivityController.sendReceiptAck(result);
+                } catch (CircuitException e1) {
+                    CJSystem.logging().error(getClass(), e1);
+                }
+                throw new RabbitMQException(ce.getStatus(), ce);
+            }
+            result.setStatus("500");
+            result.setMessage(e.getMessage());
+            try {
+                withdrawActivityController.sendReceiptAck(result);
+            } catch (CircuitException e1) {
+                CJSystem.logging().error(getClass(), e1);
+            }
             throw new RabbitMQException("500", e);
         } finally {
             try {
@@ -76,33 +87,8 @@ public class WithdrawCommand implements IConsumerCommand {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            WithdrawResult result = new WithdrawResult();
-            result.setSn(withdrawBO.getSn());
-            result.setPerson(withdrawBO.getPerson());
-            result.setPayChannel(withdrawBO.getToChannel());
-            result.setMessage(message);
-            result.setStatus(status);
-            result.setRecord(withdrawBO);
-            try {
-                ack(result);
-            } catch (CircuitException e) {
-                throw new RabbitMQException(e.getStatus(), e.getMessage());
-            }
         }
 
-    }
-
-    private void ack(WithdrawResult result) throws CircuitException {
-        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
-                .type("/trade/settle/ack.mq")
-                .headers(new HashMap<String, Object>() {{
-                    put("command", "withdraw");
-                    put("person", result.getPerson());
-                    put("record_sn", result.getSn());
-                    put("channelCode", result.getPayChannel());
-                }})
-                .build();
-        rabbitMQProducer.publish("gateway",properties, new Gson().toJson(result).getBytes());
     }
 
 }

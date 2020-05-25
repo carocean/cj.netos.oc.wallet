@@ -134,7 +134,7 @@ public class WalletService implements IWalletService {
         map.put("absorbAccount", absorbAccount.getId());
 
         WenyAccount wenyAccount = new WenyAccount();
-        wenyAccount.setQuanlities(BigDecimal.ZERO);
+        wenyAccount.setStock(BigDecimal.ZERO);
         wenyAccount.setCtime(rootAccount.getCtime());
         wenyAccount.setCurrency("WENY");
         wenyAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));

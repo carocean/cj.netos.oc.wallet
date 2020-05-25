@@ -171,7 +171,7 @@ public class OnorderService implements IOnorderService {
         }
         bo.setAmount(returnAmount);
         bo.setCause(bo.getCause()+"-归还到余额");
-        addOnorderBillForSub(bo);
+        addOnorderBillForSub(bo);//再把要归还的从在订单扣减
         bo.setAmount(returnAmount);
         addBalanceBillForAddByOnorder(bo);
     }

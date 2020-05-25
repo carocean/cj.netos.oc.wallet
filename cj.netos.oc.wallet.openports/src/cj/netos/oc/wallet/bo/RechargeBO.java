@@ -47,8 +47,7 @@ public class RechargeBO {
 
     /**
      * Column: state
-     * Remark: 0-待充值
-     1- 充值成功 2- 充值失败
+     * Remark: 为当前的步骤号 是否出错看status，status记录当前步骤的状态
      */
     private Integer state;
 
@@ -65,22 +64,22 @@ public class RechargeBO {
     private String lutime;
 
     /**
+     * Column: status
+     * Remark: 订单完成时第三方渠道的返回码
+     */
+    private Integer status;
+
+    /**
+     * Column: message
+     * Remark: 订单完成时第三方渠道的返回信息
+     */
+    private String message;
+
+    /**
      * Column: note
      * Remark: 备注
      */
     private String note;
-
-    /**
-     * Column: settle_code
-     * Remark: 订单完成时第三方渠道的返回码
-     */
-    private String settleCode;
-
-    /**
-     * Column: settle_msg
-     * Remark: 订单完成时第三方渠道的返回信息
-     */
-    private String settleMsg;
 
     /**
      * Column: channel_name
@@ -176,20 +175,20 @@ public class RechargeBO {
         this.note = note == null ? null : note.trim();
     }
 
-    public String getSettleCode() {
-        return settleCode;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setSettleCode(String settleCode) {
-        this.settleCode = settleCode == null ? null : settleCode.trim();
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public String getSettleMsg() {
-        return settleMsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setSettleMsg(String settleMsg) {
-        this.settleMsg = settleMsg == null ? null : settleMsg.trim();
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getChannelName() {
@@ -197,7 +196,6 @@ public class RechargeBO {
     }
 
     public void setChannelName(String channelName) {
-        this.channelName = channelName == null ? null : channelName.trim();
+        this.channelName = channelName;
     }
-
 }

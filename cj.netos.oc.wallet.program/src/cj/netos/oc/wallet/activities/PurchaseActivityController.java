@@ -1,46 +1,87 @@
-package cj.netos.oc.wallet.cmd;
+package cj.netos.oc.wallet.activities;
 
+import cj.netos.oc.wallet.IOnorderService;
+import cj.netos.oc.wallet.IPurchaseActivityController;
+import cj.netos.oc.wallet.ISettleTradeService;
+import cj.netos.oc.wallet.bo.OnorderBO;
 import cj.netos.oc.wallet.bo.PurchaseBO;
-import cj.netos.rabbitmq.CjConsumer;
-import cj.netos.rabbitmq.RabbitMQException;
-import cj.netos.rabbitmq.RetryCommandException;
-import cj.netos.rabbitmq.consumer.IConsumerCommand;
+import cj.netos.oc.wallet.bo.PurchasedBO;
+import cj.netos.oc.wallet.result.PurchaseResult;
+import cj.netos.oc.wallet.result.PurchasingResult;
+import cj.netos.rabbitmq.IRabbitMQProducer;
 import cj.studio.ecm.IServiceSite;
+import cj.studio.ecm.annotation.CjBridge;
 import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.annotation.CjServiceSite;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.openport.util.Encript;
+import cj.studio.orm.mybatis.annotation.CjTransaction;
 import cj.ultimate.gson2.com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Envelope;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@CjConsumer(name = "trade")
-@CjService(name = "/trade/weny.mq#purchase")
-public class PurchaseWenyCommand implements IConsumerCommand {
+@CjBridge(aspects = "@transaction")
+@CjService(name = "purchaseActivityController")
+public class PurchaseActivityController implements IPurchaseActivityController {
+    @CjServiceRef
+    IOnorderService onorderService;
+
     @CjServiceSite
     IServiceSite site;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
+    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef
+    ISettleTradeService settleTradeService;
 
 
+    @CjTransaction
     @Override
-    public void command(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws RabbitMQException, RetryCommandException, IOException {
-        PurchaseBO purchaseBO = new Gson().fromJson(new String(body), PurchaseBO.class);
-        try {
-            Map<String, Object> result = call_wenybank_purchase(purchaseBO);
-            System.out.println("-----" + result);
-        } catch (CircuitException e) {
-            e.printStackTrace();
-        }
+    public PurchasingResult receipt(PurchaseBO bo) throws CircuitException {
+        //1。预扣款
+        //2。发起申购（银行）
+        putOnorder(bo);
+        PurchasingResult purchasingResult = call_wenybank_purchase(bo);
+        return purchasingResult;
+    }
+
+    @CjTransaction
+    @Override
+    public void sendReceiptAck(PurchaseResult result) throws CircuitException {
+        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
+                .type("/trade/receipt/ack.mhub")
+                .headers(new HashMap<String, Object>() {{
+                    put("command", "purchase");
+                    put("person", result.getPerson());
+                    put("record_sn", result.getSn());
+                }})
+                .build();
+        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+    }
+
+    private void putOnorder(PurchaseBO bo) throws CircuitException {
+        OnorderBO onOrderBO = new OnorderBO();
+        onOrderBO.setPersonName(bo.getPurchaserName());
+        onOrderBO.setRefType("purchase");
+        onOrderBO.setAmount(bo.getAmount());
+        onOrderBO.setNote(bo.getNote());
+        onOrderBO.setPerson(bo.getPurchaser());
+        onOrderBO.setRefsn(bo.getSn());
+        onOrderBO.setOrder(8);
+        onOrderBO.setCause("申购纹银");
+        onorderService.put(onOrderBO);
     }
 
     //发纹银银行发起承兑
-    private Map<String, Object> call_wenybank_purchase(PurchaseBO purchaseBO) throws CircuitException {
+    private PurchasingResult call_wenybank_purchase(PurchaseBO purchaseBO) throws CircuitException {
 
         OkHttpClient client = (OkHttpClient) site.getService("@.http");
 
@@ -97,7 +138,14 @@ public class PurchaseWenyCommand implements IConsumerCommand {
             throw new CircuitException(map.get("status") + "", map.get("message") + "");
         }
         String v = (String) map.get("dataText");
-        Map<String, Object> result = new Gson().fromJson(v, HashMap.class);
+        PurchasingResult result = new Gson().fromJson(v, PurchasingResult.class);
         return result;
     }
+
+    @CjTransaction
+    @Override
+    public void settle(PurchasedBO bo) throws CircuitException {
+        settleTradeService.purchase(bo);
+    }
+
 }

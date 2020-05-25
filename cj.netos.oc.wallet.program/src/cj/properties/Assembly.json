@@ -75,6 +75,10 @@
 			extName : ".class|.json|.xml",
 			exoterical:"true"
 		},{
+			package : "cj.netos.oc.wallet.activities",
+			extName : ".class|.json|.xml",
+			exoterical:"true"
+		},{
 			package : "cj.netos.oc.wallet.ports",
 			extName : ".class|.json|.xml",
 			exoterical:"true"

@@ -62,6 +62,5 @@ public interface RootAccountMapper {
      */
     int updateByPrimaryKey(RootAccount record);
 
-    void setAmountOnorder(@Param(value = "id") String id,@Param(value = "onorderAmount") Long onorderAmount,@Param(value = "lutime") String lutime);
-
+    void setAmountOnorder(@Param(value = "id") String id, @Param(value = "onorderAmount") Long onorderAmount, @Param(value = "lutime") String lutime);
 }

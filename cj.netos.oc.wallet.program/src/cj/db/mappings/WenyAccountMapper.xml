@@ -7,7 +7,7 @@
     <result column="person" jdbcType="VARCHAR" property="person" />
     <result column="person_name" jdbcType="VARCHAR" property="personName" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
-    <result column="quanlities" jdbcType="DECIMAL" property="quanlities" />
+    <result column="stock" jdbcType="DECIMAL" property="stock" />
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
@@ -74,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    id, person, person_name, currency, quanlities, `state`, ctime, lutime
+    id, person, person_name, currency, stock, `state`, ctime, lutime
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.WenyAccountExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -113,10 +113,10 @@
   <insert id="insert" parameterType="cj.netos.oc.wallet.model.WenyAccount">
     <!-- @mbg.generated: generated automatically, do not modify! -->
     insert into weny_account (id, person, person_name, 
-      currency, quanlities, `state`, 
+      currency, stock, `state`, 
       ctime, lutime)
     values (#{id,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
-      #{currency,jdbcType=VARCHAR}, #{quanlities,jdbcType=DECIMAL}, #{state,jdbcType=INTEGER}, 
+      #{currency,jdbcType=VARCHAR}, #{stock,jdbcType=DECIMAL}, #{state,jdbcType=INTEGER}, 
       #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.WenyAccount">
@@ -135,8 +135,8 @@
       <if test="currency != null">
         currency,
       </if>
-      <if test="quanlities != null">
-        quanlities,
+      <if test="stock != null">
+        stock,
       </if>
       <if test="state != null">
         `state`,
@@ -161,8 +161,8 @@
       <if test="currency != null">
         #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="quanlities != null">
-        #{quanlities,jdbcType=DECIMAL},
+      <if test="stock != null">
+        #{stock,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
@@ -198,8 +198,8 @@
       <if test="record.currency != null">
         currency = #{record.currency,jdbcType=VARCHAR},
       </if>
-      <if test="record.quanlities != null">
-        quanlities = #{record.quanlities,jdbcType=DECIMAL},
+      <if test="record.stock != null">
+        stock = #{record.stock,jdbcType=DECIMAL},
       </if>
       <if test="record.state != null">
         `state` = #{record.state,jdbcType=INTEGER},
@@ -222,7 +222,7 @@
       person = #{record.person,jdbcType=VARCHAR},
       person_name = #{record.personName,jdbcType=VARCHAR},
       currency = #{record.currency,jdbcType=VARCHAR},
-      quanlities = #{record.quanlities,jdbcType=DECIMAL},
+      stock = #{record.stock,jdbcType=DECIMAL},
       `state` = #{record.state,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       lutime = #{record.lutime,jdbcType=VARCHAR}
@@ -243,8 +243,8 @@
       <if test="currency != null">
         currency = #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="quanlities != null">
-        quanlities = #{quanlities,jdbcType=DECIMAL},
+      <if test="stock != null">
+        stock = #{stock,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         `state` = #{state,jdbcType=INTEGER},
@@ -264,10 +264,17 @@
     set person = #{person,jdbcType=VARCHAR},
       person_name = #{personName,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
-      quanlities = #{quanlities,jdbcType=DECIMAL},
+      stock = #{stock,jdbcType=DECIMAL},
       `state` = #{state,jdbcType=INTEGER},
       ctime = #{ctime,jdbcType=VARCHAR},
       lutime = #{lutime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateStock" parameterType="cj.netos.oc.wallet.model.WenyAccount">
+    update weny_account
+    set
+    stock = #{stock,jdbcType=DECIMAL},
+    lutime = #{lutime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

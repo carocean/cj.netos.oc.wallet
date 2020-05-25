@@ -8,6 +8,14 @@ public class WithdrawResult {
     String payChannel;
     Object record;
 
+    public WithdrawResult() {
+    }
+
+    public WithdrawResult(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
     public String getPayChannel() {
         return payChannel;
     }
