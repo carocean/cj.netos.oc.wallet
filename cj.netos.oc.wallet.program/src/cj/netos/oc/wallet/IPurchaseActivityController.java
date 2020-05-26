@@ -9,10 +9,12 @@ import cj.studio.ecm.net.CircuitException;
 public interface IPurchaseActivityController {
     PurchasingResult receipt(PurchaseBO bo) throws CircuitException;
 
-    void settle(PurchasedBO bo) throws CircuitException;
+    void settle(PurchasedBO purchasedBO) throws CircuitException;
 
 
     void sendReceiptAck(PurchaseResult result) throws CircuitException;
 
+
+    void sendSettleAck(PurchaseResult result) throws CircuitException;
 
 }

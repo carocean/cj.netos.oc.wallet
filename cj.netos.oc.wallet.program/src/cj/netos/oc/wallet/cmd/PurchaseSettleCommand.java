@@ -47,18 +47,37 @@ public class PurchaseSettleCommand implements IConsumerCommand {
             throw new RabbitMQException("500", e);
         }
         PurchasedBO purchasedBO = new Gson().fromJson(new String(body), PurchasedBO.class);
+        PurchaseResult result = new PurchaseResult("200","OK");
+        result.setPerson(purchasedBO.getPerson());
+        result.setSn(purchasedBO.getSn());
 
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
         InterProcessMutex mutex = lock.writeLock();
         try {
             mutex.acquire();
             purchaseActivityController.settle(purchasedBO);
+            result.setRecord(new Gson().toJson(purchasedBO));
+            purchaseActivityController.sendSettleAck(result);
         } catch (RabbitMQException e) {
             throw e;
         } catch (Exception e) {
             CircuitException ce = CircuitException.search(e);
             if (ce != null) {
+                result.setStatus(ce.getStatus());
+                result.setMessage(ce.getMessage());
+                try {
+                    purchaseActivityController.sendSettleAck(result);
+                } catch (CircuitException ex) {
+                    CJSystem.logging().error(getClass(), ex);
+                }
                 throw new RabbitMQException(ce.getStatus(), ce);
+            }
+            result.setStatus("500");
+            result.setMessage(e.getMessage());
+            try {
+                purchaseActivityController.sendSettleAck(result);
+            } catch (CircuitException ex) {
+                CJSystem.logging().error(getClass(), ex);
             }
             throw new RabbitMQException("500", e);
         } finally {

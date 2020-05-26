@@ -14,6 +14,6 @@ public interface ISettleTradeService {
 
     void recharge(RechargeBO rechargeBO)throws CircuitException;
 
-    void purchase(PurchasedBO bo) throws CircuitException;
+    void purchase(PurchasedBO purchasedBO) throws CircuitException;
 
 }

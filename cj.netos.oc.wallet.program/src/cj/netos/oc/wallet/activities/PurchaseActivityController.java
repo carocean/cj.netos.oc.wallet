@@ -144,8 +144,21 @@ public class PurchaseActivityController implements IPurchaseActivityController {
 
     @CjTransaction
     @Override
-    public void settle(PurchasedBO bo) throws CircuitException {
-        settleTradeService.purchase(bo);
+    public void settle(PurchasedBO purchasedBO) throws CircuitException {
+        settleTradeService.purchase(purchasedBO);
     }
 
+    @CjTransaction
+    @Override
+    public void sendSettleAck(PurchaseResult result) throws CircuitException {
+        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
+                .type("/trade/settle/ack.mhub")
+                .headers(new HashMap<String, Object>() {{
+                    put("command", "purchase");
+                    put("person", result.getPerson());
+                    put("record_sn", result.getSn());
+                }})
+                .build();
+        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+    }
 }

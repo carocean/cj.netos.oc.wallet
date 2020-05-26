@@ -2,9 +2,6 @@ package cj.netos.oc.wallet.bo;
 
 import java.math.BigDecimal;
 
-/**
- * Table: weny_purch_record
- */
 public class PurchasedBO {
     /**
      * Column: sn
@@ -72,17 +69,6 @@ public class PurchasedBO {
      */
     private Integer state;
 
-    /**
-     * Column: ctime
-     * Remark: 创建时间
-     */
-    private String ctime;
-
-    /**
-     * Column: lutime
-     * Remark: 最新修改时间
-     */
-    private String lutime;
 
     /**
      * Column: note
@@ -95,17 +81,7 @@ public class PurchasedBO {
      */
     private String bankid;
 
-    /**
-     * Column: status
-     * Remark: 返回码
-     */
-    private Integer status;
 
-    /**
-     * Column: message
-     * Remark: 返回消息
-     */
-    private String message;
 
     /**
      * Column: principal_ratio
@@ -113,11 +89,6 @@ public class PurchasedBO {
      */
     private BigDecimal principalRatio;
 
-    /**
-     * Column: principal_amount
-     * Remark: 本金
-     */
-    private Long principalAmount;
 
     /**
      * Column: bank_purch_sn
@@ -149,12 +120,13 @@ public class PurchasedBO {
      */
     private Long reserveAmount;
 
+
     public String getSn() {
         return sn;
     }
 
     public void setSn(String sn) {
-        this.sn = sn == null ? null : sn.trim();
+        this.sn = sn;
     }
 
     public String getPerson() {
@@ -162,7 +134,7 @@ public class PurchasedBO {
     }
 
     public void setPerson(String person) {
-        this.person = person == null ? null : person.trim();
+        this.person = person;
     }
 
     public String getPersonName() {
@@ -170,7 +142,7 @@ public class PurchasedBO {
     }
 
     public void setPersonName(String personName) {
-        this.personName = personName == null ? null : personName.trim();
+        this.personName = personName;
     }
 
     public String getCurrency() {
@@ -178,7 +150,7 @@ public class PurchasedBO {
     }
 
     public void setCurrency(String currency) {
-        this.currency = currency == null ? null : currency.trim();
+        this.currency = currency;
     }
 
     public Long getPurchAmount() {
@@ -237,28 +209,12 @@ public class PurchasedBO {
         this.state = state;
     }
 
-    public String getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(String ctime) {
-        this.ctime = ctime == null ? null : ctime.trim();
-    }
-
-    public String getLutime() {
-        return lutime;
-    }
-
-    public void setLutime(String lutime) {
-        this.lutime = lutime == null ? null : lutime.trim();
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
+        this.note = note;
     }
 
     public String getBankid() {
@@ -266,23 +222,7 @@ public class PurchasedBO {
     }
 
     public void setBankid(String bankid) {
-        this.bankid = bankid == null ? null : bankid.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message == null ? null : message.trim();
+        this.bankid = bankid;
     }
 
     public BigDecimal getPrincipalRatio() {
@@ -293,20 +233,12 @@ public class PurchasedBO {
         this.principalRatio = principalRatio;
     }
 
-    public Long getPrincipalAmount() {
-        return principalAmount;
-    }
-
-    public void setPrincipalAmount(Long principalAmount) {
-        this.principalAmount = principalAmount;
-    }
-
     public String getBankPurchSn() {
         return bankPurchSn;
     }
 
     public void setBankPurchSn(String bankPurchSn) {
-        this.bankPurchSn = bankPurchSn == null ? null : bankPurchSn.trim();
+        this.bankPurchSn = bankPurchSn;
     }
 
     public BigDecimal getFreeRatio() {
