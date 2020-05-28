@@ -52,6 +52,11 @@ public class FreezenAccount {
      */
     private String lutime;
 
+    /**
+     * Column: bankid
+     */
+    private String bankid;
+
     public String getId() {
         return id;
     }
@@ -114,5 +119,13 @@ public class FreezenAccount {
 
     public void setLutime(String lutime) {
         this.lutime = lutime == null ? null : lutime.trim();
+    }
+
+    public String getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(String bankid) {
+        this.bankid = bankid == null ? null : bankid.trim();
     }
 }

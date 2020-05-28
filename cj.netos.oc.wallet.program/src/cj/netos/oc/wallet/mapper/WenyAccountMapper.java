@@ -2,10 +2,9 @@ package cj.netos.oc.wallet.mapper;
 
 import cj.netos.oc.wallet.model.WenyAccount;
 import cj.netos.oc.wallet.model.WenyAccountExample;
-
+import org.apache.ibatis.annotations.Param;
 import java.math.BigDecimal;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface WenyAccountMapper {
 
@@ -64,6 +63,5 @@ public interface WenyAccountMapper {
      */
     int updateByPrimaryKey(WenyAccount record);
 
-    void updateStock(@Param(value = "id") String id,@Param(value = "stock") BigDecimal stock,@Param(value = "lutime") String lutime);
-
+    void updateStock(@Param(value = "id") String id, @Param(value = "stock") BigDecimal stock, @Param(value = "lutime") String lutime);
 }

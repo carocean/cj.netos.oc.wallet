@@ -4,15 +4,9 @@ import cj.netos.oc.wallet.IOnorderService;
 import cj.netos.oc.wallet.ISettleTradeService;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.bo.*;
-import cj.netos.oc.wallet.mapper.BalanceAccountMapper;
-import cj.netos.oc.wallet.mapper.BalanceBillMapper;
-import cj.netos.oc.wallet.mapper.WenyAccountMapper;
-import cj.netos.oc.wallet.mapper.WenyBillMapper;
-import cj.netos.oc.wallet.model.BalanceAccount;
-import cj.netos.oc.wallet.model.BalanceBill;
-import cj.netos.oc.wallet.model.WenyAccount;
-import cj.netos.oc.wallet.model.WenyBill;
-import cj.netos.oc.wallet.result.PurchasedResult;
+import cj.netos.oc.wallet.mapper.*;
+import cj.netos.oc.wallet.model.*;
+import cj.netos.oc.wallet.result.ExchangeResult;
 import cj.netos.oc.wallet.util.IdWorker;
 import cj.netos.oc.wallet.util.WalletUtils;
 import cj.studio.ecm.annotation.CjBridge;
@@ -20,6 +14,8 @@ import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.orm.mybatis.annotation.CjTransaction;
+
+import java.math.BigDecimal;
 
 @CjBridge(aspects = "@transaction")
 @CjService(name = "settleTradeService")
@@ -38,6 +34,15 @@ public class SettleTradeService implements ISettleTradeService {
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WenyAccountMapper")
     WenyAccountMapper wenyAccountMapper;
 
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FreezenBillMapper")
+    FreezenBillMapper freezenBillMapper;
+
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FreezenAccountMapper")
+    FreezenAccountMapper freezenAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.ProfitAccountMapper")
+    ProfitAccountMapper profitAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.ProfitBillMapper")
+    ProfitBillMapper profitBillMapper;
     @CjServiceRef
     IWalletService walletService;
     @CjServiceRef
@@ -93,6 +98,7 @@ public class SettleTradeService implements ISettleTradeService {
         bo.setRefType("withdraw");
         onorderService.done(bo);
     }
+
     @CjTransaction
     @Override
     public void purchase(PurchasedBO purchasedBO) throws CircuitException {
@@ -110,11 +116,34 @@ public class SettleTradeService implements ISettleTradeService {
         if (!walletService.hasWallet(purchasedBO.getPerson())) {
             walletService.createWallet(purchasedBO.getPerson(), purchasedBO.getPersonName());
         }
+        if (!walletService.hasWenyBankAccount(purchasedBO.getPerson(), purchasedBO.getBankid())) {
+            walletService.createWenyBankAccount(purchasedBO.getPerson(), purchasedBO.getPersonName(), purchasedBO.getBankid());
+        }
         addStockBill(purchasedBO);
+        addFreezenBill(purchasedBO);
+    }
+
+    private void addFreezenBill(PurchasedBO purchasedBO) {
+        FreezenAccount freezenAccount = walletService.getFreezenAccount(purchasedBO.getPerson(), purchasedBO.getBankid());
+        FreezenBill bill = new FreezenBill();
+        bill.setAccountid(freezenAccount.getId());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(purchasedBO.getNote());
+        bill.setOrder(8);
+        bill.setAmount(purchasedBO.getPrincipalAmount());
+        bill.setBalance(freezenAccount.getAmount() + purchasedBO.getPrincipalAmount());
+        bill.setRefsn(purchasedBO.getSn());
+        bill.setSn(new IdWorker().nextId());
+        bill.setTitle("申购");
+        bill.setBankid(purchasedBO.getBankid());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        freezenBillMapper.insert(bill);
+
+        freezenAccountMapper.updateAmount(freezenAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     private void addStockBill(PurchasedBO purchasedBO) {
-        WenyAccount wenyAccount = walletService.getWenyAccount(purchasedBO.getPerson());
+        WenyAccount wenyAccount = walletService.getWenyAccount(purchasedBO.getPerson(), purchasedBO.getBankid());
         WenyBill bill = new WenyBill();
         bill.setAccountid(wenyAccount.getId());
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
@@ -125,10 +154,82 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setRefsn(purchasedBO.getSn());
         bill.setSn(new IdWorker().nextId());
         bill.setTitle("申购");
+        bill.setBankid(purchasedBO.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         wenyBillMapper.insert(bill);
 
         wenyAccountMapper.updateStock(wenyAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
 
+    }
+
+    @CjTransaction
+    @Override
+    public ExchangeResult exchange(ExchangedBO bo) {
+        if (!walletService.hasWenyBankAccount(bo.getExchanger(), bo.getBankid())) {
+            walletService.createWenyBankAccount(bo.getExchanger(), bo.getPersonName(), bo.getBankid());
+        }
+        ExchangeResult result = new ExchangeResult();
+        addStockBill_sub(bo);
+        addProfitBill_add(bo);
+        addFreezenBill_sub(bo);
+        return result;
+    }
+
+    private void addFreezenBill_sub(ExchangedBO bo) {
+        FreezenAccount freezenAccount = walletService.getFreezenAccount(bo.getExchanger(), bo.getBankid());
+        FreezenBill bill = new FreezenBill();
+        bill.setAccountid(freezenAccount.getId());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(9);
+        bill.setAmount(bo.getPrincipalAmount() * -1);
+        bill.setBalance(freezenAccount.getAmount() - bo.getPrincipalAmount());
+        bill.setRefsn(bo.getSn());
+        bill.setSn(new IdWorker().nextId());
+        bill.setTitle("承兑");
+        bill.setBankid(bo.getBankid());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        freezenBillMapper.insert(bill);
+
+        freezenAccountMapper.updateAmount(freezenAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
+
+    private void addProfitBill_add(ExchangedBO bo) {
+        ProfitAccount profitAccount = walletService.getProfitAccount(bo.getExchanger(), bo.getBankid());
+        ProfitBill bill = new ProfitBill();
+        bill.setAccountid(profitAccount.getId());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(9);
+        bill.setAmount(bo.getProfit());
+        bill.setBalance(profitAccount.getAmount() + bo.getProfit());
+        bill.setRefsn(bo.getSn());
+        bill.setSn(new IdWorker().nextId());
+        bill.setTitle("承兑");
+        bill.setBankid(bo.getBankid());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        profitBillMapper.insert(bill);
+
+        profitAccountMapper.updateAmount(profitAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+
+    }
+
+    private void addStockBill_sub(ExchangedBO bo) {
+        WenyAccount wenyAccount = walletService.getWenyAccount(bo.getExchanger(), bo.getBankid());
+        WenyBill bill = new WenyBill();
+        bill.setBankid(bo.getBankid());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("承兑");
+        bill.setSn(new IdWorker().nextId());
+        bill.setRefsn(bo.getSn());
+        bill.setOrder(9);
+        bill.setNote(bo.getNote());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setAccountid(wenyAccount.getId());
+        bill.setStock(bo.getStock().multiply(new BigDecimal(-1.0)));
+        bill.setBalance(wenyAccount.getStock().subtract(bo.getStock()));
+        wenyBillMapper.insert(bill);
+
+        wenyAccountMapper.updateStock(wenyAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 }

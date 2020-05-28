@@ -61,4 +61,7 @@ public interface FreezenAccountMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(FreezenAccount record);
+
+    void updateAmount(@Param(value = "id") String id,@Param(value = "amount") Long amount,@Param(value = "lutime") String lutime);
+
 }

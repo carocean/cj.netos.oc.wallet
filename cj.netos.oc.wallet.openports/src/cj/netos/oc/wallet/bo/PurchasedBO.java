@@ -8,7 +8,7 @@ public class PurchasedBO {
      * Remark: YYYYMMDD+交易流水（每天从1开始）
      */
     private String sn;
-
+    long principalAmount;
     /**
      * Column: person
      * Remark: 公众号
@@ -120,6 +120,13 @@ public class PurchasedBO {
      */
     private Long reserveAmount;
 
+    public long getPrincipalAmount() {
+        return principalAmount;
+    }
+
+    public void setPrincipalAmount(long principalAmount) {
+        this.principalAmount = principalAmount;
+    }
 
     public String getSn() {
         return sn;

@@ -45,7 +45,7 @@ public class OnorderService implements IOnorderService {
         }
         BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
         if (balanceAccount.getAmount() < bo.getAmount()) {
-            throw new CircuitException("2000", String.format("余额不足，提现失败。订单:%s", bo.getRefsn()));
+            throw new CircuitException("2000", String.format("余额不足。订单:%s", bo.getRefsn()));
         }
         addBalanceBillByOnorder(bo, bo.getAmount());
         addOnorderBill(bo, balanceAccount);

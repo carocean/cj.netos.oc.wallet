@@ -1,8 +1,7 @@
 package cj.netos.oc.wallet;
 
-import cj.netos.oc.wallet.bo.PurchasedBO;
-import cj.netos.oc.wallet.bo.RechargeBO;
-import cj.netos.oc.wallet.bo.WithdrawBO;
+import cj.netos.oc.wallet.bo.*;
+import cj.netos.oc.wallet.result.ExchangeResult;
 import cj.studio.ecm.net.CircuitException;
 
 public interface ISettleTradeService {
@@ -15,5 +14,7 @@ public interface ISettleTradeService {
     void recharge(RechargeBO rechargeBO)throws CircuitException;
 
     void purchase(PurchasedBO purchasedBO) throws CircuitException;
+
+    ExchangeResult exchange(ExchangedBO bo);
 
 }

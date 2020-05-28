@@ -64,6 +64,11 @@ public class ProfitBill {
      */
     private String workday;
 
+    /**
+     * Column: bankid
+     */
+    private String bankid;
+
     public String getSn() {
         return sn;
     }
@@ -142,5 +147,13 @@ public class ProfitBill {
 
     public void setWorkday(String workday) {
         this.workday = workday == null ? null : workday.trim();
+    }
+
+    public String getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(String bankid) {
+        this.bankid = bankid == null ? null : bankid.trim();
     }
 }

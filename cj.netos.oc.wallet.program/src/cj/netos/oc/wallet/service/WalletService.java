@@ -1,7 +1,6 @@
 package cj.netos.oc.wallet.service;
 
 import cj.netos.oc.wallet.IWalletService;
-import cj.netos.oc.wallet.Person;
 import cj.netos.oc.wallet.mapper.*;
 import cj.netos.oc.wallet.model.*;
 import cj.netos.oc.wallet.util.WalletUtils;
@@ -41,6 +40,59 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
+    public void createWenyBankAccount(String person, String personName, String bankid) {
+        if (hasWenyBankAccount(person, bankid)) {
+            return;
+        }
+
+        WenyAccount wenyAccount = new WenyAccount();
+        wenyAccount.setStock(BigDecimal.ZERO);
+        wenyAccount.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        wenyAccount.setCurrency("WENY");
+        wenyAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
+        wenyAccount.setLutime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        wenyAccount.setPerson(person);
+        wenyAccount.setPersonName(personName);
+        wenyAccount.setState(0);
+        wenyAccount.setBankid(bankid);
+        wenyAccountMapper.insert(wenyAccount);
+
+        FreezenAccount freezenAccount = new FreezenAccount();
+        freezenAccount.setAmount(0L);
+        freezenAccount.setCtime(wenyAccount.getCtime());
+        freezenAccount.setCurrency("CNY");
+        freezenAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
+        freezenAccount.setLutime(wenyAccount.getLutime());
+        freezenAccount.setPerson(person);
+        freezenAccount.setPersonName(personName);
+        freezenAccount.setState(0);
+        freezenAccount.setBankid(bankid);
+        freezenAccountMapper.insert(freezenAccount);
+
+        ProfitAccount profitAccount = new ProfitAccount();
+        profitAccount.setAmount(0L);
+        profitAccount.setCtime(wenyAccount.getCtime());
+        profitAccount.setCurrency("CNY");
+        profitAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
+        profitAccount.setLutime(wenyAccount.getLutime());
+        profitAccount.setPerson(person);
+        profitAccount.setPersonName(personName);
+        profitAccount.setState(0);
+        profitAccount.setBankid(bankid);
+        profitAccountMapper.insert(profitAccount);
+
+    }
+
+    @CjTransaction
+    @Override
+    public boolean hasWenyBankAccount(String person, String bankid) {
+        WenyAccountExample example = new WenyAccountExample();
+        example.createCriteria().andBankidEqualTo(bankid).andPersonEqualTo(person);
+        return wenyAccountMapper.countByExample(example) > 0;
+    }
+
+    @CjTransaction
+    @Override
     public Map<String, Object> createWallet(String person, String personName) {
         Map<String, Object> map = new HashMap<>();
         map.put("person", person);
@@ -56,17 +108,17 @@ public class WalletService implements IWalletService {
             BalanceAccount balanceAccount = getBalanceAccount(p);
             map.put("balanceAccount", balanceAccount);
 
-            FreezenAccount freezenAccount = getFreezenAccount(p);
-            map.put("freezenAccount", freezenAccount);
-
-            ProfitAccount profitAccount = getProfitAccount(p);
-            map.put("profitAccount", profitAccount);
-
             AbsorbAccount absorbAccount = getAbsorbAccount(p);
             map.put("absorbAccount", absorbAccount);
 
-            WenyAccount wenyAccount = getWenyAccount(p);
-            map.put("wenyAccount", wenyAccount);
+            List<FreezenAccount> freezenAccounts = listFreezenAccount(p);
+            map.put("freezenAccounts", freezenAccounts);
+
+            List<ProfitAccount> profitAccounts = listProfitAccount(p);
+            map.put("profitAccounts", profitAccounts);
+
+            List<WenyAccount> wenyAccounts = listWenyAccount(p);
+            map.put("wenyAccounts", wenyAccounts);
 
             return map;
         }
@@ -97,30 +149,6 @@ public class WalletService implements IWalletService {
         balanceAccountMapper.insert(balanceAccount);
         map.put("balanceAccount", balanceAccount.getId());
 
-        FreezenAccount freezenAccount = new FreezenAccount();
-        freezenAccount.setAmount(0L);
-        freezenAccount.setCtime(rootAccount.getCtime());
-        freezenAccount.setCurrency("CNY");
-        freezenAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
-        freezenAccount.setLutime(rootAccount.getLutime());
-        freezenAccount.setPerson(person);
-        freezenAccount.setPersonName(personName);
-        freezenAccount.setState(0);
-        freezenAccountMapper.insert(freezenAccount);
-        map.put("freezenAccount", freezenAccount.getId());
-
-        ProfitAccount profitAccount = new ProfitAccount();
-        profitAccount.setAmount(0L);
-        profitAccount.setCtime(rootAccount.getCtime());
-        profitAccount.setCurrency("CNY");
-        profitAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
-        profitAccount.setLutime(rootAccount.getLutime());
-        profitAccount.setPerson(person);
-        profitAccount.setPersonName(personName);
-        profitAccount.setState(0);
-        profitAccountMapper.insert(profitAccount);
-        map.put("profitAccount", profitAccount.getId());
-
         AbsorbAccount absorbAccount = new AbsorbAccount();
         absorbAccount.setAmount(0L);
         absorbAccount.setCtime(rootAccount.getCtime());
@@ -132,18 +160,6 @@ public class WalletService implements IWalletService {
         absorbAccount.setState(0);
         absorbAccountMapper.insert(absorbAccount);
         map.put("absorbAccount", absorbAccount.getId());
-
-        WenyAccount wenyAccount = new WenyAccount();
-        wenyAccount.setStock(BigDecimal.ZERO);
-        wenyAccount.setCtime(rootAccount.getCtime());
-        wenyAccount.setCurrency("WENY");
-        wenyAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
-        wenyAccount.setLutime(rootAccount.getLutime());
-        wenyAccount.setPerson(person);
-        wenyAccount.setPersonName(personName);
-        wenyAccount.setState(0);
-        wenyAccountMapper.insert(wenyAccount);
-        map.put("wenyAccount", wenyAccount.getId());
 
         return map;
     }
@@ -157,25 +173,24 @@ public class WalletService implements IWalletService {
         if (balanceAccount != null) {
             map.put("balanceAccount", balanceAccount);
         }
-
-        FreezenAccount freezenAccount = getFreezenAccount(person);
-        if (freezenAccount != null) {
-            map.put("freezenAccount", freezenAccount);
-        }
-
-        ProfitAccount profitAccount = getProfitAccount(person);
-        if (profitAccount != null) {
-            map.put("profitAccount", profitAccount);
-        }
-
         AbsorbAccount absorbAccount = getAbsorbAccount(person);
         if (absorbAccount != null) {
             map.put("absorbAccount", absorbAccount);
         }
 
-        WenyAccount wenyAccount = getWenyAccount(person);
-        if (wenyAccount != null) {
-            map.put("absorbAccount", wenyAccount);
+        List<FreezenAccount> freezenAccounts = listFreezenAccount(person);
+        if (freezenAccounts != null) {
+            map.put("freezenAccounts", freezenAccounts);
+        }
+
+        List<ProfitAccount> profitAccounts = listProfitAccount(person);
+        if (profitAccounts != null) {
+            map.put("profitAccounts", profitAccounts);
+        }
+
+        List<WenyAccount> wenyAccounts = listWenyAccount(person);
+        if (wenyAccounts != null) {
+            map.put("wenyAccounts", wenyAccounts);
         }
 
         return map;
@@ -183,14 +198,25 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
-    public WenyAccount getWenyAccount(String person) {
-        WenyAccountExample wenyAccountExample = new WenyAccountExample();
-        wenyAccountExample.createCriteria().andPersonEqualTo(person);
-        List<WenyAccount> wenyAccountList = wenyAccountMapper.selectByExample(wenyAccountExample);
-        if (wenyAccountList.isEmpty()) {
-            return null;
+    public Map<String, Object> getWenyAccounts(String person) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<FreezenAccount> freezenAccounts = listFreezenAccount(person);
+        if (freezenAccounts != null) {
+            map.put("freezenAccounts", freezenAccounts);
         }
-        return wenyAccountList.get(0);
+
+        List<ProfitAccount> profitAccounts = listProfitAccount(person);
+        if (profitAccounts != null) {
+            map.put("profitAccounts", profitAccounts);
+        }
+
+        List<WenyAccount> wenyAccounts = listWenyAccount(person);
+        if (wenyAccounts != null) {
+            map.put("wenyAccounts", wenyAccounts);
+        }
+
+        return map;
     }
 
     @CjTransaction
@@ -207,26 +233,56 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
-    public ProfitAccount getProfitAccount(String person) {
-        ProfitAccountExample profitAccountExample = new ProfitAccountExample();
-        profitAccountExample.createCriteria().andPersonEqualTo(person);
-        List<ProfitAccount> profitAccountList = profitAccountMapper.selectByExample(profitAccountExample);
-        if (profitAccountList.isEmpty()) {
-            return null;
-        }
-        return profitAccountList.get(0);
+    public List<WenyAccount> listWenyAccount(String person) {
+        WenyAccountExample wenyAccountExample = new WenyAccountExample();
+        wenyAccountExample.createCriteria().andPersonEqualTo(person);
+        List<WenyAccount> wenyAccountList = wenyAccountMapper.selectByExample(wenyAccountExample);
+        return wenyAccountList;
     }
 
     @CjTransaction
     @Override
-    public FreezenAccount getFreezenAccount(String person) {
+    public WenyAccount getWenyAccount(String person, String bankid) {
+        WenyAccountExample wenyAccountExample = new WenyAccountExample();
+        wenyAccountExample.createCriteria().andPersonEqualTo(person).andBankidEqualTo(bankid);
+        List<WenyAccount> wenyAccountList = wenyAccountMapper.selectByExample(wenyAccountExample);
+        return wenyAccountList.isEmpty() ? null : wenyAccountList.get(0);
+    }
+
+    @CjTransaction
+    @Override
+    public List<ProfitAccount> listProfitAccount(String person) {
+        ProfitAccountExample profitAccountExample = new ProfitAccountExample();
+        profitAccountExample.createCriteria().andPersonEqualTo(person);
+        List<ProfitAccount> profitAccountList = profitAccountMapper.selectByExample(profitAccountExample);
+        return profitAccountList;
+    }
+
+    @CjTransaction
+    @Override
+    public ProfitAccount getProfitAccount(String person,String bankid) {
+        ProfitAccountExample profitAccountExample = new ProfitAccountExample();
+        profitAccountExample.createCriteria().andPersonEqualTo(person).andBankidEqualTo(bankid);
+        List<ProfitAccount> profitAccountList = profitAccountMapper.selectByExample(profitAccountExample);
+        return profitAccountList.isEmpty() ? null : profitAccountList.get(0);
+    }
+
+    @CjTransaction
+    @Override
+    public List<FreezenAccount> listFreezenAccount(String person) {
         FreezenAccountExample freezenAccountExample = new FreezenAccountExample();
         freezenAccountExample.createCriteria().andPersonEqualTo(person);
         List<FreezenAccount> freezenAccountList = freezenAccountMapper.selectByExample(freezenAccountExample);
-        if (freezenAccountList.isEmpty()) {
-            return null;
-        }
-        return freezenAccountList.get(0);
+        return freezenAccountList;
+    }
+
+    @CjTransaction
+    @Override
+    public FreezenAccount getFreezenAccount(String person, String bankid) {
+        FreezenAccountExample freezenAccountExample = new FreezenAccountExample();
+        freezenAccountExample.createCriteria().andPersonEqualTo(person).andBankidEqualTo(bankid);
+        List<FreezenAccount> freezenAccountList = freezenAccountMapper.selectByExample(freezenAccountExample);
+        return freezenAccountList.isEmpty() ? null : freezenAccountList.get(0);
     }
 
     @CjTransaction

@@ -13,6 +13,7 @@
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="workday" jdbcType="VARCHAR" property="workday" />
+    <result column="bankid" jdbcType="VARCHAR" property="bankid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    sn, accountid, title, `order`, amount, balance, refsn, ctime, note, workday
+    sn, accountid, title, `order`, amount, balance, refsn, ctime, note, workday, bankid
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.ProfitBillExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -117,11 +118,11 @@
     insert into profit_bill (sn, accountid, title, 
       `order`, amount, balance, 
       refsn, ctime, note, 
-      workday)
+      workday, bankid)
     values (#{sn,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{order,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
       #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
-      #{workday,jdbcType=VARCHAR})
+      #{workday,jdbcType=VARCHAR}, #{bankid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.ProfitBill">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -157,6 +158,9 @@
       <if test="workday != null">
         workday,
       </if>
+      <if test="bankid != null">
+        bankid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sn != null">
@@ -188,6 +192,9 @@
       </if>
       <if test="workday != null">
         #{workday,jdbcType=VARCHAR},
+      </if>
+      <if test="bankid != null">
+        #{bankid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -232,6 +239,9 @@
       <if test="record.workday != null">
         workday = #{record.workday,jdbcType=VARCHAR},
       </if>
+      <if test="record.bankid != null">
+        bankid = #{record.bankid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -249,7 +259,8 @@
       refsn = #{record.refsn,jdbcType=VARCHAR},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
-      workday = #{record.workday,jdbcType=VARCHAR}
+      workday = #{record.workday,jdbcType=VARCHAR},
+      bankid = #{record.bankid,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -285,6 +296,9 @@
       <if test="workday != null">
         workday = #{workday,jdbcType=VARCHAR},
       </if>
+      <if test="bankid != null">
+        bankid = #{bankid,jdbcType=VARCHAR},
+      </if>
     </set>
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
@@ -299,7 +313,8 @@
       refsn = #{refsn,jdbcType=VARCHAR},
       ctime = #{ctime,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},
-      workday = #{workday,jdbcType=VARCHAR}
+      workday = #{workday,jdbcType=VARCHAR},
+      bankid = #{bankid,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -3,10 +3,13 @@ package cj.netos.oc.wallet.cmd;
 import cj.netos.oc.wallet.IExchangeActivityController;
 import cj.netos.oc.wallet.bo.ExchangeBO;
 import cj.netos.oc.wallet.program.ICuratorPathChecker;
+import cj.netos.oc.wallet.result.ExchangeResult;
+import cj.netos.oc.wallet.result.ExchangingResult;
 import cj.netos.rabbitmq.CjConsumer;
 import cj.netos.rabbitmq.RabbitMQException;
 import cj.netos.rabbitmq.RetryCommandException;
 import cj.netos.rabbitmq.consumer.IConsumerCommand;
+import cj.studio.ecm.CJSystem;
 import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
@@ -41,18 +44,35 @@ public class ExchangeReceiptCommand implements IConsumerCommand {
         } catch (Exception e) {
             throw new RabbitMQException("500", e);
         }
+
+        ExchangeBO bo = new Gson().fromJson(new String(body), ExchangeBO.class);
+        ExchangingResult result = new ExchangingResult("200", "OK");
+        result.setPerson(bo.getPerson());
+        result.setSn(bo.getSn());
+
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
         InterProcessMutex mutex = lock.writeLock();
         try {
             mutex.acquire();
-            ExchangeBO bo = new Gson().fromJson(new String(body), ExchangeBO.class);
-            exchangeActivityController.receipt(bo);
+            ExchangeResult result1 = exchangeActivityController.doReceipt(bo);
+            result.setRecord(new Gson().toJson(result1));
+            exchangeActivityController.sendReceiptAck(result);
         } catch (RabbitMQException e) {
             throw e;
         } catch (Exception e) {
             CircuitException ce = CircuitException.search(e);
             if (ce != null) {
+                try {
+                    exchangeActivityController.sendReceiptAck(result);
+                } catch (CircuitException ex) {
+                    CJSystem.logging().error(getClass(), ex);
+                }
                 throw new RabbitMQException(ce.getStatus(), ce);
+            }
+            try {
+                exchangeActivityController.sendReceiptAck(result);
+            } catch (CircuitException ex) {
+                CJSystem.logging().error(getClass(), ex);
             }
             throw new RabbitMQException("500", e);
         } finally {
