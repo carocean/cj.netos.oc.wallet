@@ -69,6 +69,30 @@ public class ProfitBill {
      */
     private String bankid;
 
+    /**
+     * Column: day
+     * Remark: 日
+     */
+    private Integer day;
+
+    /**
+     * Column: month
+     * Remark: 月
+     */
+    private Integer month;
+
+    /**
+     * Column: season
+     * Remark: 季
+     */
+    private Integer season;
+
+    /**
+     * Column: year
+     * Remark: 年
+     */
+    private Integer year;
+
     public String getSn() {
         return sn;
     }
@@ -155,5 +179,37 @@ public class ProfitBill {
 
     public void setBankid(String bankid) {
         this.bankid = bankid == null ? null : bankid.trim();
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getSeason() {
+        return season;
+    }
+
+    public void setSeason(Integer season) {
+        this.season = season;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 }

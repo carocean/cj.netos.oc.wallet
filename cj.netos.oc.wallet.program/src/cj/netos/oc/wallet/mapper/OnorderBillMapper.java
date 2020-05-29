@@ -2,8 +2,9 @@ package cj.netos.oc.wallet.mapper;
 
 import cj.netos.oc.wallet.model.OnorderBill;
 import cj.netos.oc.wallet.model.OnorderBillExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface OnorderBillMapper {
 
@@ -61,4 +62,9 @@ public interface OnorderBillMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(OnorderBill record);
+
+    List<OnorderBill> page(@Param(value = "accountid") String accountid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
+    List<OnorderBill> month(@Param(value = "accountid") String accountid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
 }

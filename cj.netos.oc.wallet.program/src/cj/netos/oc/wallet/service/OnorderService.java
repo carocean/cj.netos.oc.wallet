@@ -17,6 +17,7 @@ import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.orm.mybatis.annotation.CjTransaction;
 
+import java.util.Calendar;
 import java.util.List;
 
 @CjBridge(aspects = "@transaction")
@@ -67,6 +68,14 @@ public class OnorderService implements IOnorderService {
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle(bo.getCause());
 
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        balanceBill.setSeason(season);
+
         balanceBillMapper.insert(balanceBill);
 
         //驱动余额更新
@@ -87,6 +96,14 @@ public class OnorderService implements IOnorderService {
         bill.setSn(new IdWorker().nextId());
         bill.setTitle(bo.getCause());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
 
         onorderBillMapper.insert(bill);
 
@@ -121,6 +138,14 @@ public class OnorderService implements IOnorderService {
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle(bo.getCause());
 
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        balanceBill.setSeason(season);
+
         balanceBillMapper.insert(balanceBill);
 
         //驱动余额更新
@@ -143,6 +168,14 @@ public class OnorderService implements IOnorderService {
         bill.setSn(new IdWorker().nextId());
         bill.setTitle(bo.getCause());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
 
         onorderBillMapper.insert(bill);
 

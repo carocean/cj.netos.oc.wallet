@@ -1,5 +1,6 @@
 package cj.netos.oc.wallet.mapper;
 
+import cj.netos.oc.wallet.model.AbsorbBill;
 import cj.netos.oc.wallet.model.BalanceBill;
 import cj.netos.oc.wallet.model.BalanceBillExample;
 import java.util.List;
@@ -61,4 +62,10 @@ public interface BalanceBillMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(BalanceBill record);
+
+    List<BalanceBill> page(@Param(value = "accountid") String accountid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
+    List<BalanceBill> month(@Param(value = "accountid") String accountid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
+
 }

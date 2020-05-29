@@ -16,6 +16,7 @@ import cj.studio.ecm.net.CircuitException;
 import cj.studio.orm.mybatis.annotation.CjTransaction;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 @CjBridge(aspects = "@transaction")
 @CjService(name = "settleTradeService")
@@ -73,6 +74,14 @@ public class SettleTradeService implements ISettleTradeService {
 //        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle("充值");
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        balanceBill.setSeason(season);
 
         balanceBillMapper.insert(balanceBill);
 
@@ -137,6 +146,15 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setTitle("申购");
         bill.setBankid(purchasedBO.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
+
         freezenBillMapper.insert(bill);
 
         freezenAccountMapper.updateAmount(freezenAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
@@ -156,6 +174,15 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setTitle("申购");
         bill.setBankid(purchasedBO.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
+
         wenyBillMapper.insert(bill);
 
         wenyAccountMapper.updateStock(wenyAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
@@ -189,6 +216,15 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setTitle("承兑");
         bill.setBankid(bo.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
+
         freezenBillMapper.insert(bill);
 
         freezenAccountMapper.updateAmount(freezenAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
@@ -208,6 +244,15 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setTitle("承兑");
         bill.setBankid(bo.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
+
         profitBillMapper.insert(bill);
 
         profitAccountMapper.updateAmount(profitAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
@@ -228,6 +273,15 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setAccountid(wenyAccount.getId());
         bill.setStock(bo.getStock().multiply(new BigDecimal(-1.0)));
         bill.setBalance(wenyAccount.getStock().subtract(bo.getStock()));
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season=calendar.get(Calendar.MONTH)%4;
+        bill.setSeason(season);
+
         wenyBillMapper.insert(bill);
 
         wenyAccountMapper.updateStock(wenyAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));

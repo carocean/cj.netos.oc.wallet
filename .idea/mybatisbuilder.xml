@@ -368,7 +368,7 @@
             <TableInfo>
               <option name="database" value="netos.wallet.trade" />
               <option name="domainName" value="ProfitAccount" />
-              <option name="tableComment" value="收益账户" />
+              <option name="tableComment" value="收益账户&#10;收益可以为负" />
               <option name="tableName" value="profit_account" />
             </TableInfo>
           </value>

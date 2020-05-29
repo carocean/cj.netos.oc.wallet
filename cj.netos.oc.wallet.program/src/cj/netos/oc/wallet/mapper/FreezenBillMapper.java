@@ -1,5 +1,6 @@
 package cj.netos.oc.wallet.mapper;
 
+import cj.netos.oc.wallet.model.AbsorbBill;
 import cj.netos.oc.wallet.model.FreezenBill;
 import cj.netos.oc.wallet.model.FreezenBillExample;
 import java.util.List;
@@ -61,4 +62,9 @@ public interface FreezenBillMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(FreezenBill record);
+
+    List<FreezenBill> page(@Param(value = "accountid") String accountid,@Param(value = "bankid") String bankid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
+    List<FreezenBill> month(@Param(value = "accountid") String accountid,@Param(value = "bankid") String bankid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
 }

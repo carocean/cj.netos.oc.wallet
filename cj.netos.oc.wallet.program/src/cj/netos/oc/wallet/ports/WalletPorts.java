@@ -25,15 +25,4 @@ public class WalletPorts implements IWalletPorts {
     public boolean hasWallet(ISecuritySession securitySession, String person) throws CircuitException {
         return walletService.hasWallet(person);
     }
-
-    @Override
-    public Map<String, Object> getAllAccount(ISecuritySession securitySession, String person) throws CircuitException {
-        return walletService.getAllAccount(person);
-    }
-
-    @Override
-    public Map<String, Object> getBalanceAccount(ISecuritySession securitySession, String person) throws CircuitException {
-        Object obj = walletService.getBalanceAccount(person);
-        return new Gson().fromJson(new Gson().toJson(obj), HashMap.class);
-    }
 }

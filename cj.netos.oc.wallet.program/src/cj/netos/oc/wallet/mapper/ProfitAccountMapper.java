@@ -62,6 +62,5 @@ public interface ProfitAccountMapper {
      */
     int updateByPrimaryKey(ProfitAccount record);
 
-    void updateAmount(@Param(value = "id") String id,@Param(value = "amount") Long amount,@Param(value = "lutime") String lutime);
-
+    void updateAmount(@Param(value = "id") String id, @Param(value = "amount") Long amount, @Param(value = "lutime") String lutime);
 }
