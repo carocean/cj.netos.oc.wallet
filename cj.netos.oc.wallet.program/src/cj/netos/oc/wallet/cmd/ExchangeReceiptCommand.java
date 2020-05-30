@@ -62,6 +62,8 @@ public class ExchangeReceiptCommand implements IConsumerCommand {
         } catch (Exception e) {
             CircuitException ce = CircuitException.search(e);
             if (ce != null) {
+                result.setStatus(ce.getStatus());
+                result.setMessage(ce.getMessage());
                 try {
                     exchangeActivityController.sendReceiptAck(result);
                 } catch (CircuitException ex) {
@@ -70,6 +72,8 @@ public class ExchangeReceiptCommand implements IConsumerCommand {
                 throw new RabbitMQException(ce.getStatus(), ce);
             }
             try {
+                result.setStatus("500");
+                result.setMessage(e.getMessage());
                 exchangeActivityController.sendReceiptAck(result);
             } catch (CircuitException ex) {
                 CJSystem.logging().error(getClass(), ex);

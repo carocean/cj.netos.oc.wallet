@@ -64,6 +64,8 @@ public class ExchangeSettleCommand implements IConsumerCommand {
             CircuitException ce = CircuitException.search(e);
             if (ce != null) {
                 try {
+                    result.setStatus(ce.getStatus());
+                    result.setMessage(ce.getMessage());
                     exchangeActivityController.sendSettleAck(result);
                 } catch (CircuitException ex) {
                     CJSystem.logging().error(getClass(), ex);
@@ -71,6 +73,8 @@ public class ExchangeSettleCommand implements IConsumerCommand {
                 throw new RabbitMQException(ce.getStatus(), ce);
             }
             try {
+                result.setStatus("500");
+                result.setMessage(e.getMessage());
                 exchangeActivityController.sendSettleAck(result);
             } catch (CircuitException ex) {
                 CJSystem.logging().error(getClass(), ex);

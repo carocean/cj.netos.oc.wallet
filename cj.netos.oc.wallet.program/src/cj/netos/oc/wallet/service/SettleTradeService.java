@@ -195,10 +195,11 @@ public class SettleTradeService implements ISettleTradeService {
         if (!walletService.hasWenyBankAccount(bo.getExchanger(), bo.getBankid())) {
             walletService.createWenyBankAccount(bo.getExchanger(), bo.getPersonName(), bo.getBankid());
         }
-        ExchangeResult result = new ExchangeResult();
         addStockBill_sub(bo);
         addProfitBill_add(bo);
         addFreezenBill_sub(bo);
+        ExchangeResult result = new ExchangeResult();
+        result.load(bo);
         return result;
     }
 

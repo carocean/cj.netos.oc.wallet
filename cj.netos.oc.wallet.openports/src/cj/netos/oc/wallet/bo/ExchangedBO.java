@@ -23,6 +23,15 @@ public class ExchangedBO {
     String bankid;
     String bankPurchaseSn;
     String bankExchangeSn;
+    String walletPurchaseSn;
+
+    public String getWalletPurchaseSn() {
+        return walletPurchaseSn;
+    }
+
+    public void setWalletPurchaseSn(String walletPurchaseSn) {
+        this.walletPurchaseSn = walletPurchaseSn;
+    }
 
     public String getSn() {
         return sn;
