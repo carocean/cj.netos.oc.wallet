@@ -3,17 +3,17 @@ package cj.netos.oc.wallet.ports;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.model.*;
 import cj.netos.oc.wallet.program.ICuratorPathChecker;
+import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.openport.ISecuritySession;
-import cj.studio.openport.annotations.CjOpenports;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
 import java.util.Map;
 
-@CjOpenports(usage = "余额类服务")
+@CjService(name = "/balance.ports")
 public class BalancePorts implements IBalancePorts {
     @CjServiceRef
     IWalletService walletService;
