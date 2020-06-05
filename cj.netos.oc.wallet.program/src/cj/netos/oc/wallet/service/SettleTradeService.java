@@ -67,7 +67,7 @@ public class SettleTradeService implements ISettleTradeService {
         balanceBill.setAccountid(balanceAccount.getId());
         balanceBill.setAmount(amount);
         balanceBill.setBalance(balanceAccount.getAmount() + amount);
-        balanceBill.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         balanceBill.setNote(rechargeRecord.getNote());
         balanceBill.setOrder(1);
         balanceBill.setRefsn(rechargeRecord.getSn());
@@ -90,7 +90,7 @@ public class SettleTradeService implements ISettleTradeService {
     }
 
     private void updateBalanceAccount(BalanceAccount balanceAccount, Long balance) {
-        balanceAccountMapper.updateAmount(balanceAccount.getId(), balance, WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceAccountMapper.updateAmount(balanceAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     @CjTransaction

@@ -60,7 +60,7 @@ public class OnorderService implements IOnorderService {
         balanceBill.setAccountid(balanceAccount.getId());
         balanceBill.setAmount(amount * -1);
         balanceBill.setBalance(balanceAccount.getAmount() - amount);
-        balanceBill.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         balanceBill.setNote(bo.getNote());
         balanceBill.setOrder(bo.getOrder());
         balanceBill.setRefsn(bo.getRefsn());
@@ -79,7 +79,7 @@ public class OnorderService implements IOnorderService {
         balanceBillMapper.insert(balanceBill);
 
         //驱动余额更新
-        balanceAccountMapper.updateAmount(balanceAccount.getId(), balanceBill.getBalance(), WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceAccountMapper.updateAmount(balanceAccount.getId(), balanceBill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     private void addOnorderBill(OnorderBO bo, BalanceAccount balanceAccount) {
@@ -130,7 +130,7 @@ public class OnorderService implements IOnorderService {
         balanceBill.setAccountid(balanceAccount.getId());
         balanceBill.setAmount(bo.getAmount());
         balanceBill.setBalance(balanceAccount.getAmount() + bo.getAmount());
-        balanceBill.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         balanceBill.setNote(bo.getNote());
         balanceBill.setOrder(bo.getOrder());
         balanceBill.setRefsn(bo.getRefsn());
@@ -149,7 +149,7 @@ public class OnorderService implements IOnorderService {
         balanceBillMapper.insert(balanceBill);
 
         //驱动余额更新
-        balanceAccountMapper.updateAmount(balanceAccount.getId(), balanceBill.getBalance(), WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        balanceAccountMapper.updateAmount(balanceAccount.getId(), balanceBill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     private void addOnorderBillForSub(OnorderBO bo) throws CircuitException {

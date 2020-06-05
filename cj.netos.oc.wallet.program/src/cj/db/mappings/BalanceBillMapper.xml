@@ -370,6 +370,7 @@
     <include refid="Base_Column_List" />
     from balance_bill
     where accountid = #{accountid,jdbcType=VARCHAR}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
   <select id="month" parameterType="cj.netos.oc.wallet.model.BalanceBill" resultMap="BaseResultMap">
@@ -377,8 +378,9 @@
     <include refid="Base_Column_List" />
     from balance_bill
     where accountid = #{accountid,jdbcType=VARCHAR}
-    and year=#{year}
-    and month=#{month}
+    and `year`=#{year}
+    and `month`=#{month}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
 </mapper>

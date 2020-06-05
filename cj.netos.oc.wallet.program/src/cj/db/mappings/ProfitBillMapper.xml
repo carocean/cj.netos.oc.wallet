@@ -389,6 +389,7 @@
     from profit_bill
     where accountid = #{accountid,jdbcType=VARCHAR}
     and bankid=#{bankid}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
   <select id="month" parameterType="cj.netos.oc.wallet.model.ProfitBill" resultMap="BaseResultMap">
@@ -397,8 +398,9 @@
     from profit_bill
     where accountid = #{accountid,jdbcType=VARCHAR}
     and bankid=#{bankid}
-    and year=#{year}
-    and month=#{month}
+    and `year`=#{year}
+    and `month`=#{month}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
 </mapper>

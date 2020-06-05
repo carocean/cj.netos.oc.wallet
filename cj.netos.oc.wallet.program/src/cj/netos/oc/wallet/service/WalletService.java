@@ -125,7 +125,7 @@ public class WalletService implements IWalletService {
         map.put("code", "1200");
         map.put("message", "成功初始化");
         RootAccount rootAccount = new RootAccount();
-        rootAccount.setCtime(WalletUtils.dateTimeToSecond(System.currentTimeMillis()));
+        rootAccount.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         rootAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
         rootAccount.setIsRealName(1);
         rootAccount.setLutime(rootAccount.getCtime());
