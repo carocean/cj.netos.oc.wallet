@@ -1,6 +1,5 @@
 package cj.netos.oc.wallet.mapper;
 
-import cj.netos.oc.wallet.model.FreezenBill;
 import cj.netos.oc.wallet.model.WenyBill;
 import cj.netos.oc.wallet.model.WenyBillExample;
 import java.util.List;
@@ -65,6 +64,5 @@ public interface WenyBillMapper {
 
     List<WenyBill> page(@Param(value = "accountid") String accountid, @Param(value = "bankid") String bankid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 
-    List<WenyBill> month(@Param(value = "accountid") String accountid,@Param(value = "bankid") String bankid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
-
+    List<WenyBill> month(@Param(value = "accountid") String accountid, @Param(value = "bankid") String bankid, @Param(value = "year") int year, @Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 }

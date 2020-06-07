@@ -61,4 +61,6 @@ public interface AbsorbAccountMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     int updateByPrimaryKey(AbsorbAccount record);
+
+    void updateAmount(@Param(value = "id") String id, @Param(value = "balance") Long balance, @Param(value = "lutime") String lutime);
 }

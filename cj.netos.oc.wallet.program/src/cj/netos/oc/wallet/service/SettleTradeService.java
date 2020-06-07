@@ -44,6 +44,11 @@ public class SettleTradeService implements ISettleTradeService {
     ProfitAccountMapper profitAccountMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.ProfitBillMapper")
     ProfitBillMapper profitBillMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbAccountMapper")
+    AbsorbAccountMapper absorbAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbBillMapper")
+    AbsorbBillMapper absorbBillMapper;
+
     @CjServiceRef
     IWalletService walletService;
     @CjServiceRef
@@ -75,12 +80,12 @@ public class SettleTradeService implements ISettleTradeService {
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle("充值");
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         balanceBill.setYear(calendar.get(Calendar.YEAR));
         balanceBill.setMonth(calendar.get(Calendar.MONTH));
         balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         balanceBill.setSeason(season);
 
         balanceBillMapper.insert(balanceBill);
@@ -147,12 +152,12 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setBankid(purchasedBO.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         freezenBillMapper.insert(bill);
@@ -175,12 +180,12 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setBankid(purchasedBO.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         wenyBillMapper.insert(bill);
@@ -218,12 +223,12 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setBankid(bo.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         freezenBillMapper.insert(bill);
@@ -246,12 +251,12 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setBankid(bo.getBankid());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         profitBillMapper.insert(bill);
@@ -275,16 +280,209 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setStock(bo.getStock().multiply(new BigDecimal(-1.0)));
         bill.setBalance(wenyAccount.getStock().subtract(bo.getStock()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         wenyBillMapper.insert(bill);
 
         wenyAccountMapper.updateStock(wenyAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
+
+    @CjTransaction
+    @Override
+    public void depositAbsorb(DepositAbsorbBO bo) {
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+        }
+        addAbsorbBill_add(bo);
+    }
+
+    private void addAbsorbBill_add(DepositAbsorbBO bo) {
+        AbsorbAccount absorbAccount = walletService.getAbsorbAccount(bo.getPerson());
+
+        AbsorbBill bill = new AbsorbBill();
+        bill.setSn(new IdWorker().nextId());
+        bill.setAccountid(absorbAccount.getId());
+        bill.setAmount(bo.getDemandAmount());
+        bill.setBalance(absorbAccount.getAmount() + bo.getDemandAmount());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(1);
+        bill.setRefsn(bo.getSn());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("存入");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        bill.setSeason(season);
+
+        absorbBillMapper.insert(bill);
+
+        //驱动余额更新
+        updateAbsorbAccount(absorbAccount, bill.getBalance());
+    }
+
+    private void updateAbsorbAccount(AbsorbAccount absorbAccount, Long balance) {
+        absorbAccountMapper.updateAmount(absorbAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
+
+    @CjTransaction
+    @Override
+    public void transAbsorb(TransAbsorbBO bo) throws CircuitException {
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+        }
+        addAbsorbBill_sub(bo);
+        addBalanceBill_add_by_absorb(bo);
+    }
+
+    private void addBalanceBill_add_by_absorb(TransAbsorbBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getDemandAmount());
+        balanceBill.setBalance(balanceAccount.getAmount() + bo.getDemandAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(10);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("转入洇金");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    private void addAbsorbBill_sub(TransAbsorbBO bo) throws CircuitException {
+        AbsorbAccount absorbAccount = walletService.getAbsorbAccount(bo.getPerson());
+        if (absorbAccount.getAmount() < bo.getDemandAmount()) {
+            throw new CircuitException("2000", String.format("余额不足"));
+        }
+        AbsorbBill bill = new AbsorbBill();
+        bill.setSn(new IdWorker().nextId());
+        bill.setAccountid(absorbAccount.getId());
+        bill.setAmount(bo.getDemandAmount() * -1);
+        bill.setBalance(absorbAccount.getAmount() - bo.getDemandAmount());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(2);
+        bill.setRefsn(bo.getSn());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("提取到零钱");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        bill.setSeason(season);
+
+        absorbBillMapper.insert(bill);
+
+        //驱动余额更新
+        updateAbsorbAccount(absorbAccount, bill.getBalance());
+    }
+
+    @CjTransaction
+    @Override
+    public void transProfit(TransProfitBO bo) throws CircuitException {
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+        }
+        if (!walletService.hasWenyBankAccount(bo.getPerson(), bo.getWenyBankID())) {
+            walletService.createWenyBankAccount(bo.getPerson(), bo.getPersonName(), bo.getWenyBankID());
+        }
+        addProfitBill_sub(bo);
+        addBalanceBill_add_by_profit(bo);
+    }
+
+    private void addBalanceBill_add_by_profit(TransProfitBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getDemandAmount());
+        balanceBill.setBalance(balanceAccount.getAmount() + bo.getDemandAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(11);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("转入收益");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    private void addProfitBill_sub(TransProfitBO bo) throws CircuitException {
+        ProfitAccount profitAccount = walletService.getProfitAccount(bo.getPerson(), bo.getWenyBankID());
+        if (profitAccount.getAmount() < bo.getDemandAmount()) {
+            throw new CircuitException("2000", String.format("余额不足"));
+        }
+        ProfitBill bill = new ProfitBill();
+        bill.setSn(new IdWorker().nextId());
+        bill.setAccountid(profitAccount.getId());
+        bill.setAmount(bo.getDemandAmount() * -1);
+        bill.setBalance(profitAccount.getAmount() - bo.getDemandAmount());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(2);
+        bill.setRefsn(bo.getSn());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("提取到零钱");
+        bill.setBankid(bo.getWenyBankID());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        bill.setSeason(season);
+
+        profitBillMapper.insert(bill);
+
+        //驱动余额更新
+        updateProfitAccount(profitAccount, bill.getBalance());
+    }
+
+    private void updateProfitAccount(ProfitAccount profitAccount, Long balance) {
+        profitAccountMapper.updateAmount(profitAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
+
 }

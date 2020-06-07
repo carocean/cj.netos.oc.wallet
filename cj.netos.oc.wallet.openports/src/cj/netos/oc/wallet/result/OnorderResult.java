@@ -7,7 +7,10 @@ public class OnorderResult {
     String message;
     Object record;
 
-
+    public OnorderResult(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 
     public String getSn() {
         return sn;

@@ -17,4 +17,10 @@ public interface ISettleTradeService {
 
     ExchangeResult exchange(ExchangedBO bo);
 
+    void depositAbsorb(DepositAbsorbBO depositAbsorbBO);
+
+    void transAbsorb(TransAbsorbBO transAbsorbBO) throws CircuitException;
+
+    void transProfit(TransProfitBO transAbsorbBO) throws CircuitException;
+
 }

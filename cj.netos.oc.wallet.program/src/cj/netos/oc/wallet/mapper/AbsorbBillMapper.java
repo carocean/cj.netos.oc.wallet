@@ -2,9 +2,7 @@ package cj.netos.oc.wallet.mapper;
 
 import cj.netos.oc.wallet.model.AbsorbBill;
 import cj.netos.oc.wallet.model.AbsorbBillExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface AbsorbBillMapper {
@@ -66,6 +64,5 @@ public interface AbsorbBillMapper {
 
     List<AbsorbBill> page(@Param(value = "accountid") String accountid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 
-    List<AbsorbBill> month(@Param(value = "accountid") String accountid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
-
+    List<AbsorbBill> month(@Param(value = "accountid") String accountid, @Param(value = "year") int year, @Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 }

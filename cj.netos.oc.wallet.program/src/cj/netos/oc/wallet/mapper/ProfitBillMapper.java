@@ -2,9 +2,8 @@ package cj.netos.oc.wallet.mapper;
 
 import cj.netos.oc.wallet.model.ProfitBill;
 import cj.netos.oc.wallet.model.ProfitBillExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ProfitBillMapper {
 
@@ -65,6 +64,5 @@ public interface ProfitBillMapper {
 
     List<ProfitBill> page(@Param(value = "accountid") String accountid, @Param(value = "bankid") String bankid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 
-    List<ProfitBill> month(@Param(value = "accountid") String accountid,@Param(value = "bankid") String bankid,@Param(value = "year") int year,@Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
-
+    List<ProfitBill> month(@Param(value = "accountid") String accountid, @Param(value = "bankid") String bankid, @Param(value = "year") int year, @Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 }

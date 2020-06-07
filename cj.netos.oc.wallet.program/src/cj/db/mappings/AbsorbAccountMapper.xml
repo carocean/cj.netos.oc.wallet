@@ -270,4 +270,11 @@
       lutime = #{lutime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <update id="updateAmount" parameterType="cj.netos.oc.wallet.model.AbsorbAccount">
+    update absorb_account
+    set
+    amount = #{balance,jdbcType=BIGINT},
+    lutime = #{lutime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
 </mapper>

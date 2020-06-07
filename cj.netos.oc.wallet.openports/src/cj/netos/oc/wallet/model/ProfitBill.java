@@ -24,7 +24,7 @@ public class ProfitBill {
 
     /**
      * Column: order
-     * Remark: 01 充值  02 提现 03 转账 04 支付 05 收款 06原交易退款 07原交易撤销 08申购纹银 09承况纹银
+     * Remark: 01  02 转出收益到零钱账户  03  04  05  06 07 08 09承兑纹银
      */
     private Integer order;
 
