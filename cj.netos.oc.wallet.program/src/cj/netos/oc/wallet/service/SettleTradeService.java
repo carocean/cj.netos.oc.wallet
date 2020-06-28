@@ -419,6 +419,7 @@ public class SettleTradeService implements ISettleTradeService {
         addBalanceBill_add_by_profit(bo);
     }
 
+
     private void addBalanceBill_add_by_profit(TransProfitBO bo) {
         BalanceBill balanceBill = new BalanceBill();
 
@@ -484,5 +485,45 @@ public class SettleTradeService implements ISettleTradeService {
     private void updateProfitAccount(ProfitAccount profitAccount, Long balance) {
         profitAccountMapper.updateAmount(profitAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
+    @CjTransaction
+    @Override
+    public void transShunt(WithdrawShunterBO transShuntedBO) {
+        if (!walletService.hasWallet(transShuntedBO.getPerson())) {
+            walletService.createWallet(transShuntedBO.getPerson(), transShuntedBO.getPersonName());
+        }
+        if (!walletService.hasWenyBankAccount(transShuntedBO.getPerson(), transShuntedBO.getWenyBankID())) {
+            walletService.createWenyBankAccount(transShuntedBO.getPerson(), transShuntedBO.getPersonName(), transShuntedBO.getWenyBankID());
+        }
+        addBalanceBill_add_by_shunt(transShuntedBO);
+    }
 
+    private void addBalanceBill_add_by_shunt(WithdrawShunterBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getDemandAmount());
+        balanceBill.setBalance(balanceAccount.getAmount() + bo.getDemandAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(12);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("转入账金");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
 }
