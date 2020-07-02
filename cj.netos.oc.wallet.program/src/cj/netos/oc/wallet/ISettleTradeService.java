@@ -25,4 +25,8 @@ public interface ISettleTradeService {
 
     void transShunt(WithdrawShunterBO transShuntedBO);
 
+    void payTrade(PayBO payBO) throws CircuitException;
+
+    void p2p(P2PBO pbo) throws CircuitException;
+
 }

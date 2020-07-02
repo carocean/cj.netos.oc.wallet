@@ -11,12 +11,12 @@
     <result column="balance" jdbcType="BIGINT" property="balance" />
     <result column="refsn" jdbcType="VARCHAR" property="refsn" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
-    <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="workday" jdbcType="VARCHAR" property="workday" />
     <result column="day" jdbcType="INTEGER" property="day" />
     <result column="month" jdbcType="INTEGER" property="month" />
     <result column="season" jdbcType="INTEGER" property="season" />
     <result column="year" jdbcType="INTEGER" property="year" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -80,8 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     <!-- @mbg.generated: generated automatically, do not modify! -->
-    sn, accountid, title, `order`, amount, balance, refsn, ctime, note, workday, `day`, 
-    `month`, season, `year`
+    sn, accountid, title, `order`, amount, balance, refsn, ctime, workday, `day`, `month`, 
+    season, `year`, note
   </sql>
   <select id="selectByExample" parameterType="cj.netos.oc.wallet.model.AbsorbBillExample" resultMap="BaseResultMap">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -121,14 +121,14 @@
     <!-- @mbg.generated: generated automatically, do not modify! -->
     insert into absorb_bill (sn, accountid, title, 
       `order`, amount, balance, 
-      refsn, ctime, note, 
-      workday, `day`, `month`, 
-      season, `year`)
+      refsn, ctime, workday, 
+      `day`, `month`, season, 
+      `year`, note)
     values (#{sn,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{order,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
-      #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
-      #{workday,jdbcType=VARCHAR}, #{day,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, 
-      #{season,jdbcType=INTEGER}, #{year,jdbcType=INTEGER})
+      #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, #{workday,jdbcType=VARCHAR}, 
+      #{day,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, #{season,jdbcType=INTEGER}, 
+      #{year,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.AbsorbBill">
     <!-- @mbg.generated: generated automatically, do not modify! -->
@@ -158,9 +158,6 @@
       <if test="ctime != null">
         ctime,
       </if>
-      <if test="note != null">
-        note,
-      </if>
       <if test="workday != null">
         workday,
       </if>
@@ -175,6 +172,9 @@
       </if>
       <if test="year != null">
         `year`,
+      </if>
+      <if test="note != null">
+        note,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -202,9 +202,6 @@
       <if test="ctime != null">
         #{ctime,jdbcType=VARCHAR},
       </if>
-      <if test="note != null">
-        #{note,jdbcType=VARCHAR},
-      </if>
       <if test="workday != null">
         #{workday,jdbcType=VARCHAR},
       </if>
@@ -219,6 +216,9 @@
       </if>
       <if test="year != null">
         #{year,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -257,9 +257,6 @@
       <if test="record.ctime != null">
         ctime = #{record.ctime,jdbcType=VARCHAR},
       </if>
-      <if test="record.note != null">
-        note = #{record.note,jdbcType=VARCHAR},
-      </if>
       <if test="record.workday != null">
         workday = #{record.workday,jdbcType=VARCHAR},
       </if>
@@ -274,6 +271,9 @@
       </if>
       <if test="record.year != null">
         `year` = #{record.year,jdbcType=INTEGER},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -291,12 +291,12 @@
       balance = #{record.balance,jdbcType=BIGINT},
       refsn = #{record.refsn,jdbcType=VARCHAR},
       ctime = #{record.ctime,jdbcType=VARCHAR},
-      note = #{record.note,jdbcType=VARCHAR},
       workday = #{record.workday,jdbcType=VARCHAR},
       `day` = #{record.day,jdbcType=INTEGER},
       `month` = #{record.month,jdbcType=INTEGER},
       season = #{record.season,jdbcType=INTEGER},
-      `year` = #{record.year,jdbcType=INTEGER}
+      `year` = #{record.year,jdbcType=INTEGER},
+      note = #{record.note,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -326,9 +326,6 @@
       <if test="ctime != null">
         ctime = #{ctime,jdbcType=VARCHAR},
       </if>
-      <if test="note != null">
-        note = #{note,jdbcType=VARCHAR},
-      </if>
       <if test="workday != null">
         workday = #{workday,jdbcType=VARCHAR},
       </if>
@@ -344,6 +341,9 @@
       <if test="year != null">
         `year` = #{year,jdbcType=INTEGER},
       </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
     </set>
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
@@ -357,12 +357,12 @@
       balance = #{balance,jdbcType=BIGINT},
       refsn = #{refsn,jdbcType=VARCHAR},
       ctime = #{ctime,jdbcType=VARCHAR},
-      note = #{note,jdbcType=VARCHAR},
       workday = #{workday,jdbcType=VARCHAR},
       `day` = #{day,jdbcType=INTEGER},
       `month` = #{month,jdbcType=INTEGER},
       season = #{season,jdbcType=INTEGER},
-      `year` = #{year,jdbcType=INTEGER}
+      `year` = #{year,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR}
     where sn = #{sn,jdbcType=VARCHAR}
   </update>
 

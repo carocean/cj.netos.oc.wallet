@@ -30,7 +30,7 @@ public class AbsorbBill {
 
     /**
      * Column: amount
-     * Remark: 发生金额
+     * Remark: 发生金额单位为1/10的8次方分
      */
     private Long amount;
 
@@ -51,12 +51,6 @@ public class AbsorbBill {
      * Remark: 创建时间
      */
     private String ctime;
-
-    /**
-     * Column: note
-     * Remark: 备注
-     */
-    private String note;
 
     /**
      * Column: workday
@@ -87,6 +81,12 @@ public class AbsorbBill {
      * Remark: 年
      */
     private Integer year;
+
+    /**
+     * Column: note
+     * Remark: 备注
+     */
+    private String note;
 
     public String getSn() {
         return sn;
@@ -152,14 +152,6 @@ public class AbsorbBill {
         this.ctime = ctime == null ? null : ctime.trim();
     }
 
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
-    }
-
     public String getWorkday() {
         return workday;
     }
@@ -198,5 +190,13 @@ public class AbsorbBill {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
     }
 }

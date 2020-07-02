@@ -30,7 +30,7 @@ public class AbsorbAccount {
 
     /**
      * Column: amount
-     * Remark: 余额	即可用的零钱，单位为分
+     * Remark: 余额	即可用的零钱，单位为1/10的8次方分
      */
     private Long amount;
 

@@ -14,6 +14,7 @@ import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.orm.mybatis.annotation.CjTransaction;
+import cj.ultimate.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -304,14 +305,14 @@ public class SettleTradeService implements ISettleTradeService {
 
     private void addAbsorbBill_add(DepositAbsorbBO bo) {
         AbsorbAccount absorbAccount = walletService.getAbsorbAccount(bo.getPerson());
-
+        String note = bo.getNote();
         AbsorbBill bill = new AbsorbBill();
         bill.setSn(new IdWorker().nextId());
         bill.setAccountid(absorbAccount.getId());
         bill.setAmount(bo.getDemandAmount());
         bill.setBalance(absorbAccount.getAmount() + bo.getDemandAmount());
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
-        bill.setNote(bo.getNote());
+        bill.setNote(note);
         bill.setOrder(1);
         bill.setRefsn(bo.getSn());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
@@ -485,6 +486,7 @@ public class SettleTradeService implements ISettleTradeService {
     private void updateProfitAccount(ProfitAccount profitAccount, Long balance) {
         profitAccountMapper.updateAmount(profitAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
+
     @CjTransaction
     @Override
     public void transShunt(WithdrawShunterBO transShuntedBO) {
@@ -512,6 +514,143 @@ public class SettleTradeService implements ISettleTradeService {
 //        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle("转入账金");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    @CjTransaction
+    @Override
+    public void payTrade(PayBO payBO) throws CircuitException {
+        if (!walletService.hasWallet(payBO.getPerson())) {
+            walletService.createWallet(payBO.getPerson(), payBO.getPersonName());
+        }
+        addBalanceBill_add_by_payment(payBO);
+    }
+
+    private void addBalanceBill_add_by_payment(PayBO bo) throws CircuitException {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        if (balanceAccount.getAmount() < bo.getAmount()) {
+            throw new CircuitException("500", String.format("余额不足"));
+        }
+        PayDetailsBO detailsBO = bo.getDetails();
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getAmount() * -1);
+        balanceBill.setBalance(balanceAccount.getAmount() - bo.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(4);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle(detailsBO.getOrderTitle());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    @CjTransaction
+    @Override
+    public void p2p(P2PBO pbo) throws CircuitException {
+        if (!walletService.hasWallet(pbo.getPayer())) {
+            walletService.createWallet(pbo.getPayer(), pbo.getPayerName());
+        }
+        if (!walletService.hasWallet(pbo.getPayee())) {
+            walletService.createWallet(pbo.getPayee(), pbo.getPayeeName());
+        }
+        addBalanceBill_add_by_payer_p2p(pbo);
+        addBalanceBill_add_by_payee_p2p(pbo);
+    }
+
+    private void addBalanceBill_add_by_payee_p2p(P2PBO bo) throws CircuitException {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPayee());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getAmount());
+        balanceBill.setBalance(balanceAccount.getAmount() + bo.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        String title = "";
+        switch (bo.getDirect()) {
+            case "to":
+                title = String.format("转账自:%s", bo.getPayerName());
+                break;
+            case "from":
+                title = String.format("收款自:%s", bo.getPayerName());
+                break;
+        }
+        balanceBill.setTitle(title);
+        balanceBill.setOrder(3);//付方账单一律视为转账，虽然名为支付
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    private void addBalanceBill_add_by_payer_p2p(P2PBO bo) throws CircuitException {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPayer());
+        if (balanceAccount.getAmount() < bo.getAmount()) {
+            throw new CircuitException("500", String.format("余额不足"));
+        }
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getAmount() * -1);
+        balanceBill.setBalance(balanceAccount.getAmount() - bo.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        String title = "";
+        switch (bo.getDirect()) {
+            case "to":
+                title = String.format("转账给:%s", bo.getPayeeName());
+                break;
+            case "from":
+                title = String.format("付款给:%s", bo.getPayeeName());
+                break;
+        }
+        balanceBill.setTitle(title);
+        balanceBill.setOrder(3);//付方账单一律视为转账，虽然名为支付
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
