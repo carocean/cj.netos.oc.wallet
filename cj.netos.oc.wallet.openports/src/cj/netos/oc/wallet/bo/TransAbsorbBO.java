@@ -1,5 +1,7 @@
 package cj.netos.oc.wallet.bo;
 
+import java.math.BigDecimal;
+
 public class TransAbsorbBO {
     String sn;
     String person;

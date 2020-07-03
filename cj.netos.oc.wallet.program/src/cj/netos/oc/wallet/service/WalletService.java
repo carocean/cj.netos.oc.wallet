@@ -150,7 +150,7 @@ public class WalletService implements IWalletService {
         map.put("balanceAccount", balanceAccount.getId());
 
         AbsorbAccount absorbAccount = new AbsorbAccount();
-        absorbAccount.setAmount(0L);
+        absorbAccount.setAmount(new BigDecimal("0.00"));
         absorbAccount.setCtime(rootAccount.getCtime());
         absorbAccount.setCurrency("CNY");
         absorbAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));

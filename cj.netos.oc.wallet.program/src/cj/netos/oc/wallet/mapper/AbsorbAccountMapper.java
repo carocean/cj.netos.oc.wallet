@@ -2,6 +2,8 @@ package cj.netos.oc.wallet.mapper;
 
 import cj.netos.oc.wallet.model.AbsorbAccount;
 import cj.netos.oc.wallet.model.AbsorbAccountExample;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -62,5 +64,5 @@ public interface AbsorbAccountMapper {
      */
     int updateByPrimaryKey(AbsorbAccount record);
 
-    void updateAmount(@Param(value = "id") String id, @Param(value = "balance") Long balance, @Param(value = "lutime") String lutime);
+    void updateAmount(@Param(value = "id") String id, @Param(value = "amount") BigDecimal amount, @Param(value = "lutime") String lutime);
 }

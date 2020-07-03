@@ -1,5 +1,7 @@
 package cj.netos.oc.wallet.model;
 
+import java.math.BigDecimal;
+
 /**
  * Table: absorb_bill
  */
@@ -30,15 +32,15 @@ public class AbsorbBill {
 
     /**
      * Column: amount
-     * Remark: 发生金额单位为1/10的8次方分
+     * Remark: 发生金额单位为分
      */
-    private Long amount;
+    private BigDecimal amount;
 
     /**
      * Column: balance
      * Remark: 变动后余额
      */
-    private Long balance;
+    private BigDecimal balance;
 
     /**
      * Column: refsn
@@ -120,19 +122,19 @@ public class AbsorbBill {
         this.order = order;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

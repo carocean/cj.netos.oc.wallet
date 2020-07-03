@@ -1,5 +1,6 @@
 package cj.netos.oc.wallet.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -417,52 +418,52 @@ public class AbsorbBillExample {
             return (Criteria) this;
         }
 
-        public Criteria andAmountEqualTo(Long value) {
+        public Criteria andAmountEqualTo(BigDecimal value) {
             addCriterion("amount =", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotEqualTo(Long value) {
+        public Criteria andAmountNotEqualTo(BigDecimal value) {
             addCriterion("amount <>", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThan(Long value) {
+        public Criteria andAmountGreaterThan(BigDecimal value) {
             addCriterion("amount >", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThanOrEqualTo(Long value) {
+        public Criteria andAmountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("amount >=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThan(Long value) {
+        public Criteria andAmountLessThan(BigDecimal value) {
             addCriterion("amount <", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThanOrEqualTo(Long value) {
+        public Criteria andAmountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("amount <=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIn(List<Long> values) {
+        public Criteria andAmountIn(List<BigDecimal> values) {
             addCriterion("amount in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotIn(List<Long> values) {
+        public Criteria andAmountNotIn(List<BigDecimal> values) {
             addCriterion("amount not in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountBetween(Long value1, Long value2) {
+        public Criteria andAmountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("amount between", value1, value2, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotBetween(Long value1, Long value2) {
+        public Criteria andAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("amount not between", value1, value2, "amount");
             return (Criteria) this;
         }
@@ -477,52 +478,52 @@ public class AbsorbBillExample {
             return (Criteria) this;
         }
 
-        public Criteria andBalanceEqualTo(Long value) {
+        public Criteria andBalanceEqualTo(BigDecimal value) {
             addCriterion("balance =", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceNotEqualTo(Long value) {
+        public Criteria andBalanceNotEqualTo(BigDecimal value) {
             addCriterion("balance <>", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceGreaterThan(Long value) {
+        public Criteria andBalanceGreaterThan(BigDecimal value) {
             addCriterion("balance >", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceGreaterThanOrEqualTo(Long value) {
+        public Criteria andBalanceGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("balance >=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceLessThan(Long value) {
+        public Criteria andBalanceLessThan(BigDecimal value) {
             addCriterion("balance <", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceLessThanOrEqualTo(Long value) {
+        public Criteria andBalanceLessThanOrEqualTo(BigDecimal value) {
             addCriterion("balance <=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceIn(List<Long> values) {
+        public Criteria andBalanceIn(List<BigDecimal> values) {
             addCriterion("balance in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceNotIn(List<Long> values) {
+        public Criteria andBalanceNotIn(List<BigDecimal> values) {
             addCriterion("balance not in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceBetween(Long value1, Long value2) {
+        public Criteria andBalanceBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("balance between", value1, value2, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andBalanceNotBetween(Long value1, Long value2) {
+        public Criteria andBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("balance not between", value1, value2, "balance");
             return (Criteria) this;
         }

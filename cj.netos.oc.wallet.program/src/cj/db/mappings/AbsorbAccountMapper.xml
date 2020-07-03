@@ -7,7 +7,7 @@
     <result column="person" jdbcType="VARCHAR" property="person" />
     <result column="person_name" jdbcType="VARCHAR" property="personName" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
-    <result column="amount" jdbcType="BIGINT" property="amount" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="lutime" jdbcType="VARCHAR" property="lutime" />
@@ -116,7 +116,7 @@
       currency, amount, `state`, 
       ctime, lutime)
     values (#{id,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{personName,jdbcType=VARCHAR}, 
-      #{currency,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{state,jdbcType=INTEGER}, 
+      #{currency,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=INTEGER}, 
       #{ctime,jdbcType=VARCHAR}, #{lutime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cj.netos.oc.wallet.model.AbsorbAccount">
@@ -162,7 +162,7 @@
         #{currency,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
-        #{amount,jdbcType=BIGINT},
+        #{amount,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
@@ -199,7 +199,7 @@
         currency = #{record.currency,jdbcType=VARCHAR},
       </if>
       <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=BIGINT},
+        amount = #{record.amount,jdbcType=DECIMAL},
       </if>
       <if test="record.state != null">
         `state` = #{record.state,jdbcType=INTEGER},
@@ -222,7 +222,7 @@
       person = #{record.person,jdbcType=VARCHAR},
       person_name = #{record.personName,jdbcType=VARCHAR},
       currency = #{record.currency,jdbcType=VARCHAR},
-      amount = #{record.amount,jdbcType=BIGINT},
+      amount = #{record.amount,jdbcType=DECIMAL},
       `state` = #{record.state,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       lutime = #{record.lutime,jdbcType=VARCHAR}
@@ -244,7 +244,7 @@
         currency = #{currency,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
-        amount = #{amount,jdbcType=BIGINT},
+        amount = #{amount,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         `state` = #{state,jdbcType=INTEGER},
@@ -264,7 +264,7 @@
     set person = #{person,jdbcType=VARCHAR},
       person_name = #{personName,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=DECIMAL},
       `state` = #{state,jdbcType=INTEGER},
       ctime = #{ctime,jdbcType=VARCHAR},
       lutime = #{lutime,jdbcType=VARCHAR}
@@ -273,7 +273,7 @@
   <update id="updateAmount" parameterType="cj.netos.oc.wallet.model.AbsorbAccount">
     update absorb_account
     set
-    amount = #{balance,jdbcType=BIGINT},
+    amount = #{amount,jdbcType=DECIMAL},
     lutime = #{lutime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>

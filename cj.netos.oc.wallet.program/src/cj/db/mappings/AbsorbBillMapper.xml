@@ -7,8 +7,8 @@
     <result column="accountid" jdbcType="VARCHAR" property="accountid" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="order" jdbcType="INTEGER" property="order" />
-    <result column="amount" jdbcType="BIGINT" property="amount" />
-    <result column="balance" jdbcType="BIGINT" property="balance" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
     <result column="refsn" jdbcType="VARCHAR" property="refsn" />
     <result column="ctime" jdbcType="VARCHAR" property="ctime" />
     <result column="workday" jdbcType="VARCHAR" property="workday" />
@@ -125,7 +125,7 @@
       `day`, `month`, season, 
       `year`, note)
     values (#{sn,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{order,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
+      #{order,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, 
       #{refsn,jdbcType=VARCHAR}, #{ctime,jdbcType=VARCHAR}, #{workday,jdbcType=VARCHAR}, 
       #{day,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, #{season,jdbcType=INTEGER}, 
       #{year,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR})
@@ -191,10 +191,10 @@
         #{order,jdbcType=INTEGER},
       </if>
       <if test="amount != null">
-        #{amount,jdbcType=BIGINT},
+        #{amount,jdbcType=DECIMAL},
       </if>
       <if test="balance != null">
-        #{balance,jdbcType=BIGINT},
+        #{balance,jdbcType=DECIMAL},
       </if>
       <if test="refsn != null">
         #{refsn,jdbcType=VARCHAR},
@@ -246,10 +246,10 @@
         `order` = #{record.order,jdbcType=INTEGER},
       </if>
       <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=BIGINT},
+        amount = #{record.amount,jdbcType=DECIMAL},
       </if>
       <if test="record.balance != null">
-        balance = #{record.balance,jdbcType=BIGINT},
+        balance = #{record.balance,jdbcType=DECIMAL},
       </if>
       <if test="record.refsn != null">
         refsn = #{record.refsn,jdbcType=VARCHAR},
@@ -287,8 +287,8 @@
       accountid = #{record.accountid,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       `order` = #{record.order,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=BIGINT},
-      balance = #{record.balance,jdbcType=BIGINT},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      balance = #{record.balance,jdbcType=DECIMAL},
       refsn = #{record.refsn,jdbcType=VARCHAR},
       ctime = #{record.ctime,jdbcType=VARCHAR},
       workday = #{record.workday,jdbcType=VARCHAR},
@@ -315,10 +315,10 @@
         `order` = #{order,jdbcType=INTEGER},
       </if>
       <if test="amount != null">
-        amount = #{amount,jdbcType=BIGINT},
+        amount = #{amount,jdbcType=DECIMAL},
       </if>
       <if test="balance != null">
-        balance = #{balance,jdbcType=BIGINT},
+        balance = #{balance,jdbcType=DECIMAL},
       </if>
       <if test="refsn != null">
         refsn = #{refsn,jdbcType=VARCHAR},
@@ -353,8 +353,8 @@
     set accountid = #{accountid,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       `order` = #{order,jdbcType=INTEGER},
-      amount = #{amount,jdbcType=BIGINT},
-      balance = #{balance,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      balance = #{balance,jdbcType=DECIMAL},
       refsn = #{refsn,jdbcType=VARCHAR},
       ctime = #{ctime,jdbcType=VARCHAR},
       workday = #{workday,jdbcType=VARCHAR},

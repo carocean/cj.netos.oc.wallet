@@ -29,4 +29,6 @@ public interface ISettleTradeService {
 
     void p2p(P2PBO pbo) throws CircuitException;
 
+    void depositHubTails(DepositHubTailsBO depositAbsorbBO);
+
 }

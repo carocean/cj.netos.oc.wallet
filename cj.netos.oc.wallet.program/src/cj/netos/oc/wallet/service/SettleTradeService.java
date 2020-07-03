@@ -17,6 +17,7 @@ import cj.studio.orm.mybatis.annotation.CjTransaction;
 import cj.ultimate.util.StringUtil;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 
 @CjBridge(aspects = "@transaction")
@@ -310,7 +311,7 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setSn(new IdWorker().nextId());
         bill.setAccountid(absorbAccount.getId());
         bill.setAmount(bo.getDemandAmount());
-        bill.setBalance(absorbAccount.getAmount() + bo.getDemandAmount());
+        bill.setBalance(absorbAccount.getAmount().add(bo.getDemandAmount()));
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         bill.setNote(note);
         bill.setOrder(1);
@@ -332,8 +333,47 @@ public class SettleTradeService implements ISettleTradeService {
         updateAbsorbAccount(absorbAccount, bill.getBalance());
     }
 
-    private void updateAbsorbAccount(AbsorbAccount absorbAccount, Long balance) {
+    private void updateAbsorbAccount(AbsorbAccount absorbAccount, BigDecimal balance) {
         absorbAccountMapper.updateAmount(absorbAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
+
+    @CjTransaction
+    @Override
+    public void depositHubTails(DepositHubTailsBO bo) {
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+        }
+        addBalanceBill_add_by_hub_tails(bo);
+    }
+
+    private void addBalanceBill_add_by_hub_tails(DepositHubTailsBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getAmount());
+        balanceBill.setBalance(balanceAccount.getAmount() + bo.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(13);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("转入经营尾金");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
     }
 
     @CjTransaction
@@ -378,14 +418,15 @@ public class SettleTradeService implements ISettleTradeService {
 
     private void addAbsorbBill_sub(TransAbsorbBO bo) throws CircuitException {
         AbsorbAccount absorbAccount = walletService.getAbsorbAccount(bo.getPerson());
-        if (absorbAccount.getAmount() < bo.getDemandAmount()) {
+        BigDecimal amount = new BigDecimal(bo.getDemandAmount() + "");
+        if (absorbAccount.getAmount().compareTo(amount) < 0) {
             throw new CircuitException("2000", String.format("余额不足"));
         }
         AbsorbBill bill = new AbsorbBill();
         bill.setSn(new IdWorker().nextId());
         bill.setAccountid(absorbAccount.getId());
-        bill.setAmount(bo.getDemandAmount() * -1);
-        bill.setBalance(absorbAccount.getAmount() - bo.getDemandAmount());
+        bill.setAmount(amount.multiply(new BigDecimal("-1")));
+        bill.setBalance(absorbAccount.getAmount().subtract(amount));
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         bill.setNote(bo.getNote());
         bill.setOrder(2);
