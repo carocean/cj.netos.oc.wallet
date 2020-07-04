@@ -19,7 +19,7 @@ import java.util.HashMap;
 @CjService(name = "rechargeActivityController")
 public class RechargeActivityController implements IRechargeActivityController {
 
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_settle.recharge")
     IRabbitMQProducer rabbitMQProducer;
 
     @CjServiceRef

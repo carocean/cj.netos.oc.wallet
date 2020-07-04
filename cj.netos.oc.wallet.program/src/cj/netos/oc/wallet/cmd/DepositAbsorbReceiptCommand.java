@@ -23,7 +23,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_receipt_depositAbsorb")
 @CjService(name = "/trade/receipt.mhub#depositAbsorb")
 public class DepositAbsorbReceiptCommand implements IConsumerCommand {
     @CjServiceSite

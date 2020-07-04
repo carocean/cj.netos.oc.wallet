@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 @CjService(name = "depositHubTailsActivityController")
 public class DepositHubTailsActivityController implements IDepositHubTailsActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_depositHubTails")
+    IRabbitMQProducer toGateway_ack_receipt_depositHubTails;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -37,6 +37,6 @@ public class DepositHubTailsActivityController implements IDepositHubTailsActivi
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_depositHubTails.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

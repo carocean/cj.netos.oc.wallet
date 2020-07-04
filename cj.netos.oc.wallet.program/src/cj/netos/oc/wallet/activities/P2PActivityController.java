@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 @CjService(name = "p2pActivityController")
 public class P2PActivityController implements IP2PActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_p2p")
+    IRabbitMQProducer toGateway_ack_receipt_p2p;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -35,6 +35,6 @@ public class P2PActivityController implements IP2PActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_p2p.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

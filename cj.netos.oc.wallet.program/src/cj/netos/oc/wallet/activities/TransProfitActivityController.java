@@ -21,8 +21,8 @@ import java.util.HashMap;
 @CjBridge(aspects = "@transaction")
 @CjService(name = "transProfitActivityController")
 public class TransProfitActivityController implements ITransProfitActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_transProfit")
+    IRabbitMQProducer toGateway_ack_receipt_transProfit;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -42,6 +42,6 @@ public class TransProfitActivityController implements ITransProfitActivityContro
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_transProfit.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

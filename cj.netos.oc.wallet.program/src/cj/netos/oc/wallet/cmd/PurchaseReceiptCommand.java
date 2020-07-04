@@ -23,7 +23,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
 import java.io.IOException;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_receipt_purchase")
 @CjService(name = "/trade/receipt.mhub#purchase")
 public class PurchaseReceiptCommand implements IConsumerCommand {
     @CjServiceRef

@@ -30,8 +30,11 @@ import java.util.UUID;
 @CjBridge(aspects = "@transaction")
 @CjService(name = "exchangeActivityController")
 public class ExchangeActivityController implements IExchangeActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_exchange")
+    IRabbitMQProducer toGateway_ack_receipt_exchange;
+
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_settle_exchange")
+    IRabbitMQProducer toGateway_ack_settle_exchange;
 
     @CjServiceSite
     IServiceSite site;
@@ -111,7 +114,7 @@ public class ExchangeActivityController implements IExchangeActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_exchange.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
     @CjTransaction
@@ -131,6 +134,6 @@ public class ExchangeActivityController implements IExchangeActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_settle_exchange.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

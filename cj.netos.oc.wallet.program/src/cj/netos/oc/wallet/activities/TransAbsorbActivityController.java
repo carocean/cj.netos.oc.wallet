@@ -18,8 +18,8 @@ import java.util.HashMap;
 @CjBridge(aspects = "@transaction")
 @CjService(name = "transAbsorbActivityController")
 public class TransAbsorbActivityController implements ITransAbsorbActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_transAbsorb")
+    IRabbitMQProducer toGateway_ack_receipt_transAbsorb;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -39,6 +39,6 @@ public class TransAbsorbActivityController implements ITransAbsorbActivityContro
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_transAbsorb.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

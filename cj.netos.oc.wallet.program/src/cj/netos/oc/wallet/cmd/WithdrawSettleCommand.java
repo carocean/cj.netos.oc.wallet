@@ -23,7 +23,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_settle_withdraw")
 @CjService(name = "/trade/settle.mhub#withdraw")
 public class WithdrawSettleCommand implements IConsumerCommand {
     @CjServiceSite
@@ -35,8 +35,6 @@ public class WithdrawSettleCommand implements IConsumerCommand {
     @CjServiceRef
     ICuratorPathChecker curatorPathChecker;
 
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
 
     @CjServiceRef
     IWithdrawActivityController withdrawActivityController;

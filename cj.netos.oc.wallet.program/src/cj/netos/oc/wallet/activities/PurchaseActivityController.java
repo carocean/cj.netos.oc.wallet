@@ -37,8 +37,10 @@ public class PurchaseActivityController implements IPurchaseActivityController {
 
     @CjServiceSite
     IServiceSite site;
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_purchase")
+    IRabbitMQProducer toGateway_ack_receipt_purchase;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_settle_purchase")
+    IRabbitMQProducer toGateway_ack_settle_purchase;
     @CjServiceRef
     ISettleTradeService settleTradeService;
 
@@ -64,7 +66,7 @@ public class PurchaseActivityController implements IPurchaseActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_purchase.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
     private void putOnorder(PurchaseBO bo) throws CircuitException {
@@ -159,6 +161,6 @@ public class PurchaseActivityController implements IPurchaseActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_settle_purchase.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

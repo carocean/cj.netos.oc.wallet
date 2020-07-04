@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 @CjService(name = "payActivityController")
 public class PayActivityController implements IPayActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_payTrade")
+    IRabbitMQProducer toGateway_ack_receipt_payTrade;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -36,6 +36,6 @@ public class PayActivityController implements IPayActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_payTrade.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

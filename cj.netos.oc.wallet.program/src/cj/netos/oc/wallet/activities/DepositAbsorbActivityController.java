@@ -18,8 +18,8 @@ import java.util.HashMap;
 @CjBridge(aspects = "@transaction")
 @CjService(name = "depositAbsorbActivityController")
 public class DepositAbsorbActivityController implements IDepositAbsorbActivityController {
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_depositAbsorb")
+    IRabbitMQProducer toGateway_ack_receipt_depositAbsorb;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -43,6 +43,6 @@ public class DepositAbsorbActivityController implements IDepositAbsorbActivityCo
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_depositAbsorb.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

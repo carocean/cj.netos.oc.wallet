@@ -27,7 +27,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
 import java.io.IOException;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_receipt_transShunter")
 @CjService(name = "/trade/receipt.mhub#transShunter")
 public class TransShunterReceiptCommand implements IConsumerCommand {
     @CjServiceRef

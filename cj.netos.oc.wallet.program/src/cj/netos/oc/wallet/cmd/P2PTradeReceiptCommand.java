@@ -25,7 +25,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_receipt_p2p")
 @CjService(name = "/trade/receipt.mhub#p2p")
 public class P2PTradeReceiptCommand implements IConsumerCommand {
     @CjServiceSite

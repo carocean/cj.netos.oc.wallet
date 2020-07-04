@@ -21,8 +21,11 @@ import java.util.HashMap;
 @CjService(name = "withdrawActivityController")
 public class WithdrawActivityController implements IWithdrawActivityController {
 
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_withdraw")
+    IRabbitMQProducer toGateway_ack_receipt_withdraw;
+
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_settle_withdraw")
+    IRabbitMQProducer toGateway_ack_settle_withdraw;
 
     @CjServiceRef
     ISettleTradeService settleTradeService;
@@ -58,7 +61,7 @@ public class WithdrawActivityController implements IWithdrawActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_withdraw.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
     @CjTransaction
@@ -78,6 +81,6 @@ public class WithdrawActivityController implements IWithdrawActivityController {
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_settle_withdraw.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 }

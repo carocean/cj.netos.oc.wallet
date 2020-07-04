@@ -35,8 +35,10 @@ public class TransShunterActivityController implements ITransShunterActivityCont
 
     @CjServiceSite
     IServiceSite site;
-    @CjServiceRef(refByName = "@.rabbitmq.producer.ack")
-    IRabbitMQProducer rabbitMQProducer;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_receipt_transShunter")
+    IRabbitMQProducer toGateway_ack_receipt_transShunter;
+    @CjServiceRef(refByName = "@.rabbitmq.producer.toGateway_ack_settle_transShunter")
+    IRabbitMQProducer toGateway_ack_settle_transShunter;
     @CjServiceRef
     ISettleTradeService settleTradeService;
 
@@ -57,7 +59,7 @@ public class TransShunterActivityController implements ITransShunterActivityCont
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_receipt_transShunter.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
     @CjTransaction
@@ -77,7 +79,7 @@ public class TransShunterActivityController implements ITransShunterActivityCont
                     put("record_sn", result.getSn());
                 }})
                 .build();
-        rabbitMQProducer.publish("gateway", properties, new Gson().toJson(result).getBytes());
+        toGateway_ack_settle_transShunter.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
     private WithdrawShunterResult call_wenybank_withdraw(TransShuntBO bo) throws CircuitException {

@@ -24,7 +24,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
 import java.io.IOException;
 
-@CjConsumer(name = "trade")
+@CjConsumer(name = "fromGateway_settle_exchange")
 @CjService(name = "/trade/settle.mhub#exchange")
 public class ExchangeSettleCommand implements IConsumerCommand {
     @CjServiceRef
