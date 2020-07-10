@@ -642,7 +642,7 @@ public class SettleTradeService implements ISettleTradeService {
         String title = "";
         switch (bo.getDirect()) {
             case "to":
-                title = String.format("转账自:%s", bo.getPayerName());
+                title = String.format("转入自:%s", bo.getPayerName());
                 break;
             case "from":
                 title = String.format("收款自:%s", bo.getPayerName());
