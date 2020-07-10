@@ -640,14 +640,15 @@ public class SettleTradeService implements ISettleTradeService {
 //        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         String title = "";
-        switch (bo.getDirect()) {
-            case "to":
-                title = String.format("转入自:%s", bo.getPayerName());
-                break;
-            case "from":
-                title = String.format("收款自:%s", bo.getPayerName());
-                break;
-        }
+//        switch (bo.getDirect()) {
+//            case "to":
+//                title = String.format("转入自:%s", bo.getPayerName());
+//                break;
+//            case "from":
+//                title = String.format("收款自:%s", bo.getPayerName());
+//                break;
+//        }
+        title = String.format("收款自:%s", bo.getPayerName());
         balanceBill.setTitle(title);
         balanceBill.setOrder(3);//付方账单一律视为转账，虽然名为支付
 
@@ -682,14 +683,15 @@ public class SettleTradeService implements ISettleTradeService {
 //        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         String title = "";
-        switch (bo.getDirect()) {
-            case "to":
-                title = String.format("转账给:%s", bo.getPayeeName());
-                break;
-            case "from":
-                title = String.format("付款给:%s", bo.getPayeeName());
-                break;
-        }
+//        switch (bo.getDirect()) {
+//            case "to":
+//                title = String.format("转账给:%s", bo.getPayeeName());
+//                break;
+//            case "from":
+//                title = String.format("付款给:%s", bo.getPayeeName());
+//                break;
+//        }
+        title = String.format("付款给:%s", bo.getPayeeName());
         balanceBill.setTitle(title);
         balanceBill.setOrder(3);//付方账单一律视为转账，虽然名为支付
 
