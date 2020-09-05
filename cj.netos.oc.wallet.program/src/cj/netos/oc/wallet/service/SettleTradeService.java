@@ -205,9 +205,40 @@ public class SettleTradeService implements ISettleTradeService {
         addStockBill_sub(bo);
         addProfitBill_add(bo);
         addFreezenBill_sub(bo);
+        addBalanceBill_add(bo);
         ExchangeResult result = new ExchangeResult();
         result.load(bo);
         return result;
+    }
+
+    private void addBalanceBill_add(ExchangedBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getExchanger());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getPurchaseAmount() + bo.getProfit());//归还申购金,即申购金+收益金。如果收益为负则相加也是对的
+        balanceBill.setBalance(balanceAccount.getAmount() + balanceBill.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote() + "");
+        balanceBill.setOrder(9);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle("归还原申购金");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
     }
 
     private void addFreezenBill_sub(ExchangedBO bo) {
@@ -218,7 +249,7 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setNote(bo.getNote());
         bill.setOrder(9);
         bill.setAmount(bo.getPrincipalAmount() * -1);
-        bill.setBalance(freezenAccount.getAmount() - bo.getPrincipalAmount());
+        bill.setBalance(freezenAccount.getAmount() + bill.getAmount());
         bill.setRefsn(bo.getSn());
         bill.setSn(new IdWorker().nextId());
         bill.setTitle("承兑");
@@ -246,7 +277,7 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setNote(bo.getNote());
         bill.setOrder(9);
         bill.setAmount(bo.getProfit());
-        bill.setBalance(profitAccount.getAmount() + bo.getProfit());
+        bill.setBalance(profitAccount.getAmount() + bill.getAmount());
         bill.setRefsn(bo.getSn());
         bill.setSn(new IdWorker().nextId());
         bill.setTitle("承兑");
@@ -280,7 +311,7 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         bill.setAccountid(wenyAccount.getId());
         bill.setStock(bo.getStock().multiply(new BigDecimal(-1.0)));
-        bill.setBalance(wenyAccount.getStock().subtract(bo.getStock()));
+        bill.setBalance(wenyAccount.getStock().add(bill.getStock()));
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -501,7 +532,7 @@ public class SettleTradeService implements ISettleTradeService {
         bill.setSn(new IdWorker().nextId());
         bill.setAccountid(profitAccount.getId());
         bill.setAmount(bo.getDemandAmount() * -1);
-        bill.setBalance(profitAccount.getAmount() - bo.getDemandAmount());
+        bill.setBalance(profitAccount.getAmount() + bill.getAmount());
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         bill.setNote(bo.getNote());
         bill.setOrder(2);
