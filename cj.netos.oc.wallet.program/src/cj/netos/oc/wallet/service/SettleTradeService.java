@@ -225,7 +225,7 @@ public class SettleTradeService implements ISettleTradeService {
         balanceBill.setRefsn(bo.getSn());
 //        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
-        balanceBill.setTitle("归还原申购金");
+        balanceBill.setTitle("承兑纹银最终获得");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
