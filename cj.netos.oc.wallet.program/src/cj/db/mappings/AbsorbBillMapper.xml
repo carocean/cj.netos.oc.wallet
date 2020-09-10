@@ -371,6 +371,7 @@
     <include refid="Base_Column_List" />
     from absorb_bill
     where accountid = #{accountid,jdbcType=VARCHAR}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
   <select id="month" parameterType="cj.netos.oc.wallet.model.AbsorbBill" resultMap="BaseResultMap">
@@ -380,6 +381,7 @@
     where accountid = #{accountid,jdbcType=VARCHAR}
     and year=#{year}
     and month=#{month}
+    order by ctime desc
     limit #{offset},#{limit}
   </select>
 </mapper>
