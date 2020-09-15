@@ -21,7 +21,7 @@ public interface ISettleTradeService {
 
     void transAbsorb(TransAbsorbBO transAbsorbBO) throws CircuitException;
 
-    void transProfit(TransProfitBO transAbsorbBO) throws CircuitException;
+//    void transProfit(TransProfitBO transAbsorbBO) throws CircuitException;
 
     void transShunt(WithdrawShunterBO transShuntedBO);
 

@@ -217,7 +217,7 @@ public class SettleTradeService implements ISettleTradeService {
         BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getExchanger());
         balanceBill.setSn(new IdWorker().nextId());
         balanceBill.setAccountid(balanceAccount.getId());
-        balanceBill.setAmount(bo.getPurchaseAmount() + bo.getProfit());//归还申购金,即申购金+收益金。如果收益为负则相加也是对的
+        balanceBill.setAmount(bo.getAmount());//承兑是直接将所得打到余额账户，至于收益金账户仅用于统计赢亏，因此收益金账户不用于提现
         balanceBill.setBalance(balanceAccount.getAmount() + balanceBill.getAmount());
         balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         balanceBill.setNote(bo.getNote() + "");
@@ -478,86 +478,86 @@ public class SettleTradeService implements ISettleTradeService {
         //驱动余额更新
         updateAbsorbAccount(absorbAccount, bill.getBalance());
     }
+//
+//    @CjTransaction
+//    @Override
+//    public void transProfit(TransProfitBO bo) throws CircuitException {
+//        if (!walletService.hasWallet(bo.getPerson())) {
+//            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+//        }
+//        if (!walletService.hasWenyBankAccount(bo.getPerson(), bo.getWenyBankID())) {
+//            walletService.createWenyBankAccount(bo.getPerson(), bo.getPersonName(), bo.getWenyBankID());
+//        }
+//        addProfitBill_sub(bo);
+//        addBalanceBill_add_by_profit(bo);
+//    }
 
-    @CjTransaction
-    @Override
-    public void transProfit(TransProfitBO bo) throws CircuitException {
-        if (!walletService.hasWallet(bo.getPerson())) {
-            walletService.createWallet(bo.getPerson(), bo.getPersonName());
-        }
-        if (!walletService.hasWenyBankAccount(bo.getPerson(), bo.getWenyBankID())) {
-            walletService.createWenyBankAccount(bo.getPerson(), bo.getPersonName(), bo.getWenyBankID());
-        }
-        addProfitBill_sub(bo);
-        addBalanceBill_add_by_profit(bo);
-    }
-
-
-    private void addBalanceBill_add_by_profit(TransProfitBO bo) {
-        BalanceBill balanceBill = new BalanceBill();
-
-        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
-        balanceBill.setSn(new IdWorker().nextId());
-        balanceBill.setAccountid(balanceAccount.getId());
-        balanceBill.setAmount(bo.getDemandAmount());
-        balanceBill.setBalance(balanceAccount.getAmount() + bo.getDemandAmount());
-        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
-        balanceBill.setNote(bo.getNote());
-        balanceBill.setOrder(11);
-        balanceBill.setRefsn(bo.getSn());
-//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
-        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
-        balanceBill.setTitle("转入收益");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        balanceBill.setYear(calendar.get(Calendar.YEAR));
-        balanceBill.setMonth(calendar.get(Calendar.MONTH));
-        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season = calendar.get(Calendar.MONTH) % 4;
-        balanceBill.setSeason(season);
-
-        balanceBillMapper.insert(balanceBill);
-
-        //驱动余额更新
-        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
-    }
-
-    private void addProfitBill_sub(TransProfitBO bo) throws CircuitException {
-        ProfitAccount profitAccount = walletService.getProfitAccount(bo.getPerson(), bo.getWenyBankID());
-        if (profitAccount.getAmount() < bo.getDemandAmount()) {
-            throw new CircuitException("2000", String.format("余额不足"));
-        }
-        ProfitBill bill = new ProfitBill();
-        bill.setSn(new IdWorker().nextId());
-        bill.setAccountid(profitAccount.getId());
-        bill.setAmount(bo.getDemandAmount() * -1);
-        bill.setBalance(profitAccount.getAmount() + bill.getAmount());
-        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
-        bill.setNote(bo.getNote());
-        bill.setOrder(2);
-        bill.setRefsn(bo.getSn());
-        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
-        bill.setTitle("提取到零钱");
-        bill.setBankid(bo.getWenyBankID());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        bill.setYear(calendar.get(Calendar.YEAR));
-        bill.setMonth(calendar.get(Calendar.MONTH));
-        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season = calendar.get(Calendar.MONTH) % 4;
-        bill.setSeason(season);
-
-        profitBillMapper.insert(bill);
-
-        //驱动余额更新
-        updateProfitAccount(profitAccount, bill.getBalance());
-    }
-
-    private void updateProfitAccount(ProfitAccount profitAccount, Long balance) {
-        profitAccountMapper.updateAmount(profitAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
-    }
+//
+//    private void addBalanceBill_add_by_profit(TransProfitBO bo) {
+//        BalanceBill balanceBill = new BalanceBill();
+//
+//        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+//        balanceBill.setSn(new IdWorker().nextId());
+//        balanceBill.setAccountid(balanceAccount.getId());
+//        balanceBill.setAmount(bo.getDemandAmount());
+//        balanceBill.setBalance(balanceAccount.getAmount() + bo.getDemandAmount());
+//        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+//        balanceBill.setNote(bo.getNote());
+//        balanceBill.setOrder(11);
+//        balanceBill.setRefsn(bo.getSn());
+////        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+//        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+//        balanceBill.setTitle("转入收益");
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        balanceBill.setYear(calendar.get(Calendar.YEAR));
+//        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+//        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+//        int season = calendar.get(Calendar.MONTH) % 4;
+//        balanceBill.setSeason(season);
+//
+//        balanceBillMapper.insert(balanceBill);
+//
+//        //驱动余额更新
+//        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+//    }
+//
+//    private void addProfitBill_sub(TransProfitBO bo) throws CircuitException {
+//        ProfitAccount profitAccount = walletService.getProfitAccount(bo.getPerson(), bo.getWenyBankID());
+//        if (profitAccount.getAmount() < bo.getDemandAmount()) {
+//            throw new CircuitException("2000", String.format("余额不足"));
+//        }
+//        ProfitBill bill = new ProfitBill();
+//        bill.setSn(new IdWorker().nextId());
+//        bill.setAccountid(profitAccount.getId());
+//        bill.setAmount(bo.getDemandAmount() * -1);
+//        bill.setBalance(profitAccount.getAmount() + bill.getAmount());
+//        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+//        bill.setNote(bo.getNote());
+//        bill.setOrder(2);
+//        bill.setRefsn(bo.getSn());
+//        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+//        bill.setTitle("提取到零钱");
+//        bill.setBankid(bo.getWenyBankID());
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        bill.setYear(calendar.get(Calendar.YEAR));
+//        bill.setMonth(calendar.get(Calendar.MONTH));
+//        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+//        int season = calendar.get(Calendar.MONTH) % 4;
+//        bill.setSeason(season);
+//
+//        profitBillMapper.insert(bill);
+//
+//        //驱动余额更新
+//        updateProfitAccount(profitAccount, bill.getBalance());
+//    }
+//
+//    private void updateProfitAccount(ProfitAccount profitAccount, Long balance) {
+//        profitAccountMapper.updateAmount(profitAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+//    }
 
     @CjTransaction
     @Override

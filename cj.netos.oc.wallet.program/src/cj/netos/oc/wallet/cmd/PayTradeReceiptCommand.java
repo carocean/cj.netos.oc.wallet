@@ -1,12 +1,9 @@
 package cj.netos.oc.wallet.cmd;
 
 import cj.netos.oc.wallet.IPayActivityController;
-import cj.netos.oc.wallet.ITransProfitActivityController;
 import cj.netos.oc.wallet.bo.PayBO;
-import cj.netos.oc.wallet.bo.TransProfitBO;
 import cj.netos.oc.wallet.program.ICuratorPathChecker;
 import cj.netos.oc.wallet.result.PayResult;
-import cj.netos.oc.wallet.result.TransProfitResult;
 import cj.netos.rabbitmq.CjConsumer;
 import cj.netos.rabbitmq.RabbitMQException;
 import cj.netos.rabbitmq.RetryCommandException;
