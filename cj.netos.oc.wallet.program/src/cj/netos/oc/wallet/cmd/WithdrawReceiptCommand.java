@@ -50,7 +50,7 @@ public class WithdrawReceiptCommand implements IConsumerCommand {
         WithdrawResult result = new WithdrawResult("200", "ok");
         result.setPerson(withdrawBO.getPerson());
         result.setSn(withdrawBO.getSn());
-        result.setPayChannel(withdrawBO.getToChannel());
+        result.setPayChannel(withdrawBO.getPayChannel());
 
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
         InterProcessMutex mutex = lock.writeLock();

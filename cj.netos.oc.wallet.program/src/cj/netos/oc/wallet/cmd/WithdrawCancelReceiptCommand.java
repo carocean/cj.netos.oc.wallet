@@ -5,7 +5,6 @@ import cj.netos.oc.wallet.bo.WithdrawBO;
 import cj.netos.oc.wallet.program.ICuratorPathChecker;
 import cj.netos.oc.wallet.result.WithdrawResult;
 import cj.netos.rabbitmq.CjConsumer;
-import cj.netos.rabbitmq.IRabbitMQProducer;
 import cj.netos.rabbitmq.RabbitMQException;
 import cj.netos.rabbitmq.RetryCommandException;
 import cj.netos.rabbitmq.consumer.IConsumerCommand;
@@ -23,9 +22,9 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 
-@CjConsumer(name = "fromGateway_settle_withdraw")
-@CjService(name = "/trade/settle.mhub#withdraw")
-public class WithdrawSettleCommand implements IConsumerCommand {
+@CjConsumer(name = "fromGateway_receipt_withdraw")
+@CjService(name = "/trade/cancelReceipt.mhub#withdraw")
+public class WithdrawCancelReceiptCommand implements IConsumerCommand {
     @CjServiceSite
     IServiceSite site;
 
@@ -34,7 +33,6 @@ public class WithdrawSettleCommand implements IConsumerCommand {
 
     @CjServiceRef
     ICuratorPathChecker curatorPathChecker;
-
 
     @CjServiceRef
     IWithdrawActivityController withdrawActivityController;
@@ -50,17 +48,17 @@ public class WithdrawSettleCommand implements IConsumerCommand {
         }
         WithdrawBO withdrawBO = new Gson().fromJson(new String(body), WithdrawBO.class);
         WithdrawResult result = new WithdrawResult("200", "ok");
-        result.setPayChannel(withdrawBO.getPayChannel());
-        result.setSn(withdrawBO.getSn());
         result.setPerson(withdrawBO.getPerson());
+        result.setSn(withdrawBO.getSn());
+        result.setPayChannel(withdrawBO.getPayChannel());
 
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
         InterProcessMutex mutex = lock.writeLock();
         try {
             mutex.acquire();
-            withdrawActivityController.settle(withdrawBO);
+            withdrawActivityController.cancelReceipt(withdrawBO);
             result.setRecord(withdrawBO);
-            withdrawActivityController.sendSettleAck(result);
+            withdrawActivityController.sendCancelReceiptAck(result);
         } catch (RabbitMQException e) {
             throw e;
         } catch (Exception e) {
@@ -69,7 +67,7 @@ public class WithdrawSettleCommand implements IConsumerCommand {
                 result.setStatus(ce.getStatus());
                 result.setMessage(ce.getMessage());
                 try {
-                    withdrawActivityController.sendSettleAck(result);
+                    withdrawActivityController.sendReceiptAck(result);
                 } catch (CircuitException e1) {
                     CJSystem.logging().error(getClass(), e1);
                 }
@@ -78,7 +76,7 @@ public class WithdrawSettleCommand implements IConsumerCommand {
             result.setStatus("500");
             result.setMessage(e.getMessage());
             try {
-                withdrawActivityController.sendSettleAck(result);
+                withdrawActivityController.sendReceiptAck(result);
             } catch (CircuitException e1) {
                 CJSystem.logging().error(getClass(), e1);
             }
@@ -92,6 +90,5 @@ public class WithdrawSettleCommand implements IConsumerCommand {
         }
 
     }
-
 
 }

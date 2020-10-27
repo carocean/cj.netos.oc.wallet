@@ -66,6 +66,37 @@ public class WithdrawActivityController implements IWithdrawActivityController {
 
     @CjTransaction
     @Override
+    public void cancelReceipt(WithdrawBO withdrawBO) throws CircuitException {
+
+        OnorderBO bo = new OnorderBO();
+        bo.setCause("提现撤销");
+        bo.setNote(withdrawBO.getNote());
+        bo.setAmount(withdrawBO.getDemandAmount());
+        bo.setRefType("withdraw");
+        bo.setRefsn(withdrawBO.getSn());
+        bo.setPersonName(withdrawBO.getPersonName());
+        bo.setPerson(withdrawBO.getPerson());
+        bo.setOrder(7);
+        onorderService.returnOrder(bo);
+
+    }
+
+    @CjTransaction
+    @Override
+    public void sendCancelReceiptAck(WithdrawResult result) throws CircuitException {
+        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
+                .type("/trade/receipt/ackCancelReceipt.mhub")
+                .headers(new HashMap<String, Object>() {{
+                    put("command", "withdraw");
+                    put("person", result.getPerson());
+                    put("record_sn", result.getSn());
+                }})
+                .build();
+        toGateway_ack_receipt_withdraw.publish("gateway", properties, new Gson().toJson(result).getBytes());
+    }
+
+    @CjTransaction
+    @Override
     public void settle(WithdrawBO withdrawBO) throws CircuitException {
         settleTradeService.withdraw(withdrawBO);
     }
