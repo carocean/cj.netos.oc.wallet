@@ -42,5 +42,7 @@
         <mapper resource="cj/db/mappings/WenyAccountMapper.xml"/>
         <mapper resource="cj/db/mappings/WenyBillMapper.xml"/>
         <mapper resource="cj/db/mappings/OnorderBillMapper.xml"/>
+        <mapper resource="cj/db/mappings/FeeAccountMapper.xml"/>
+        <mapper resource="cj/db/mappings/FeeBillMapper.xml"/>
     </mappers>
 </configuration>

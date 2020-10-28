@@ -2,6 +2,8 @@ package cj.netos.oc.wallet.bo;
 
 import cj.ultimate.gson2.com.google.gson.Gson;
 
+import java.math.BigDecimal;
+
 public class WithdrawBO {
     /**
      * Column: sn
@@ -38,7 +40,16 @@ public class WithdrawBO {
      * Remark: 实际渠道接收的金额
      */
     private Long realAmount;
+    /**
+     * Column: fee_ratio
+     * Remark: 费率，从渠道的费率表中取得
+     */
+    private BigDecimal feeRatio;
 
+    /**
+     * Column: fee_amount
+     */
+    private Long feeAmount;
     /**
      * Column: pay_channel
      * Remark: 出款渠道，即提现方式，为yongyu字段，与公众账户对应，如提现到个人支付宝，个人微信，银联
@@ -213,5 +224,21 @@ public class WithdrawBO {
 
     public void setSettleMsg(String settleMsg) {
         this.settleMsg = settleMsg == null ? null : settleMsg.trim();
+    }
+
+    public BigDecimal getFeeRatio() {
+        return feeRatio;
+    }
+
+    public void setFeeRatio(BigDecimal feeRatio) {
+        this.feeRatio = feeRatio;
+    }
+
+    public Long getFeeAmount() {
+        return feeAmount;
+    }
+
+    public void setFeeAmount(Long feeAmount) {
+        this.feeAmount = feeAmount;
     }
 }

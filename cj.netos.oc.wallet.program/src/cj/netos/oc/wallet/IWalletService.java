@@ -1,7 +1,6 @@
 package cj.netos.oc.wallet;
 
 import cj.netos.oc.wallet.model.*;
-import cj.studio.orm.mybatis.annotation.CjTransaction;
 
 import java.util.List;
 import java.util.Map;
@@ -47,5 +46,11 @@ public interface IWalletService {
 
     Map<String, Object> getAllAccount(String person);
 
+
+    boolean hasFeeAccount(String payAccount);
+
+    void createFeeAccount(String payChannel, String payAccount);
+
+    FeeAccount getFeeAccount(String payAccount);
 
 }

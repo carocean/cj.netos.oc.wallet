@@ -14,10 +14,8 @@ import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.orm.mybatis.annotation.CjTransaction;
-import cj.ultimate.util.StringUtil;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Calendar;
 
 @CjBridge(aspects = "@transaction")
@@ -50,7 +48,10 @@ public class SettleTradeService implements ISettleTradeService {
     AbsorbAccountMapper absorbAccountMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbBillMapper")
     AbsorbBillMapper absorbBillMapper;
-
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FeeAccountMapper")
+    FeeAccountMapper feeAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FeeBillMapper")
+    FeeBillMapper feeBillMapper;
     @CjServiceRef
     IWalletService walletService;
     @CjServiceRef
@@ -104,7 +105,7 @@ public class SettleTradeService implements ISettleTradeService {
     @Override
     public void withdraw(WithdrawBO withdrawBO) throws CircuitException {
         OnorderBO bo = new OnorderBO();
-        bo.setAmount(withdrawBO.getRealAmount());
+        bo.setAmount(withdrawBO.getDemandAmount());
         bo.setCause("决清");
         bo.setNote(withdrawBO.getNote());
         bo.setOrder(2);
@@ -113,6 +114,45 @@ public class SettleTradeService implements ISettleTradeService {
         bo.setRefsn(withdrawBO.getSn());
         bo.setRefType("withdraw");
         onorderService.done(bo);
+        //记账服务费
+        addBalanceFee(withdrawBO);
+    }
+
+    private void addBalanceFee(WithdrawBO bo) {
+        if (!walletService.hasFeeAccount(bo.getPayAccount())) {
+            walletService.createFeeAccount(bo.getPayChannel(),bo.getPayAccount());
+        }
+        FeeAccount feeAccount = walletService.getFeeAccount(bo.getPayAccount());
+        FeeBill bill = new FeeBill();
+
+        bill.setSn(new IdWorker().nextId());
+        bill.setAccountid(feeAccount.getId());
+        bill.setAmount(bo.getFeeAmount());
+        bill.setBalance(feeAccount.getAmount() + bill.getAmount());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(bo.getNote());
+        bill.setOrder(0);
+        bill.setRefsn(bo.getSn());
+        bill.setPayChannel(bo.getPayChannel());
+        bill.setChannelAccount(bo.getPayAccount());
+        bill.setPersonCard(bo.getPersonCard());
+
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("提现手续费");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        bill.setSeason(season);
+
+        feeBillMapper.insert(bill);
+
+        //驱动余额更新
+        feeAccountMapper.updateAmount(feeAccount.getId(), bill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     @CjTransaction

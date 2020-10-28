@@ -3,6 +3,7 @@ package cj.netos.oc.wallet.service;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.mapper.*;
 import cj.netos.oc.wallet.model.*;
+import cj.netos.oc.wallet.util.IdWorker;
 import cj.netos.oc.wallet.util.WalletUtils;
 import cj.studio.ecm.annotation.CjBridge;
 import cj.studio.ecm.annotation.CjService;
@@ -37,6 +38,9 @@ public class WalletService implements IWalletService {
 
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WenyAccountMapper")
     WenyAccountMapper wenyAccountMapper;
+
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FeeAccountMapper")
+    FeeAccountMapper feeAccountMapper;
 
     @CjTransaction
     @Override
@@ -260,7 +264,7 @@ public class WalletService implements IWalletService {
 
     @CjTransaction
     @Override
-    public ProfitAccount getProfitAccount(String person,String bankid) {
+    public ProfitAccount getProfitAccount(String person, String bankid) {
         ProfitAccountExample profitAccountExample = new ProfitAccountExample();
         profitAccountExample.createCriteria().andPersonEqualTo(person).andBankidEqualTo(bankid);
         List<ProfitAccount> profitAccountList = profitAccountMapper.selectByExample(profitAccountExample);
@@ -317,4 +321,38 @@ public class WalletService implements IWalletService {
         return rootAccountMapper.countByExample(example) > 0;
     }
 
+    @CjTransaction
+    @Override
+    public boolean hasFeeAccount(String payAccount) {
+        FeeAccountExample example = new FeeAccountExample();
+        example.createCriteria().andChannelAccountEqualTo(payAccount);
+        return feeAccountMapper.countByExample(example) > 0;
+    }
+
+    @CjTransaction
+    @Override
+    public void createFeeAccount(String payChannel, String payAccount) {
+        FeeAccount feeAccount = new FeeAccount();
+        feeAccount.setAmount(0L);
+        feeAccount.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        feeAccount.setLutime(feeAccount.getCtime());
+        feeAccount.setCurrency("CNY");
+        feeAccount.setId(new IdWorker().nextId());
+        feeAccount.setState(0);
+        feeAccount.setPayChannel(payChannel);
+        feeAccount.setChannelAccount(payAccount);
+        feeAccountMapper.insert(feeAccount);
+    }
+
+    @CjTransaction
+    @Override
+    public FeeAccount getFeeAccount(String payAccount) {
+        FeeAccountExample example = new FeeAccountExample();
+        example.createCriteria().andChannelAccountEqualTo(payAccount);
+        List<FeeAccount> list = feeAccountMapper.selectByExample(example);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
 }
