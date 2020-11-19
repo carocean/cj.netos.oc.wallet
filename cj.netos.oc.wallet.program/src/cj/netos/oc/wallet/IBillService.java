@@ -29,4 +29,6 @@ public interface IBillService {
 
     List<WenyBill> monthStockBill(String person, String wenyBankID, int year, int month, int limit, long offset);
 
+    List<BalanceBill> pageBalanceBillByOrder(String person, int order, int limit, long offset);
+
 }

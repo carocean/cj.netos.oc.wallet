@@ -21,6 +21,11 @@ public class BalanceBillPorts implements IBalanceBillPorts {
     }
 
     @Override
+    public List<BalanceBill> pageBillByOrder(ISecuritySession securitySession, String person, int order, int limit, long offset) throws CircuitException {
+        return billService.pageBalanceBillByOrder(person, order,limit, offset);
+    }
+
+    @Override
     public List<BalanceBill> monthBill(ISecuritySession securitySession, String person, int year, int month, int limit, long offset) throws CircuitException {
         return billService.monthBalanceBill(person, year, month, limit, offset);
     }

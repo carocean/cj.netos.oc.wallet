@@ -65,4 +65,7 @@ public interface BalanceBillMapper {
     List<BalanceBill> page(@Param(value = "accountid") String accountid, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
 
     List<BalanceBill> month(@Param(value = "accountid") String accountid, @Param(value = "year") int year, @Param(value = "month") int month, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
+    List<BalanceBill> pageByOrder(@Param(value = "accountid") String accountid, @Param(value = "order") int order, @Param(value = "limit") int limit, @Param(value = "offset") long offset);
+
 }

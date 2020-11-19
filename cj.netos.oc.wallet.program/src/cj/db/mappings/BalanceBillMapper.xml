@@ -373,6 +373,15 @@
     order by ctime desc
     limit #{offset},#{limit}
   </select>
+  <select id="pageByOrder" parameterType="cj.netos.oc.wallet.model.BalanceBill" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from balance_bill
+    where accountid = #{accountid,jdbcType=VARCHAR}
+    and `order` = #{order,jdbcType=INTEGER}
+    order by ctime desc
+    limit #{offset},#{limit}
+  </select>
   <select id="month" parameterType="cj.netos.oc.wallet.model.BalanceBill" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

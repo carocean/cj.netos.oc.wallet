@@ -22,7 +22,14 @@ public interface IBalanceBillPorts extends IOpenportService {
                                @CjOpenportParameter(usage = "页大小", name = "limit") int limit,
                                @CjOpenportParameter(usage = "偏移", name = "offset") long offset
     ) throws CircuitException;
-
+    @CjOpenportAppSecurity
+    @CjOpenport(usage = "分页账单，倒序",tokenIn = AccessTokenIn.nope)
+    List<BalanceBill> pageBillByOrder(ISecuritySession securitySession,
+                               @CjOpenportParameter(usage = "公众", name = "person") String person,
+                               @CjOpenportParameter(usage = "订单类型", name = "order") int order,
+                               @CjOpenportParameter(usage = "页大小", name = "limit") int limit,
+                               @CjOpenportParameter(usage = "偏移", name = "offset") long offset
+    ) throws CircuitException;
     @CjOpenportAppSecurity
     @CjOpenport(usage = "月账单，倒序",tokenIn = AccessTokenIn.nope)
     List<BalanceBill> monthBill(ISecuritySession securitySession,

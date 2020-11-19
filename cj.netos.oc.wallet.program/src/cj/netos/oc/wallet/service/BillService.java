@@ -49,6 +49,12 @@ public class BillService implements IBillService {
         BalanceAccount balanceAccount = walletService.getBalanceAccount(person);
         return balanceBillMapper.page(balanceAccount.getId(), limit, offset);
     }
+    @CjTransaction
+    @Override
+    public List<BalanceBill> pageBalanceBillByOrder(String person, int order, int limit, long offset) {
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(person);
+        return balanceBillMapper.pageByOrder(balanceAccount.getId(),order, limit, offset);
+    }
 
     @CjTransaction
     @Override
