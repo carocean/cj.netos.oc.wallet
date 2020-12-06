@@ -413,6 +413,26 @@
             </TableInfo>
           </value>
         </entry>
+        <entry key="netos.wallet.trade#trial_account">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="TrialAccount" />
+              <option name="tableComment" value="体验金账户" />
+              <option name="tableName" value="trial_account" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="netos.wallet.trade#trial_bill">
+          <value>
+            <TableInfo>
+              <option name="database" value="netos.wallet.trade" />
+              <option name="domainName" value="TrialBill" />
+              <option name="tableComment" value="账户体验金变动流水表" />
+              <option name="tableName" value="trial_bill" />
+            </TableInfo>
+          </value>
+        </entry>
         <entry key="netos.wallet.trade#weny_account">
           <value>
             <TableInfo>

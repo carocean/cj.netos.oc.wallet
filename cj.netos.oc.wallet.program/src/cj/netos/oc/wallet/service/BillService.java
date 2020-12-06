@@ -16,6 +16,8 @@ import java.util.List;
 public class BillService implements IBillService {
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbBillMapper")
     AbsorbBillMapper absorbBillMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialBillMapper")
+    TrialBillMapper trialBillMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.BalanceBillMapper")
     BalanceBillMapper balanceBillMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.OnorderBillMapper")
@@ -28,6 +30,20 @@ public class BillService implements IBillService {
     WenyBillMapper wenyBillMapper;
     @CjServiceRef
     IWalletService walletService;
+
+    @CjTransaction
+    @Override
+    public List<TrialBill> pageTrialBill(String person, int limit, long offset) {
+        TrialAccount trialAccount = walletService.getTrialAccount(person);
+        return trialBillMapper.page(trialAccount.getId(), limit, offset);
+    }
+
+    @CjTransaction
+    @Override
+    public List<TrialBill> monthTrialBill(String person, int year, int month, int limit, long offset) {
+        TrialAccount trialAccount = walletService.getTrialAccount(person);
+        return trialBillMapper.month(trialAccount.getId(), year, month, limit, offset);
+    }
 
     @CjTransaction
     @Override
@@ -49,11 +65,12 @@ public class BillService implements IBillService {
         BalanceAccount balanceAccount = walletService.getBalanceAccount(person);
         return balanceBillMapper.page(balanceAccount.getId(), limit, offset);
     }
+
     @CjTransaction
     @Override
     public List<BalanceBill> pageBalanceBillByOrder(String person, int order, int limit, long offset) {
         BalanceAccount balanceAccount = walletService.getBalanceAccount(person);
-        return balanceBillMapper.pageByOrder(balanceAccount.getId(),order, limit, offset);
+        return balanceBillMapper.pageByOrder(balanceAccount.getId(), order, limit, offset);
     }
 
     @CjTransaction

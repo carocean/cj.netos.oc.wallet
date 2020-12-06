@@ -40,6 +40,12 @@ public interface IBalancePorts extends IOpenportService {
     ) throws CircuitException;
 
     @CjOpenportAppSecurity
+    @CjOpenport(usage = "获取体验金账户余额", tokenIn = AccessTokenIn.nope)
+    TrialAccount getTrialAccount(ISecuritySession securitySession,
+                                   @CjOpenportParameter(usage = "用户", name = "person") String person
+    ) throws CircuitException;
+
+    @CjOpenportAppSecurity
     @CjOpenport(usage = "获取冻结账户余额", tokenIn = AccessTokenIn.nope)
     FreezenAccount getFreezenAccount(ISecuritySession securitySession,
                                      @CjOpenportParameter(usage = "用户", name = "person") String person,

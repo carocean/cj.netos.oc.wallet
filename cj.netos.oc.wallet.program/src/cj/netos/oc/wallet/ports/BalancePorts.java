@@ -132,6 +132,33 @@ public class BalancePorts implements IBalancePorts {
     }
 
     @Override
+    public TrialAccount getTrialAccount(ISecuritySession securitySession, String person) throws CircuitException {
+        String path = String.format("/wallet/%s/locks", person);
+        InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);
+        InterProcessMutex mutex = lock.writeLock();
+        try {
+            curatorPathChecker.check(framework, path);
+        } catch (Exception e) {
+            throw new CircuitException("500", e);
+        }
+        try {
+            mutex.acquire();
+            return walletService.getTrialAccount(person);
+        } catch (CircuitException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CircuitException("500", e);
+        } finally {
+            try {
+                mutex.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @Override
     public FreezenAccount getFreezenAccount(ISecuritySession securitySession, String person,String bankid) throws CircuitException {
         String path = String.format("/wallet/%s/locks", person);
         InterProcessReadWriteLock lock = new InterProcessReadWriteLock(framework, path);

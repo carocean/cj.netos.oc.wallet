@@ -36,6 +36,9 @@ public class WalletService implements IWalletService {
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbAccountMapper")
     AbsorbAccountMapper absorbAccountMapper;
 
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialAccountMapper")
+    TrialAccountMapper trialAccountMapper;
+
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.WenyAccountMapper")
     WenyAccountMapper wenyAccountMapper;
 
@@ -115,6 +118,9 @@ public class WalletService implements IWalletService {
             AbsorbAccount absorbAccount = getAbsorbAccount(p);
             map.put("absorbAccount", absorbAccount);
 
+            TrialAccount trialAccount = getTrialAccount(p);
+            map.put("trialAccount", trialAccount);
+
             List<FreezenAccount> freezenAccounts = listFreezenAccount(p);
             map.put("freezenAccounts", freezenAccounts);
 
@@ -165,6 +171,18 @@ public class WalletService implements IWalletService {
         absorbAccountMapper.insert(absorbAccount);
         map.put("absorbAccount", absorbAccount.getId());
 
+        TrialAccount trialAccount = new TrialAccount();
+        trialAccount.setAmount(0L);
+        trialAccount.setCtime(rootAccount.getCtime());
+        trialAccount.setCurrency("CNY");
+        trialAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
+        trialAccount.setLutime(rootAccount.getLutime());
+        trialAccount.setPerson(person);
+        trialAccount.setPersonName(personName);
+        trialAccount.setState(0);
+        trialAccountMapper.insert(trialAccount);
+        map.put("trialAccount", trialAccount.getId());
+
         return map;
     }
 
@@ -180,6 +198,11 @@ public class WalletService implements IWalletService {
         AbsorbAccount absorbAccount = getAbsorbAccount(person);
         if (absorbAccount != null) {
             map.put("absorbAccount", absorbAccount);
+        }
+
+        TrialAccount trialAccount = getTrialAccount(person);
+        if (trialAccount != null) {
+            map.put("trialAccount", trialAccount);
         }
 
         List<FreezenAccount> freezenAccounts = listFreezenAccount(person);
@@ -233,6 +256,18 @@ public class WalletService implements IWalletService {
             return null;
         }
         return absorbAccountList.get(0);
+    }
+
+    @CjTransaction
+    @Override
+    public TrialAccount getTrialAccount(String person) {
+        TrialAccountExample example = new TrialAccountExample();
+        example.createCriteria().andPersonEqualTo(person);
+        List<TrialAccount> trialAccounts = trialAccountMapper.selectByExample(example);
+        if (trialAccounts.isEmpty()) {
+            return null;
+        }
+        return trialAccounts.get(0);
     }
 
     @CjTransaction
@@ -342,6 +377,21 @@ public class WalletService implements IWalletService {
         feeAccount.setPayChannel(payChannel);
         feeAccount.setChannelAccount(payAccount);
         feeAccountMapper.insert(feeAccount);
+    }
+
+    @CjTransaction
+    @Override
+    public void createTrialAccount(String person, String personName) {
+        TrialAccount trialAccount = new TrialAccount();
+        trialAccount.setAmount(0L);
+        trialAccount.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        trialAccount.setCurrency("CNY");
+        trialAccount.setId(Encript.md5(System.currentTimeMillis() + UUID.randomUUID().toString()));
+        trialAccount.setLutime(trialAccount.getCtime());
+        trialAccount.setPerson(person);
+        trialAccount.setPersonName(personName);
+        trialAccount.setState(0);
+        trialAccountMapper.insert(trialAccount);
     }
 
     @CjTransaction

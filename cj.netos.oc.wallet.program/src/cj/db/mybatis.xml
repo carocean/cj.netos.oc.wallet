@@ -44,5 +44,7 @@
         <mapper resource="cj/db/mappings/OnorderBillMapper.xml"/>
         <mapper resource="cj/db/mappings/FeeAccountMapper.xml"/>
         <mapper resource="cj/db/mappings/FeeBillMapper.xml"/>
+        <mapper resource="cj/db/mappings/TrialAccountMapper.xml"/>
+        <mapper resource="cj/db/mappings/TrialBillMapper.xml"/>
     </mappers>
 </configuration>

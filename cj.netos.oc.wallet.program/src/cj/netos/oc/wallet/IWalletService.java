@@ -53,4 +53,8 @@ public interface IWalletService {
 
     FeeAccount getFeeAccount(String payAccount);
 
+    TrialAccount getTrialAccount(String person);
+
+    void createTrialAccount(String person, String personName);
+
 }

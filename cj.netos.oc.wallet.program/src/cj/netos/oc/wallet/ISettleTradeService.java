@@ -31,4 +31,6 @@ public interface ISettleTradeService {
 
     void depositHubTails(DepositHubTailsBO depositAbsorbBO);
 
+    void depositTrialFunds(DepositTrialBO depositTrialBO);
+
 }

@@ -31,4 +31,8 @@ public interface IBillService {
 
     List<BalanceBill> pageBalanceBillByOrder(String person, int order, int limit, long offset);
 
+    List<TrialBill> pageTrialBill(String person, int limit, long offset);
+
+    List<TrialBill> monthTrialBill(String person, int year, int month, int limit, long offset);
+
 }

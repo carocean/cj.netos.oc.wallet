@@ -48,6 +48,10 @@ public class SettleTradeService implements ISettleTradeService {
     AbsorbAccountMapper absorbAccountMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.AbsorbBillMapper")
     AbsorbBillMapper absorbBillMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialAccountMapper")
+    TrialAccountMapper trialAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialBillMapper")
+    TrialBillMapper trialBillMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FeeAccountMapper")
     FeeAccountMapper feeAccountMapper;
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.FeeBillMapper")
@@ -120,7 +124,7 @@ public class SettleTradeService implements ISettleTradeService {
 
     private void addBalanceFee(WithdrawBO bo) {
         if (!walletService.hasFeeAccount(bo.getPayAccount())) {
-            walletService.createFeeAccount(bo.getPayChannel(),bo.getPayAccount());
+            walletService.createFeeAccount(bo.getPayChannel(), bo.getPayAccount());
         }
         FeeAccount feeAccount = walletService.getFeeAccount(bo.getPayAccount());
         FeeBill bill = new FeeBill();
@@ -375,6 +379,7 @@ public class SettleTradeService implements ISettleTradeService {
         addAbsorbBill_add(bo);
     }
 
+
     private void addAbsorbBill_add(DepositAbsorbBO bo) {
         AbsorbAccount absorbAccount = walletService.getAbsorbAccount(bo.getPerson());
         String note = bo.getNote();
@@ -406,6 +411,57 @@ public class SettleTradeService implements ISettleTradeService {
 
     private void updateAbsorbAccount(AbsorbAccount absorbAccount, BigDecimal balance) {
         absorbAccountMapper.updateAmount(absorbAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
+
+    @CjTransaction
+    @Override
+    public void depositTrialFunds(DepositTrialBO bo) {
+        //如果已创建了钱包账号，则要检查是否已创建了体验金账号
+        TrialAccount trialAccount =null;
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+            trialAccount = walletService.getTrialAccount(bo.getPerson());
+        } else {
+             trialAccount = walletService.getTrialAccount(bo.getPerson());
+            if (trialAccount == null) {
+                walletService.createTrialAccount(bo.getPerson(),bo.getPersonName());
+                trialAccount = walletService.getTrialAccount(bo.getPerson());
+            }
+        }
+        addTrialFundsBill_add(trialAccount,bo);
+    }
+
+    private void addTrialFundsBill_add(TrialAccount trialAccount, DepositTrialBO bo) {
+
+        String note = bo.getNote();
+        TrialBill bill = new TrialBill();
+        bill.setSn(new IdWorker().nextId());
+        bill.setAccountid(trialAccount.getId());
+        bill.setAmount(bo.getAmount());
+        bill.setBalance(trialAccount.getAmount() + bo.getAmount());
+        bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        bill.setNote(note);
+        bill.setOrder(1);
+        bill.setRefsn(bo.getSn());
+        bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        bill.setTitle("存入");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        bill.setYear(calendar.get(Calendar.YEAR));
+        bill.setMonth(calendar.get(Calendar.MONTH));
+        bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        bill.setSeason(season);
+
+        trialBillMapper.insert(bill);
+
+        //驱动余额更新
+        updateTrialAccount(trialAccount, bill.getBalance());
+    }
+
+    private void updateTrialAccount(TrialAccount trialAccount, Long balance) {
+        trialAccountMapper.updateAmount(trialAccount.getId(), balance, WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
     @CjTransaction
