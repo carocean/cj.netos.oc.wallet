@@ -4,10 +4,7 @@ import cj.netos.oc.wallet.IOnorderService;
 import cj.netos.oc.wallet.IWalletService;
 import cj.netos.oc.wallet.bo.OnorderBO;
 import cj.netos.oc.wallet.bo.WithdrawBO;
-import cj.netos.oc.wallet.mapper.BalanceAccountMapper;
-import cj.netos.oc.wallet.mapper.BalanceBillMapper;
-import cj.netos.oc.wallet.mapper.OnorderBillMapper;
-import cj.netos.oc.wallet.mapper.RootAccountMapper;
+import cj.netos.oc.wallet.mapper.*;
 import cj.netos.oc.wallet.model.*;
 import cj.netos.oc.wallet.util.IdWorker;
 import cj.netos.oc.wallet.util.WalletUtils;
@@ -35,8 +32,65 @@ public class OnorderService implements IOnorderService {
     @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.RootAccountMapper")
     RootAccountMapper rootAccountMapper;
 
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialAccountMapper")
+    TrialAccountMapper trialAccountMapper;
+    @CjServiceRef(refByName = "mybatis.cj.netos.oc.wallet.mapper.TrialBillMapper")
+    TrialBillMapper trialBillMapper;
+
     @CjServiceRef
     IWalletService walletService;
+
+    @CjTransaction
+    @Override
+    public void put2(OnorderBO bo) throws CircuitException {//从体验金账户扣款
+        TrialAccount trialAccount =null;
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+            trialAccount = walletService.getTrialAccount(bo.getPerson());
+        } else {
+            trialAccount = walletService.getTrialAccount(bo.getPerson());
+            if (trialAccount == null) {
+                walletService.createTrialAccount(bo.getPerson(),bo.getPersonName());
+                trialAccount = walletService.getTrialAccount(bo.getPerson());
+            }
+        }
+        //从体验金账户中扣款，之后若决清失败充许体验金还回到零钱账户中，因为都是客户的钱嘛，而且确实体验了发文流程，只是出错了嘛，出错了就该给客户随便用
+        if (trialAccount.getAmount() < bo.getAmount()) {
+            throw new CircuitException("2000", String.format("体验金不足。订单:%s", bo.getRefsn()));
+        }
+        addTrialBillByOnorder(bo, bo.getAmount());
+        addOnorderBill(bo);
+    }
+
+    private void addTrialBillByOnorder(OnorderBO bo, long amount) {
+        TrialBill trialBill = new TrialBill();
+
+        TrialAccount trialAccount = walletService.getTrialAccount(bo.getPerson());
+        trialBill.setSn(new IdWorker().nextId());
+        trialBill.setAccountid(trialAccount.getId());
+        trialBill.setAmount(amount * -1);
+        trialBill.setBalance(trialAccount.getAmount() - amount);
+        trialBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        trialBill.setNote(bo.getNote());
+        trialBill.setOrder(2);
+        trialBill.setRefsn(bo.getRefsn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        trialBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        trialBill.setTitle(bo.getCause());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        trialBill.setYear(calendar.get(Calendar.YEAR));
+        trialBill.setMonth(calendar.get(Calendar.MONTH));
+        trialBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        trialBill.setSeason(season);
+
+        trialBillMapper.insert(trialBill);
+
+        //驱动余额更新
+        trialAccountMapper.updateAmount(trialAccount.getId(), trialBill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+    }
 
     @CjTransaction
     @Override
@@ -49,7 +103,7 @@ public class OnorderService implements IOnorderService {
             throw new CircuitException("2000", String.format("余额不足。订单:%s", bo.getRefsn()));
         }
         addBalanceBillByOnorder(bo, bo.getAmount());
-        addOnorderBill(bo, balanceAccount);
+        addOnorderBill(bo);
     }
 
     private void addBalanceBillByOnorder(OnorderBO bo, long amount) throws CircuitException {
@@ -68,12 +122,12 @@ public class OnorderService implements IOnorderService {
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle(bo.getCause());
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         balanceBill.setYear(calendar.get(Calendar.YEAR));
         balanceBill.setMonth(calendar.get(Calendar.MONTH));
         balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         balanceBill.setSeason(season);
 
         balanceBillMapper.insert(balanceBill);
@@ -82,7 +136,7 @@ public class OnorderService implements IOnorderService {
         balanceAccountMapper.updateAmount(balanceAccount.getId(), balanceBill.getBalance(), WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
     }
 
-    private void addOnorderBill(OnorderBO bo, BalanceAccount balanceAccount) {
+    private void addOnorderBill(OnorderBO bo) {
         RootAccount rootAccount = walletService.getRootAccount(bo.getPerson());
 
         OnorderBill bill = new OnorderBill();
@@ -97,12 +151,12 @@ public class OnorderService implements IOnorderService {
         bill.setTitle(bo.getCause());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         onorderBillMapper.insert(bill);
@@ -138,12 +192,12 @@ public class OnorderService implements IOnorderService {
         balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
         balanceBill.setTitle(bo.getCause());
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         balanceBill.setYear(calendar.get(Calendar.YEAR));
         balanceBill.setMonth(calendar.get(Calendar.MONTH));
         balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         balanceBill.setSeason(season);
 
         balanceBillMapper.insert(balanceBill);
@@ -159,7 +213,7 @@ public class OnorderService implements IOnorderService {
         }
         OnorderBill bill = new OnorderBill();
         bill.setAccountid(rootAccount.getId());
-        bill.setAmount(bo.getAmount()*-1);
+        bill.setAmount(bo.getAmount() * -1);
         bill.setBalance(rootAccount.getOnorderAmount() - bo.getAmount());
         bill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
         bill.setNote(bo.getNote());
@@ -169,12 +223,12 @@ public class OnorderService implements IOnorderService {
         bill.setTitle(bo.getCause());
         bill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         bill.setYear(calendar.get(Calendar.YEAR));
         bill.setMonth(calendar.get(Calendar.MONTH));
         bill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        int season=calendar.get(Calendar.MONTH)%4;
+        int season = calendar.get(Calendar.MONTH) % 4;
         bill.setSeason(season);
 
         onorderBillMapper.insert(bill);
@@ -203,7 +257,7 @@ public class OnorderService implements IOnorderService {
             return;
         }
         bo.setAmount(returnAmount);
-        bo.setCause(bo.getCause()+"-归还到余额");
+        bo.setCause(bo.getCause() + "-归还到余额");
         addOnorderBillForSub(bo);//再把要归还的从在订单扣减
         bo.setAmount(returnAmount);
         addBalanceBillForAddByOnorder(bo);

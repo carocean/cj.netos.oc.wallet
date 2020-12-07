@@ -48,9 +48,19 @@ public class PurchaseActivityController implements IPurchaseActivityController {
     @CjTransaction
     @Override
     public PurchasingResult receipt(PurchaseBO bo) throws CircuitException {
-        //1。预扣款
+        //1。预扣款(从零钱账户）
         //2。发起申购（银行）
-        putOnorder(bo);
+        putOnorder(bo, 0);
+        PurchasingResult purchasingResult = call_wenybank_purchase(bo);
+        return purchasingResult;
+    }
+
+    @CjTransaction
+    @Override
+    public PurchasingResult receipt2(PurchaseBO bo) throws CircuitException {
+        //1。预扣款（从体验金账户）
+        //2。发起申购（银行）
+        putOnorder(bo, 1);
         PurchasingResult purchasingResult = call_wenybank_purchase(bo);
         return purchasingResult;
     }
@@ -69,7 +79,7 @@ public class PurchaseActivityController implements IPurchaseActivityController {
         toGateway_ack_receipt_purchase.publish("gateway", properties, new Gson().toJson(result).getBytes());
     }
 
-    private void putOnorder(PurchaseBO bo) throws CircuitException {
+    private void putOnorder(PurchaseBO bo, int payMethod) throws CircuitException {
         OnorderBO onOrderBO = new OnorderBO();
         onOrderBO.setPersonName(bo.getPurchaserName());
         onOrderBO.setRefType("purchase");
@@ -79,7 +89,14 @@ public class PurchaseActivityController implements IPurchaseActivityController {
         onOrderBO.setRefsn(bo.getSn());
         onOrderBO.setOrder(8);
         onOrderBO.setCause("申购纹银");
-        onorderService.put(onOrderBO);
+        if (payMethod == 1) {
+            onOrderBO.setNote("使用体验金付款");
+            onorderService.put2(onOrderBO);
+        } else {
+            onOrderBO.setNote("使用零钱付款");
+            onorderService.put(onOrderBO);
+        }
+
     }
 
     //发纹银银行发起承兑

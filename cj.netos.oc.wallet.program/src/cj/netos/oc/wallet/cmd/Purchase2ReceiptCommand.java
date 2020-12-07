@@ -24,8 +24,8 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import java.io.IOException;
 
 @CjConsumer(name = "fromGateway_receipt_purchase")
-@CjService(name = "/trade/receipt.mhub#purchase")//从零钱账户中扣款
-public class PurchaseReceiptCommand implements IConsumerCommand {
+@CjService(name = "/trade/receipt.mhub#purchase2")//从体验金账户中扣款
+public class Purchase2ReceiptCommand implements IConsumerCommand {
     @CjServiceRef
     IPurchaseActivityController purchaseActivityController;
     @CjServiceRef(refByName = "curator.framework")
@@ -53,7 +53,7 @@ public class PurchaseReceiptCommand implements IConsumerCommand {
         InterProcessMutex mutex = lock.writeLock();
         try {
             mutex.acquire();
-            PurchasingResult result1 = purchaseActivityController.receipt(purchaseBO);
+            PurchasingResult result1 = purchaseActivityController.receipt2(purchaseBO);
             result.setRecord(new Gson().toJson(result1));
             purchaseActivityController.sendReceiptAck(result);
         } catch (RabbitMQException e) {

@@ -10,4 +10,7 @@ public interface IOnorderService {
     void returnOrder(OnorderBO onorderBO) throws CircuitException;
 
     void done(OnorderBO onorderBO) throws CircuitException;
+
+    void put2(OnorderBO onOrderBO) throws CircuitException;
+
 }

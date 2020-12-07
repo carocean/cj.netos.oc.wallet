@@ -17,4 +17,6 @@ public interface IPurchaseActivityController {
 
     void sendSettleAck(PurchaseResult result) throws CircuitException;
 
+    PurchasingResult receipt2(PurchaseBO purchaseBO) throws CircuitException;
+
 }
