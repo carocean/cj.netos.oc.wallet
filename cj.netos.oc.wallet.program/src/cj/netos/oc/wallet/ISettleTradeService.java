@@ -33,4 +33,6 @@ public interface ISettleTradeService {
 
     void depositTrialFunds(DepositTrialBO depositTrialBO);
 
+    void moduleTransin(ModuleTransinBO moduleTransinBO);
+
 }

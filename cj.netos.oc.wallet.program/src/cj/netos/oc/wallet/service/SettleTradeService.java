@@ -372,6 +372,45 @@ public class SettleTradeService implements ISettleTradeService {
 
     @CjTransaction
     @Override
+    public void moduleTransin(ModuleTransinBO bo) {
+        if (!walletService.hasWallet(bo.getPerson())) {
+            walletService.createWallet(bo.getPerson(), bo.getPersonName());
+        }
+        addModuleTransinBill_add(bo);
+    }
+
+    private void addModuleTransinBill_add(ModuleTransinBO bo) {
+        BalanceBill balanceBill = new BalanceBill();
+
+        BalanceAccount balanceAccount = walletService.getBalanceAccount(bo.getPerson());
+        balanceBill.setSn(new IdWorker().nextId());
+        balanceBill.setAccountid(balanceAccount.getId());
+        balanceBill.setAmount(bo.getAmount());//承兑是直接将所得打到余额账户，至于收益金账户仅用于统计赢亏，因此收益金账户不用于提现
+        balanceBill.setBalance(balanceAccount.getAmount() + balanceBill.getAmount());
+        balanceBill.setCtime(WalletUtils.dateTimeToMicroSecond(System.currentTimeMillis()));
+        balanceBill.setNote(bo.getNote());
+        balanceBill.setOrder(14);
+        balanceBill.setRefsn(bo.getSn());
+//        String workSwitchDay = financeService.getActivingWorkday(rechargeRecord.getPerson());
+        balanceBill.setWorkday(WalletUtils.dateTimeToDay(System.currentTimeMillis()));
+        balanceBill.setTitle(String.format("【%s】服务转入账款",bo.getModuleTitle()));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        balanceBill.setYear(calendar.get(Calendar.YEAR));
+        balanceBill.setMonth(calendar.get(Calendar.MONTH));
+        balanceBill.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        int season = calendar.get(Calendar.MONTH) % 4;
+        balanceBill.setSeason(season);
+
+        balanceBillMapper.insert(balanceBill);
+
+        //驱动余额更新
+        updateBalanceAccount(balanceAccount, balanceBill.getBalance());
+    }
+
+    @CjTransaction
+    @Override
     public void depositAbsorb(DepositAbsorbBO bo) {
         if (!walletService.hasWallet(bo.getPerson())) {
             walletService.createWallet(bo.getPerson(), bo.getPersonName());
